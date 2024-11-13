@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { SignIn } from './pages/signin';
 import { Portal } from './pages/portal';
 import { Registration } from './pages/registration';
@@ -11,6 +13,7 @@ import { AccountSettings } from './pages/accountSettings';
 import { EditUserProfile } from './pages/editUserProfile';
 
 function App() {
+  const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
   const user = {
     role: 'student', // Change to 'admin' to test the account settings
@@ -24,7 +27,21 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/"
+          element={
+            authenticatedUser ? (
+              authenticatedUser.isAdmin() ? (
+                <Navigate to="/admin-dashboard" />
+              ) : (
+                <Navigate to="/my-concerns" />
+              )
+            ) : (
+              <Navigate to="/signin" />
+            )
+          }
+        />
+        <Route path="/signin" element={<SignIn setAuthenticatedUser={setAuthenticatedUser} />} />
         <Route path="/portal" element={<Portal />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/landing-page" element={<LandingPage />} />
