@@ -13,7 +13,6 @@ export function MyConcerns() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Header showNavbar={true} border={true}/>
             <div className="flex-grow p-4 mx-14">
                 <h2 className="text-3xl font-bold mb-8 text-blue-400">My Concerns</h2>
                 <ConcernList concerns={concerns}/>
@@ -24,4 +23,3 @@ export function MyConcerns() {
 }
 
 export default MyConcerns;
-

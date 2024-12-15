@@ -14,9 +14,6 @@ export function SubmitConcern() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/* Header Component */}
-            <Header showNavbar={true} border={true}/>
-
             {/* Main Content Area */}
             <div className="flex flex-row flex-grow bg-white bg-opacity-90 gap-32">
                 {/* Left Side: Form */}

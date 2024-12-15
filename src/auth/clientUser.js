@@ -1,24 +1,29 @@
 import { auth, provider } from '../auth/auth';
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import User from '../models/user';
 
-class ClientUser {
+export default class ClientUser {
     static async signInWithMicrosoft() {
         const result = await signInWithPopup(auth, provider);
         return new ClientUser(result.user);
     }
 
+    static onAuthStateChanged(listener) {
+        onAuthStateChanged(auth, listener);
+    }
+
+    static async signOut() {
+        await auth.signOut();
+    }
+
     constructor(firebaseUser) {
-        this.firebaseUser = firebaseUser; // Stores Firebase authenticated user
+        this.firebaseUser = firebaseUser
     }
 
     // Method to get corresponding User class from the database
     async getUserFromDatabase() {
         const email = this.firebaseUser.email;
         const user = await User.findByEmail(email);
-        console.log(user);
         return user;
     }
 }
-
-export default ClientUser;

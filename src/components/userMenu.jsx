@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { GoTriangleDown } from "react-icons/go";
+import ClientUser from '../auth/clientUser';
 
-export function UserMenu({ textWhite }) {
+export function UserMenu({ isSolid }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
@@ -12,9 +13,9 @@ export function UserMenu({ textWhite }) {
     return (
         <div className="relative">
             {/* Student Name Button with Icon */}
-            <button 
+            <button
                 onClick={toggleDropdown}
-                className={`flex items-center font-semibold hover:text-gray-900 ${textWhite ? 'text-white' : 'text-gray-700'}`}
+                className={`flex items-center font-semibold hover:text-gray-900 ${isSolid ? 'text-white' : 'text-gray-700'}`}
             >
                 John Doe {/* Replace with actual student's name */}
                 <GoTriangleDown className="ml-2" /> {/* User icon */}
@@ -26,8 +27,8 @@ export function UserMenu({ textWhite }) {
                     <ul>
                         {/* Account Settings with Icon */}
                         <li>
-                            <a 
-                                href="/account-settings" 
+                            <a
+                                href="/account-settings"
                                 className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 <FaCog className="mr-2" /> {/* Settings icon */}
@@ -36,8 +37,10 @@ export function UserMenu({ textWhite }) {
                         </li>
                         {/* Logout with Icon */}
                         <li>
-                            <button 
-                                onClick={() => alert('Logging out...')} 
+                            <button
+                                onClick={() => {
+                                    ClientUser.signOut();
+                                }}
                                 className="w-full text-left flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 <FaSignOutAlt className="mr-2" /> {/* Logout icon */}

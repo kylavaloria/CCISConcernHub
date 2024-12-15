@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../components/Header'; 
-import Footer from '../components/Footer'; 
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import ConcernList from '../components/concernList';
 import DashboardStats from '../components/dashboardStats';
 
@@ -39,7 +39,6 @@ export function AdminDashboard() {
 
     return (
         <div>
-            <Header showNavbar={true} />
             <main className="container mx-auto p-4">
                 <h2 className="text-2xl font-semibold mt-2 text-blue-400">Concern Overview</h2>
                 <DashboardStats metrics={metricsData} />

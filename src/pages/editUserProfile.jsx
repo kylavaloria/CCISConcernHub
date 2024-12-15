@@ -24,15 +24,12 @@ export function EditUserProfile({ user }) {
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/* Header */}
-            <Header showNavbar={true} border={true} />
-
             {/* Main Content */}
             <div className="flex items-center mb-4 cursor-pointer ml-8 mt-4 mx-auto" onClick={handleBackClick}>
                 <FaArrowLeft className="mr-2 text-blue-700" />
                 <h1 className="text-3xl font-semibold text-blue-700">Account Settings</h1>
             </div>
-            
+
             <h2 className="text-lg ml-16 mb-4">User Profile</h2>
 
             <div className="flex justify-start ml-20 my-4">

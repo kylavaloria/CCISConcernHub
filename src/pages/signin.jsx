@@ -1,35 +1,28 @@
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
+import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
 import backgroundImage from '../assets/background.jpg';
 import ClientUser from '../auth/clientUser';
 
-export function SignIn({ setAuthenticatedUser }) {
+async function navigateBasedOnRole(clientUser, navigate) {
+    const userData = await clientUser.getUserFromDatabase();
+
+    if (userData.isAdmin()) {
+        navigate("/admin-dashboard");
+    } else {
+        navigate("/my-concerns");
+    }
+}
+
+export function SignIn({ clientUser }) {
     const navigate = useNavigate();
 
+    if (clientUser) {
+        navigateBasedOnRole(clientUser, navigate);
+    }
+
     async function signInWithMicrosoft() {
-        let signedInUser;
-        let userData;
-
-        try {
-            signedInUser = await ClientUser.signInWithMicrosoft();
-            if (signedInUser) {
-                userData = await signedInUser.getUserFromDatabase();
-                setAuthenticatedUser(userData);
-            }
-
-        } catch {
-            setAuthenticatedUser(null);
-        }
-
-        // Redirect based on the user role
-        if (userData.isAdmin() && userData.isStudent()) {
-            navigate('/portal');
-        } else if (userData.isAdmin()) {
-            navigate('/admin-dashboard');
-        } else if (userData.isStudent()) {
-            navigate('/my-concerns');
-        }
+        const clientUser = await ClientUser.signInWithMicrosoft();
+        await navigateBasedOnRole(clientUser, navigate);
     }
 
     return (
@@ -42,8 +35,6 @@ export function SignIn({ setAuthenticatedUser }) {
             }}
         >
             <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col">
-                <Header showNavbar={false} transparent={true} textWhite={true} />
-
                 {/* Title Section */}
                 <div className="text-center mt-8">
                     <h1 className="text-4xl font-bold text-white mb-2">CCIS Concern Hub</h1>

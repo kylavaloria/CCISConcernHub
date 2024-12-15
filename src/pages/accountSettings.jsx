@@ -8,9 +8,6 @@ export function AccountSettings({ user }) {
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/* Header */}
-            <Header showNavbar={true} border={true} />
-
             {/* Main Content */}
             <div className="flex-grow container mx-auto py-8">
                 <h1 className="text-3xl font-semibold text-blue-700 mb-2">Account Settings</h1>
@@ -59,9 +56,9 @@ export function AccountSettings({ user }) {
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
-                
+
                 {/* Edit Information Button */}
                 <div className="mt-6">
                     <Link to="/edit-user-profile">

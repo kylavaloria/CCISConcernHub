@@ -17,8 +17,8 @@ export function Portal() {
     };
 
     return (
-        <div 
-            className="min-h-screen flex flex-col" 
+        <div
+            className="min-h-screen flex flex-col"
             style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
@@ -26,8 +26,6 @@ export function Portal() {
             }}
         >
             <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col">
-                <Header showNavbar={false} transparent={true} textWhite={true} />
-
                 {/* Title Section */}
                 <div className="text-center mt-8">
                     <h1 className="text-4xl font-bold text-white mb-2">CCIS Concern Hub</h1>
@@ -65,5 +63,3 @@ export function Portal() {
 }
 
 export default Portal;
-
-

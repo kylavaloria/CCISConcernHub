@@ -41,7 +41,6 @@ export function ViewConcern() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Header showNavbar={true} border={true} />
             <main className="p-6 gap-4">
                 <div className="flex items-center mb-4 cursor-pointer" onClick={handleBackClick}>
                     <FaArrowLeft className="mr-2 text-blue-400" />
@@ -60,4 +59,3 @@ export function ViewConcern() {
 }
 
 export default ViewConcern;
-
