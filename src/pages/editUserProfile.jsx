@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
+import { useState } from 'react';
 import Footer from '../components/Footer';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-export function EditUserProfile({ user }) {
+export function EditUserProfile({ userData }) {
     const [firstName, setFirstName] = useState('');
     const [middleName, setMiddleName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [department, setDepartment] = useState(user?.department || '');
-
+    const [department, setDepartment] = useState(userData?.department || '');
     const navigate = useNavigate();
+
+    if (!userData) return <></>;
 
     const handleBackClick = () => {
         navigate('/account-settings');
@@ -66,7 +66,7 @@ export function EditUserProfile({ user }) {
                             required
                         />
                     </div>
-                    {user.role === 'student' && (
+                    {userData.role === 'student' && (
                         <div className="form-group mb-8">
                             <label htmlFor="department" className="block text-gray-700 text-xs">Department *</label>
                             <select

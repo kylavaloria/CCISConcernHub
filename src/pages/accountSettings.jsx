@@ -1,10 +1,10 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export function AccountSettings({ user }) {
-    const isStudent = user.role === 'student';
+export function AccountSettings({ userData }) {
+    if (!userData) return <></>;
+
+    const isStudent = userData.role === 'student';
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -16,7 +16,7 @@ export function AccountSettings({ user }) {
                 {/* User Profile Container */}
                 <div>
                     {/* Display Username */}
-                    <h1 className="text-4xl font-semibold text-gray-700 mb-4">{user.username}</h1>
+                    <h1 className="text-4xl font-semibold text-gray-700 mb-4">{userData.username}</h1>
 
                     <div className="bg-white p-6 shadow-md rounded-md mx-auto border">
                         <div className="flex gap-4">
@@ -42,7 +42,7 @@ export function AccountSettings({ user }) {
                             {!isStudent && (
                                 <div className="flex-1">
                                     <label className="block text-sm font-medium text-gray-700">Assigned Categories</label>
-                                    <p className="mt-1 text-gray-900">{user.assignedCategories.join(', ')}</p>
+                                    <p className="mt-1 text-gray-900">{userData.assignedCategories.join(', ')}</p>
                                 </div>
                             )}
 
@@ -52,7 +52,7 @@ export function AccountSettings({ user }) {
                             {/* Email Address */}
                             <div className="flex-1 md:ml-4">
                                 <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                                <p className="mt-1 text-gray-900">{user.email}</p>
+                                <p className="mt-1 text-gray-900">{userData.email}</p>
                             </div>
                         </div>
                     </div>

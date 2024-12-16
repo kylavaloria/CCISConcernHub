@@ -3,7 +3,7 @@ import { FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { GoTriangleDown } from "react-icons/go";
 import ClientUser from '../auth/clientUser';
 
-export function UserMenu({ isSolid }) {
+export function UserMenu({ userData, isSolid }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
@@ -17,7 +17,7 @@ export function UserMenu({ isSolid }) {
                 onClick={toggleDropdown}
                 className={`flex items-center font-semibold hover:text-gray-900 ${isSolid ? 'text-white' : 'text-gray-700'}`}
             >
-                John Doe {/* Replace with actual student's name */}
+                {userData.username}
                 <GoTriangleDown className="ml-2" /> {/* User icon */}
             </button>
 

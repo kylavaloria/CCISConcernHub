@@ -6,6 +6,7 @@ export default function RouteElement({
     element,
     headerProps,
     clientUser,
+    userData,
 }) {
     const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ export default function RouteElement({
     }, [clientUser, navigate]);
 
     return <div className="flex flex-wrap">
-        <Header clientUser={clientUser} {...headerProps} />
+        <Header userData={userData} {...headerProps} />
         {element}
     </div>;
 }

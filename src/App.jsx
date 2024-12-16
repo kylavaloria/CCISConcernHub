@@ -30,18 +30,11 @@ export default function App() {
     (async () => {
       if (clientUser) {
         setUserData(await clientUser.getUserFromDatabase());
+      } else {
+        setUserData(null);
       }
     })();
   }, [clientUser]);
-
-  const user = {
-    role: 'student', // Change to 'admin' to test the account settings
-    username: 'JohnDoe',
-    department: 'Department of Computer Science',
-    studentNumber: '2022-XXXXX-MN-X',
-    email: 'john.doe@gmail.com',
-    assignedCategories: ['Complaints', 'Inquiries']
-  };
 
   const routeMap = {
     "/signin": {
@@ -81,13 +74,13 @@ export default function App() {
       }
     },
     "/account-settings": {
-      "element": <AccountSettings user={user} />,
+      "element": <AccountSettings userData={userData} />,
       "headerProps": {
         "isSolid": false,
       }
     },
     "/edit-user-profile": {
-      "element": <EditUserProfile user={user} />,
+      "element": <EditUserProfile userData={userData} />,
       "headerProps": {
         "isSolid": false,
       }
@@ -107,6 +100,7 @@ export default function App() {
                 element={value["element"]}
                 headerProps={value["headerProps"]}
                 clientUser={clientUser}
+                userData={userData}
               />
             } />;
           })
