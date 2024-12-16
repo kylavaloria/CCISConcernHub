@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { SignIn } from './pages/signin';
 import { Portal } from './pages/portal';
-import { Registration } from './pages/registration';
 import { SubmitConcern } from './pages/submitConcern';
 import { MyConcerns } from "./pages/myConcerns";
 import { AdminDashboard } from "./pages/adminDashboard";
@@ -53,12 +52,6 @@ export default function App() {
     },
     "/portal": {
       "element": <Portal />,
-      "headerProps": {
-        "isSolid": false,
-      }
-    },
-    "/registration": {
-      "element": <Registration />,
       "headerProps": {
         "isSolid": false,
       }
