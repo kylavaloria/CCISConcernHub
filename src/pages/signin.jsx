@@ -6,9 +6,11 @@ import ClientUser from '../auth/clientUser';
 async function navigateBasedOnRole(clientUser, navigate) {
     const userData = await clientUser.getUserFromDatabase();
 
-    if (userData.isAdmin()) {
+    if (userData.isAdmin() && userData.isStudent()) {
+        navigate("/portal");
+    } else if (userData.isAdmin()) {
         navigate("/admin-dashboard");
-    } else {
+    } else if (userData.isStudent()) {
         navigate("/my-concerns");
     }
 }

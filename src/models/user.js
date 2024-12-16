@@ -14,9 +14,9 @@ class User {
                 studentNumber: '2022-XXXXX-MN-X',
             },
             {
-                username: 'kylafranchezkalmorcillos',
+                username: 'Kyla Franchezka L. Morcillos',
                 email: 'kylafranchezkalmorcillos@iskolarngbayan.pup.edu.ph',
-                roles: ['admin'],
+                roles: ['student', 'admin'],
                 department: 'Department of Computer Science',
                 studentNumber: '2022-XXXXX-MN-X',
                 assignedCategories: ['Complaints', 'Inquiries'],

@@ -6,8 +6,6 @@ import { SubmitConcern } from './pages/submitConcern';
 import { MyConcerns } from "./pages/myConcerns";
 import { AdminDashboard } from "./pages/adminDashboard";
 import { ViewConcern } from './pages/viewConcern';
-import { AccountSettings } from './pages/accountSettings';
-import { EditUserProfile } from './pages/editUserProfile';
 import RouteElement from './components/route';
 import ClientUser from './auth/clientUser';
 
@@ -47,42 +45,35 @@ export default function App() {
       "element": <Portal />,
       "headerProps": {
         "isSolid": false,
+        "showStudentNavbarProp": false,
       }
     },
     "/submit-concern": {
       "element": <SubmitConcern />,
       "headerProps": {
-        "isSolid": false,
+        "isSolid": true,
+        "showStudentNavbarProp": true,
       }
     },
     "/my-concerns": {
       "element": <MyConcerns userData={userData} />,
       "headerProps": {
-        "isSolid": false,
+        "isSolid": true,
+        "showStudentNavbarProp": true,
       }
     },
     "/admin-dashboard": {
       "element": <AdminDashboard userData={userData} />,
       "headerProps": {
-        "isSolid": false,
+        "isSolid": true,
+        "showStudentNavbarProp": false,
       }
     },
     "/view-concern/:id": {
       "element": <ViewConcern />,
       "headerProps": {
-        "isSolid": false,
-      }
-    },
-    "/account-settings": {
-      "element": <AccountSettings userData={userData} />,
-      "headerProps": {
-        "isSolid": false,
-      }
-    },
-    "/edit-user-profile": {
-      "element": <EditUserProfile userData={userData} />,
-      "headerProps": {
-        "isSolid": false,
+        "isSolid": true,
+        "showStudentNavbarProp": false,
       }
     },
   }
