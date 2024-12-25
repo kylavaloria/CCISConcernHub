@@ -2,14 +2,9 @@ import pupLogo from '../assets/pup-logo.png';
 import ccisLogo from '../assets/ccis-logo.png';
 import ClientUser from '../auth/clientUser';
 
-export default function Header({ userData, isSolid, showStudentNavbarProp }) {
+export default function Header({ userData, isSolid }) {
     const showNavbar = !!userData;
     const textWhite = !isSolid;
-    let showStudentNavbar = showStudentNavbarProp;
-
-    if (userData?.isStudent() && !userData.isAdmin()) {
-        showStudentNavbar = true;
-    }
 
     return (
         <header
@@ -48,22 +43,25 @@ export default function Header({ userData, isSolid, showStudentNavbarProp }) {
                 {showNavbar && (
                     <nav className="flex mr-8">
                         <div className="flex space-x-14">
-                            { showStudentNavbar &&
-                                <>
-                                    <a
-                                        href="/submit-concern"
-                                        className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
-                                    >
-                                        Submit Concern
-                                    </a>
-                                    <a
-                                        href="/my-concerns"
-                                        className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
-                                    >
-                                        My Concerns
-                                    </a>
-                                </>
-                            }
+                            <a
+                                href="/submit-concern"
+                                className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
+                            >
+                                Submit Concern
+                            </a>
+                            <a
+                                href="/my-concerns"
+                                className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
+                            >
+                                My Concerns
+                            </a>
+
+                            { userData.isAdmin() && <a
+                                href="/admin-dashboard"
+                                className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
+                            >
+                                Manage Concerns
+                            </a>}
                             <div
                                 onClick={() => {
                                     ClientUser.signOut();

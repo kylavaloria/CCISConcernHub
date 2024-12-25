@@ -45,35 +45,30 @@ export default function App() {
       "element": <Portal />,
       "headerProps": {
         "isSolid": false,
-        "showStudentNavbarProp": false,
       }
     },
     "/submit-concern": {
       "element": <SubmitConcern />,
       "headerProps": {
         "isSolid": true,
-        "showStudentNavbarProp": true,
       }
     },
     "/my-concerns": {
       "element": <MyConcerns userData={userData} />,
       "headerProps": {
         "isSolid": true,
-        "showStudentNavbarProp": true,
       }
     },
     "/admin-dashboard": {
       "element": <AdminDashboard userData={userData} />,
       "headerProps": {
         "isSolid": true,
-        "showStudentNavbarProp": false,
       }
     },
     "/view-concern/:id": {
       "element": <ViewConcern />,
       "headerProps": {
         "isSolid": true,
-        "showStudentNavbarProp": false,
       }
     },
   }
