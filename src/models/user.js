@@ -1,4 +1,4 @@
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { firestore } from "../services/firebase";
 
 export default class User {
@@ -11,6 +11,18 @@ export default class User {
         }
 
         return null;
+    }
+
+    static async new(uid, displayName) {
+        const userData = {
+            uid: uid,
+            displayName: displayName,
+            roles: ["student"],
+            assignedCategories: null,
+        };
+        const docRef = doc(firestore, "users", uid);
+        await setDoc(docRef, userData);
+        return new User(userData);
     }
 
     constructor({ uid, displayName, roles, assignedCategories = null }) {

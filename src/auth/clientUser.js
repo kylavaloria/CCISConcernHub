@@ -22,6 +22,13 @@ export default class ClientUser {
 
     // Method to get corresponding User class from the database
     async getUserFromDatabase() {
-        return await User.findByUid(this.firebaseUser.uid);
+        const uid = this.firebaseUser.uid;
+        let user = await User.findByUid(uid);
+
+        if (user === null) {
+            user = await User.new(uid, this.firebaseUser.displayName);
+        }
+
+        return user;
     }
 }
