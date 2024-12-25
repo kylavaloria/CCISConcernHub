@@ -1,16 +1,16 @@
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../services/firebase";
+
 export default class User {
     static async findByUid(uid) {
-        const userData = {
-            displayName: "Test User",
-            roles: ["admin", "student"],
-            assignedCategories: ["laboratory"],
-        };
+        const docRef = doc(firestore, "users", uid);
+        const docSnap = await getDoc(docRef);
 
-        if (userData) {
-            return new User(userData);
-        } else {
-            throw new Error('User not found in the database');
+        if (docSnap.exists()) {
+            return new User(docSnap.data());
         }
+
+        return null;
     }
 
     constructor({ uid, displayName, roles, assignedCategories = null }) {
