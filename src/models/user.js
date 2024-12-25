@@ -1,42 +1,27 @@
-class User {
-    constructor(rawData) {
-        Object.assign(this, rawData);
-    }
-
-    // Mock method to simulate fetching user data from the database
-    static async findByEmail(email) {
-        const MOCK_DATABASE = [
-            {
-                username: 'kflmorcillos',
-                email: 'kflmorcillos@gmail.com',
-                roles: ['student'],
-                department: 'Department of Computer Science',
-                studentNumber: '2022-XXXXX-MN-X',
-            },
-            {
-                username: 'Kyla Franchezka L. Morcillos',
-                email: 'kylafranchezkalmorcillos@iskolarngbayan.pup.edu.ph',
-                roles: ['student', 'admin'],
-                department: 'Department of Computer Science',
-                studentNumber: '2022-XXXXX-MN-X',
-                assignedCategories: ['Complaints', 'Inquiries'],
-            },
-            {
-                username: 'fionamorcillos41',
-                email: 'fionamorcillos41@gmail.com',
-                roles: ['student', 'admin'],
-                department: 'Department of Computer Science',
-                studentNumber: '2022-XXXXX-MN-X',
-                assignedCategories: ['Complaints', 'Inquiries'],
-            }
-        ];
-        const userData = MOCK_DATABASE.find(user => user.email === email);
+export default class User {
+    static async findByUid(uid) {
+        const userData = {
+            displayName: "Test User",
+            roles: ["admin", "student"],
+            assignedCategories: ["laboratory"],
+        };
 
         if (userData) {
             return new User(userData);
         } else {
             throw new Error('User not found in the database');
         }
+    }
+
+    constructor({ uid, displayName, roles, assignedCategories = null }) {
+        this.uid = uid;
+        this.displayName = displayName;
+        this.roles = roles;
+        this.assignedCategories = assignedCategories;
+    }
+
+    getAvatarUrl() {
+        return `https://api.dicebear.com/9.x/initials/svg?seed=${this.displayName}`;
     }
 
     isStudent() {
@@ -47,5 +32,3 @@ class User {
         return this.roles.includes('admin');
     }
 }
-
-export default User;
