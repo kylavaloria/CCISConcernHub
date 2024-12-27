@@ -12,4 +12,10 @@ export default class Database {
         const docRef = doc(firestore, "users", uid);
         await setDoc(docRef, userData);
     }
+
+    static async getConcernData(concernId) {
+        const docRef = doc(firestore, "concerns", concernId);
+        const docSnap = await getDoc(docRef);
+        return docSnap.exists() ? docSnap.data() : null;
+    }
 }

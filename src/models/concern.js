@@ -17,7 +17,7 @@ export default class Concern {
     }
 
     static async findById(concernId) {
-        const concernData = await Database.getConcernDoc(concernId);
+        const concernData = await Database.getConcernData(concernId);
         return concernData ? new Concern(concernData) : null;
     }
 }
