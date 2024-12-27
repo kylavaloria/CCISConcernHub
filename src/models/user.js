@@ -1,16 +1,9 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { firestore } from "../services/firebase";
+import Database from "../services/database";
 
 export default class User {
     static async findByUid(uid) {
-        const docRef = doc(firestore, "users", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            return new User(docSnap.data());
-        }
-
-        return null;
+        const userData = await Database.getUserData(uid);
+        return userData ? new User(userData) : null;
     }
 
     static async new(uid, displayName) {
@@ -20,8 +13,7 @@ export default class User {
             roles: ["student"],
             assignedCategories: null,
         };
-        const docRef = doc(firestore, "users", uid);
-        await setDoc(docRef, userData);
+        await Database.setUserData(uid, userData);
         return new User(userData);
     }
 
