@@ -1,4 +1,4 @@
-import Database from "../services/database";
+import { Timestamp } from "firebase/firestore";
 
 export default class Concern {
     constructor({ attachmentLinks, category, creatorDisplayName, creatorUid, dateSubmitted, description, id, isResolved, isSpam, issueType, status, subject }) {
@@ -6,7 +6,7 @@ export default class Concern {
         this.category = category;
         this.creatorDisplayName = creatorDisplayName;
         this.creatorUid = creatorUid;
-        this.dateSubmitted = dateSubmitted.toDate();
+        this.dateSubmitted = dateSubmitted instanceof Timestamp ? dateSubmitted.toDate() : new Date(dateSubmitted);
         this.description = description;
         this.id = id;
         this.isResolved = isResolved;
@@ -14,10 +14,5 @@ export default class Concern {
         this.issueType = issueType;
         this.status = status;
         this.subject = subject;
-    }
-
-    static async findById(concernId) {
-        const concernData = await Database.getConcernData(concernId);
-        return concernData ? new Concern(concernData) : null;
     }
 }
