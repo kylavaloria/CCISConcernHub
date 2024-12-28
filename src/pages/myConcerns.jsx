@@ -1,15 +1,21 @@
-import React from 'react';
-import Header from '../components/Header';
+import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import ConcernList from '../components/concernList';
+import Database from '../services/database';
 
-export function MyConcerns() {
-    const concerns = [
-        { id: 1, issueType: 'Technical', category: 'Feedback', subject: 'Issue with Login', status: 'Open', dateSubmitted: '2024-10-24' },
-        { id: 2, issueType: 'Academic', category: 'Complaint', subject: 'Grades Issue', status: 'In Progress', dateSubmitted: '2024-10-20' },
-        { id: 3, issueType: 'Technical', category: 'Request', subject: 'Update Software', status: 'On Hold', dateSubmitted: '2024-10-18' },
-        { id: 4, issueType: 'Academic', category: 'Complaint', subject: 'Missing Credits', status: 'Closed', dateSubmitted: '2024-10-15' },
-    ];
+export function MyConcerns({ userData }) {
+    const [concerns, setConcerns] = useState([]);
+
+    useEffect(() => {
+        async function fetchUserConcerns() {
+            if (userData) {
+                const userConcerns = await Database.getUserConcerns(userData.uid);
+                setConcerns(userConcerns);
+            }
+        }
+        fetchUserConcerns();
+    }, [userData]);
+
 
     return (
         <div className="min-h-screen flex flex-col">

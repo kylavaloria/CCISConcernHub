@@ -4,17 +4,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
-import Concern from '../models/concern';
+import Database from '../services/database';
 
 export function ViewConcern() {
     const navigate = useNavigate();
-    // const { concernId } = useParams();
-    const concernId = "3345"; // placeholder only
+    const { concernId } = useParams();
     const [concern, setConcern] = useState(null);
 
     useEffect(() => {
         async function fetchConcern() {
-            const fetchedConcern = await Concern.findById(String(concernId));
+            const fetchedConcern = await Database.getConcern(String(concernId));
             setConcern(fetchedConcern);
         }
         fetchConcern();
