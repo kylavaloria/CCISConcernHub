@@ -1,6 +1,5 @@
 import { auth, provider } from '../auth/auth';
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
-import User from '../models/user';
 import Database from '../services/database';
 
 export default class ClientUser {
@@ -27,8 +26,7 @@ export default class ClientUser {
         let user = await Database.getUser(uid);
 
         if (user === null) {
-            // Database.setUserData(uid, userData)
-            user = await Database.new(uid, this.firebaseUser);
+            user = await Database.setUserData(uid, this.firebaseUser);
         }
 
         return user;
