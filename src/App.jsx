@@ -65,7 +65,7 @@ export default function App() {
         "isSolid": true,
       }
     },
-    "/view-concern/:id": {
+    "/view-concern/:concernId": {
       "element": <ViewConcern />,
       "headerProps": {
         "isSolid": true,

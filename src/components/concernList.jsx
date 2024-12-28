@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatusBadge from './statusBadge';
 
@@ -110,7 +110,7 @@ export function ConcernList({ concerns, showStudentName = false }) {
                     {filteredConcerns.length > 0 ? (
                         filteredConcerns.map(concern => (
                             <div key={concern.id} className="text-gray-700 border border-gray-300 mb-2 flex">
-                                {showStudentName && <div className="py-2 px-4 flex-1">{concern.studentName}</div>}
+                                {showStudentName && <div className="py-2 px-4 flex-1">{concern.creatorDisplayName}</div>}
                                 <div className="py-2 px-4" style={{ width: '100px' }}>{concern.id}</div>
                                 <div className="py-2 px-4 flex-1">{concern.issueType}</div>
                                 <div className="py-2 px-4 flex-1">{concern.category}</div>
@@ -118,7 +118,7 @@ export function ConcernList({ concerns, showStudentName = false }) {
                                 <div className="py-2 px-4 flex-1">
                                     <StatusBadge status={concern.status} />
                                 </div>
-                                <div className="py-2 px-4 flex-1">{concern.dateSubmitted}</div>
+                                <div className="py-2 px-4 flex-1">{concern.dateSubmitted.toLocaleDateString()}</div>
                                 <div className="py-2 px-2" style={{ width: '80px' }}>
                                     <Link to={`/view-concern/${concern.id}`} className="text-blue-500 hover:text-blue-700">View</Link>
                                 </div>
@@ -136,10 +136,3 @@ export function ConcernList({ concerns, showStudentName = false }) {
 }
 
 export default ConcernList;
-
-
-
-
-
-
-

@@ -1,31 +1,31 @@
-import React from 'react';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
+import Database from '../services/database';
 
 export function ViewConcern() {
     const navigate = useNavigate();
+    const { concernId } = useParams();
+    const [concern, setConcern] = useState(null);
+
+    useEffect(() => {
+        async function fetchConcern() {
+            const fetchedConcern = await Database.getConcern(String(concernId));
+            setConcern(fetchedConcern);
+        }
+        fetchConcern();
+    }, [concernId]);
 
     const handleBackClick = () => {
         navigate('/my-concerns');
     };
 
-    // Sample concern details (replace with actual data)
-    const concern = {
-        id: 1,
-        title: 'Need help with system access',
-        status: 'Open',
-        dateSubmitted: '2024-10-01',
-        issueType: 'Request',
-        category: 'IT Support',
-        description: 'I am unable to access my PUP account and need assistance resetting the password.',
-        attachments: ['screenshot.png', 'error_message.pdf'],
-        studentName: 'Jane Doe',
-        studentNumber: '20240001',
-    };
+    if (!concern) {
+        return <div>Loading...</div>;
+    }
 
     // Sample chat messages (replace with actual discussion data)
     const initialDiscussion = [
@@ -44,7 +44,7 @@ export function ViewConcern() {
             <main className="p-6 gap-4">
                 <div className="flex items-center mb-4 cursor-pointer" onClick={handleBackClick}>
                     <FaArrowLeft className="mr-2 text-blue-400" />
-                    <h1 className="text-3xl font-bold mb-4 text-blue-400">View Concern</h1>
+                    <h1 className="text-3xl font-bold mb-4 text-blue-400">View Concerns</h1>
                 </div>
 
                 {/* Concern Details Section */}

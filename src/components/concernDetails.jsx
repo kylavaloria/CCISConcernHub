@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import StatusBadge from './statusBadge';
-import { FaPaperclip } from 'react-icons/fa'; 
+import { FaPaperclip } from 'react-icons/fa';
 
 const ConcernDetails = ({ concern, user }) => {
     // Initialize state with the current concern status
@@ -13,7 +13,7 @@ const ConcernDetails = ({ concern, user }) => {
 
     return (
         <div className="flex flex-col mx-14 gap-4">
-            <h2 className="text-3xl font-semibold">{concern.title}</h2>
+            <h2 className="text-3xl font-semibold">{concern.subject}</h2>
             <div className="flex justify-start gap-8">
                 <div className="text-gray-600 flex items-center gap-2">
                     Concern ID <strong>#{concern.id}</strong>
@@ -42,11 +42,7 @@ const ConcernDetails = ({ concern, user }) => {
                 <div className="text-gray-600 flex justify-start gap-8">
                     <div>
                         <div>Student Name </div>
-                        <div className='text-lg font-semibold'>{concern.studentName}</div>
-                    </div>
-                    <div>
-                        <div>Student Number </div>
-                        <div className='text-lg font-semibold'>{concern.studentNumber}</div>
+                        <div className='text-lg font-semibold'>{concern.creatorDisplayName}</div>
                     </div>
                 </div>
             )}
@@ -54,7 +50,7 @@ const ConcernDetails = ({ concern, user }) => {
             <div className="flex border p-4 rounded-md shadow">
                 <div className="flex-1 border-gray-300 pl-4">
                     <p className='text-gray-400'>Date Submitted</p>
-                    <div>{concern.dateSubmitted}</div>
+                    <div>{concern.dateSubmitted.toLocaleDateString()}</div>
                 </div>
                 <div className="flex-1 border-l-2 border-gray-300 pl-4">
                     <p className='text-gray-400'>Type of Issue</p>
@@ -73,9 +69,9 @@ const ConcernDetails = ({ concern, user }) => {
             {/* Attachments */}
             <div className="mb-6">
                 <h3 className="text-gray-600 mb-2">Attachments</h3>
-                {concern.attachments.length > 0 ? (
+                {concern.attachmentLinks.length > 0 ? (
                     <div className="flex gap-4 flex-wrap">
-                        {concern.attachments.map((attachment, index) => (
+                        {concern.attachmentLinks.map((attachment, index) => (
                             <div
                                 key={index}
                                 className="flex items-center gap-2 p-2 border rounded-2xl bg-gray-50 shadow-sm"
