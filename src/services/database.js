@@ -29,4 +29,11 @@ export default class Database {
         });
         return concerns;
     }
+
+    static async setConcern(concernData) {
+        const concernsCollectionRef = collection(firestore, "concerns");
+        const docRef = doc(concernsCollectionRef);
+        const concernId = docRef.id;
+        await setDoc(docRef, { ...concernData, id: concernId });
+    }
 }
