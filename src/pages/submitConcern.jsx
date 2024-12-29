@@ -14,6 +14,8 @@ export function SubmitConcern({ userData }) {
         subject: '',
         description: '',
         attachment: null,
+        isResolved: false,
+        isSpam: false,
     });
 
     const handleBackClick = () => {
@@ -36,7 +38,6 @@ export function SubmitConcern({ userData }) {
                 dateSubmitted: new Date(),
                 status: 'Open',
                 creatorUid: userData.uid,
-                creatorDisplayName: userData.displayName,
                 attachmentLinks: [], // Handle file upload
             });
 

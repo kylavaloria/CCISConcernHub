@@ -2,7 +2,7 @@ import { useState } from 'react';
 import StatusBadge from './statusBadge';
 import { FaPaperclip } from 'react-icons/fa';
 
-const ConcernDetails = ({ concern, user }) => {
+const ConcernDetails = ({ concern, concernCreator, userData }) => {
     // Initialize state with the current concern status
     const [status, setStatus] = useState(concern.status);
 
@@ -20,7 +20,7 @@ const ConcernDetails = ({ concern, user }) => {
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="text-gray-600">Status:</span>
-                    {user.isAdmin ? (
+                    {userData?.isAdmin() ? (
                         <select
                             value={status}
                             onChange={handleStatusChange}
@@ -38,11 +38,11 @@ const ConcernDetails = ({ concern, user }) => {
             </div>
 
             {/* Additional Info for Admins */}
-            {user.isAdmin && (
+            {userData?.isAdmin() && (
                 <div className="text-gray-600 flex justify-start gap-8">
                     <div>
                         <div>Student Name </div>
-                        <div className='text-lg font-semibold'>{concern.creatorDisplayName}</div>
+                        <div className='text-lg font-semibold'>{concernCreator?.displayName}</div>
                     </div>
                 </div>
             )}
@@ -93,7 +93,7 @@ const ConcernDetails = ({ concern, user }) => {
             </div>
 
             {/* Mark as Resolved */}
-            {user.isAdmin && (
+            {userData?.isAdmin() && (
                 <div className="mt-2 mb-10">
                     <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                         Mark as Resolved

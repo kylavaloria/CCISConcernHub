@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import StatusBadge from './statusBadge';
+import Database from '../services/database';
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
@@ -29,7 +30,7 @@ const DatePicker = ({ value, onChange }) => (
     />
 );
 
-export function ConcernList({ concerns, showStudentName = false }) {
+export function ConcernList({ concerns, showStudentName = true }) {
     const [filters, setFilters] = useState({
         issueType: "All",
         category: "All",
@@ -38,6 +39,25 @@ export function ConcernList({ concerns, showStudentName = false }) {
         startDate: "", // Added state for start date filter
         endDate: "", // Added state for end date filter
     });
+
+    const [creatorDisplayNames, setCreatorDisplayNames] = useState({});
+
+    useEffect(() => {
+        const fetchCreatorData = async () => {
+            const displayNames = {};
+            for (const concern of concerns) {
+                try {
+                    const user = await Database.getUser(concern.creatorUid);
+                    displayNames[concern.creatorUid] = user.displayName;
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+            setCreatorDisplayNames(displayNames);
+        };
+
+        fetchCreatorData();
+    }, [concerns]);
 
     const handleFilterChange = (filterName, value) => {
         setFilters(prev => ({ ...prev, [filterName]: value }));
@@ -110,7 +130,7 @@ export function ConcernList({ concerns, showStudentName = false }) {
                     {filteredConcerns.length > 0 ? (
                         filteredConcerns.map(concern => (
                             <div key={concern.id} className="text-gray-700 border border-gray-300 mb-2 flex">
-                                {showStudentName && <div className="py-2 px-4 flex-1">{concern.creatorDisplayName}</div>}
+                                {showStudentName && <div className="py-2 px-4 flex-1">{creatorDisplayNames[concern.creatorUid] || 'Loading...'}</div>}
                                 <div className="py-2 px-4" style={{ width: '100px' }}>{concern.id}</div>
                                 <div className="py-2 px-4 flex-1">{concern.issueType}</div>
                                 <div className="py-2 px-4 flex-1">{concern.category}</div>

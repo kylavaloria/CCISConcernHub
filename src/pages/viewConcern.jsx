@@ -10,14 +10,16 @@ export function ViewConcern({ userData }) {
     const navigate = useNavigate();
     const { concernId } = useParams();
     const [concern, setConcern] = useState(null);
+    const [concernCreator, setConcernCreator] = useState(null);
 
     useEffect(() => {
         async function fetchConcern() {
             const fetchedConcern = await Database.getConcern(String(concernId));
             setConcern(fetchedConcern);
+            setConcernCreator(await fetchedConcern.fetchCreator(userData));
         }
         fetchConcern();
-    }, [concernId]);
+    }, [concernId, userData]);
 
     const handleBackClick = () => {
         navigate('/my-concerns');
@@ -42,7 +44,7 @@ export function ViewConcern({ userData }) {
                 </div>
 
                 {/* Concern Details Section */}
-                <ConcernDetails concern={concern} userData={userData} />
+                <ConcernDetails concern={concern} concernCreator={concernCreator} userData={userData} />
 
                 {/* Discussion Thread Section */}
                 <DiscussionThread initialDiscussion={initialDiscussion} />
