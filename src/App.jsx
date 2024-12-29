@@ -48,7 +48,7 @@ export default function App() {
       }
     },
     "/submit-concern": {
-      "element": <SubmitConcern />,
+      "element": <SubmitConcern userData={userData} />,
       "headerProps": {
         "isSolid": true,
       }
