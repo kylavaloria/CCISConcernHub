@@ -6,7 +6,7 @@ import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
 import Database from '../services/database';
 
-export function ViewConcern() {
+export function ViewConcern({ userData }) {
     const navigate = useNavigate();
     const { concernId } = useParams();
     const [concern, setConcern] = useState(null);
@@ -33,12 +33,6 @@ export function ViewConcern() {
         { sender: 'Admin', message: 'We are looking into it. Please hold on.', timestamp: '2024-10-02 11:00 AM' },
     ];
 
-    const user = {
-        id: 1,
-        name: 'John Doe',
-        isAdmin: true, // Change this to false to test as a student
-    };
-
     return (
         <div className="min-h-screen flex flex-col">
             <main className="p-6 gap-4">
@@ -48,7 +42,7 @@ export function ViewConcern() {
                 </div>
 
                 {/* Concern Details Section */}
-                <ConcernDetails concern={concern} user={user} />
+                <ConcernDetails concern={concern} userData={userData} />
 
                 {/* Discussion Thread Section */}
                 <DiscussionThread initialDiscussion={initialDiscussion} />
