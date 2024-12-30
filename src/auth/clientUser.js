@@ -1,6 +1,7 @@
 import { auth, provider } from '../auth/auth';
 import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import Database from '../services/database';
+import User from '../models/user';
 
 export default class ClientUser {
     static async signInWithMicrosoft() {
@@ -26,7 +27,13 @@ export default class ClientUser {
         let user = await Database.getUser(uid);
 
         if (user === null) {
-            user = await Database.setUserData(uid, this.firebaseUser);
+            user = new User({
+                uid: this.firebaseUser.uid,
+                displayName: this.firebaseUser.displayName,
+                roles: ['student'],
+                assignedCategories: null,
+            });
+            user = await Database.setUserData(uid, user);
         }
 
         return user;

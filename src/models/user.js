@@ -17,4 +17,13 @@ export default class User {
     isAdmin() {
         return this.roles.includes('admin');
     }
+
+    toPlainObject() {
+        return {
+            uid: this.uid,
+            displayName: this.displayName,
+            roles: this.roles,
+            assignedCategories: this.assignedCategories,
+        };
+    }
 }

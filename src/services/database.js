@@ -12,7 +12,8 @@ export default class Database {
 
     static async setUserData(uid, userData) {
         const docRef = doc(firestore, "users", uid);
-        await setDoc(docRef, userData);
+        await setDoc(docRef, userData.toPlainObject());
+        return new User(userData);
     }
 
     static async getConcern(concernId) {
