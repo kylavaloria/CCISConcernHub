@@ -62,19 +62,20 @@ export function SubmitConcern({ userData }) {
                             <label htmlFor="issue-type" className="block mb-1">Type of Issue *</label>
                             <select id="issue-type" name="issueType" required className="border border-blue-300 rounded p-2 w-full" value={formData.issueType} onChange={handleChange}>
                                 <option value="">Select Type of Issue</option>
-                                <option value="academic">Concern</option>
-                                <option value="administrative">Request</option>
-                                <option value="financial">Complaint</option>
+                                <option value="Concern">Concern</option>
+                                <option value="Request">Request</option>
+                                <option value="Complaint">Complaint</option>
                             </select>
                         </div>
                         <div className="form-group">
                             <label htmlFor="category" className="block mb-1">Category *</label>
                             <select id="category" name="category" required className="border border-blue-300 rounded p-2 w-full" value={formData.category} onChange={handleChange}>
                                 <option value="">Select Category</option>
-                                <option value="feedback">Laboratory</option>
-                                <option value="complaint">Schedule</option>
-                                <option value="request">Enrollment</option>
-                                <option value="scholarship">Scholarship</option>
+                                <option value="Enrollment">Enrollment</option>
+                                <option value="Grades">Grades</option>
+                                <option value="Laboratory">Laboratory</option>
+                                <option value="Schedule">Schedule</option>
+                                <option value="Scholarship">Scholarship</option>
                             </select>
                         </div>
                         <div className="form-group">

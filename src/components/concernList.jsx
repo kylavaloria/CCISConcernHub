@@ -4,7 +4,7 @@ import StatusBadge from './statusBadge';
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
-    categories: ["All", "Scholarship", "Enrollment", "Website", "Grades", "Others"],
+    categories: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
     statuses: ["All", "Open", "In Progress", "On Hold", "Closed"],
 };
 
