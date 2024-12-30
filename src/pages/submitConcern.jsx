@@ -27,6 +27,9 @@ const SelectDropdown = ({ id, name, value, onChange, options, defaultValue }) =>
     </select>
 );
 
+const SUBJECT_LIMIT = 50;
+const DESCRIPTION_LIMIT = 500;
+
 export function SubmitConcern({ userData }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -43,9 +46,18 @@ export function SubmitConcern({ userData }) {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
+        let newValue = value;
+
+        // Limit the number of characters for subject and description
+        if (name === 'subject' && value.length > SUBJECT_LIMIT) {
+            newValue = value.slice(0, SUBJECT_LIMIT);
+        } else if (name === 'description' && value.length > DESCRIPTION_LIMIT) {
+            newValue = value.slice(0, DESCRIPTION_LIMIT);
+        }
+
         setFormData((prevData) => ({
             ...prevData,
-            [name]: files ? files[0] : value,
+            [name]: files ? files[0] : newValue,
         }));
     };
 
@@ -105,10 +117,12 @@ export function SubmitConcern({ userData }) {
                             <label htmlFor="subject" className="block mb-1">Subject/Title *</label>
                             <input type="text" id="subject" name="subject" required className="border border-blue-300 rounded p-2 w-full" value={formData.subject} onChange={handleChange} />
                         </div>
+                        <small>{SUBJECT_LIMIT - formData.subject.length}/{SUBJECT_LIMIT}</small>
                         <div className="form-group">
                             <label htmlFor="description" className="block mb-1">Description *</label>
                             <textarea id="description" name="description" required className="border border-blue-300 rounded p-2 w-full h-24" value={formData.description} onChange={handleChange} />
                         </div>
+                        <small>{DESCRIPTION_LIMIT - formData.description.length}/{DESCRIPTION_LIMIT}</small>
                         <div className="form-group">
                             <label htmlFor="attachment" className="block mb-1">Attachment</label>
                             <input type="file" id="attachment" name="attachment" className="border border-blue-300 rounded p-2 w-full" onChange={handleChange} />
