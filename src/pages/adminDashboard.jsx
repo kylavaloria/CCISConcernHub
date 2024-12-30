@@ -1,5 +1,3 @@
-import React from 'react';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ConcernList from '../components/concernList';
 import DashboardStats from '../components/dashboardStats';
@@ -43,7 +41,7 @@ export function AdminDashboard() {
                 <h2 className="text-2xl font-semibold mt-2 text-blue-400">Concern Overview</h2>
                 <DashboardStats metrics={metricsData} />
                 <h2 className="text-xl font-semibold mt-6 text-blue-400">Manage Concerns</h2>
-                <ConcernList concerns={concerns} showStudentName={true} />
+                <ConcernList concerns={concerns} />
             </main>
             <Footer />
         </div>

@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatusBadge from './statusBadge';
-import Database from '../services/database';
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
@@ -30,7 +29,7 @@ const DatePicker = ({ value, onChange }) => (
     />
 );
 
-export function ConcernList({ concerns, showStudentName = true }) {
+export function ConcernList({ concerns }) {
     const [filters, setFilters] = useState({
         issueType: "All",
         category: "All",
@@ -39,25 +38,6 @@ export function ConcernList({ concerns, showStudentName = true }) {
         startDate: "", // Added state for start date filter
         endDate: "", // Added state for end date filter
     });
-
-    const [creatorDisplayNames, setCreatorDisplayNames] = useState({});
-
-    useEffect(() => {
-        const fetchCreatorData = async () => {
-            const displayNames = {};
-            for (const concern of concerns) {
-                try {
-                    const user = await Database.getUser(concern.creatorUid);
-                    displayNames[concern.creatorUid] = user.displayName;
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
-            }
-            setCreatorDisplayNames(displayNames);
-        };
-
-        fetchCreatorData();
-    }, [concerns]);
 
     const handleFilterChange = (filterName, value) => {
         setFilters(prev => ({ ...prev, [filterName]: value }));
@@ -81,7 +61,6 @@ export function ConcernList({ concerns, showStudentName = true }) {
             <div className="min-w-full">
                 {/* Header with Filters Beside Each Column */}
                 <div className="text-gray-600 text-sm flex border-b border-gray-300 pb-2 mb-2">
-                    {showStudentName && <div className="py-3 px-4 flex-1 font-bold">Student Name</div>}
                     <div className="py-3 px-4 font-bold" style={{ width: '120px' }}>Concern ID</div>
                     <div className="flex-1 font-bold">
                         <div>Type of Issue</div>
@@ -130,7 +109,6 @@ export function ConcernList({ concerns, showStudentName = true }) {
                     {filteredConcerns.length > 0 ? (
                         filteredConcerns.map(concern => (
                             <div key={concern.id} className="text-gray-700 border border-gray-300 mb-2 flex">
-                                {showStudentName && <div className="py-2 px-4 flex-1">{creatorDisplayNames[concern.creatorUid] || 'Loading...'}</div>}
                                 <div className="py-2 px-4" style={{ width: '100px' }}>{concern.id}</div>
                                 <div className="py-2 px-4 flex-1">{concern.issueType}</div>
                                 <div className="py-2 px-4 flex-1">{concern.category}</div>
@@ -145,7 +123,7 @@ export function ConcernList({ concerns, showStudentName = true }) {
                             </div>
                         ))
                     ) : (
-                        <div className="text-center py-4" colSpan={showStudentName ? 8 : 7}>
+                        <div className="text-center py-4">
                             No concerns available.
                         </div>
                     )}
