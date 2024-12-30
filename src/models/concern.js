@@ -1,10 +1,10 @@
 import { Timestamp } from "firebase/firestore";
+import Database from "../services/database";
 
 export default class Concern {
-    constructor({ attachmentLinks, category, creatorDisplayName, creatorUid, dateSubmitted, description, id, isResolved, isSpam, issueType, status, subject }) {
+    constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, id, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
         this.attachmentLinks = attachmentLinks;
         this.category = category;
-        this.creatorDisplayName = creatorDisplayName;
         this.creatorUid = creatorUid;
         this.dateSubmitted = dateSubmitted instanceof Timestamp ? dateSubmitted.toDate() : new Date(dateSubmitted);
         this.description = description;
@@ -14,5 +14,18 @@ export default class Concern {
         this.issueType = issueType;
         this.status = status;
         this.subject = subject;
+    }
+
+    async fetchCreator(userData) {
+        if (userData?.uid === this.creatorUid) {
+            return userData;
+        }
+
+        try {
+            return await Database.getUser(this.creatorUid);
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            return null;
+        }
     }
 }

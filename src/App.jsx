@@ -48,7 +48,7 @@ export default function App() {
       }
     },
     "/submit-concern": {
-      "element": <SubmitConcern />,
+      "element": <SubmitConcern userData={userData} />,
       "headerProps": {
         "isSolid": true,
       }
@@ -66,7 +66,7 @@ export default function App() {
       }
     },
     "/view-concern/:concernId": {
-      "element": <ViewConcern />,
+      "element": <ViewConcern userData={userData} />,
       "headerProps": {
         "isSolid": true,
       }

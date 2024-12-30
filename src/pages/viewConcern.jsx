@@ -6,18 +6,20 @@ import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
 import Database from '../services/database';
 
-export function ViewConcern() {
+export function ViewConcern({ userData }) {
     const navigate = useNavigate();
     const { concernId } = useParams();
     const [concern, setConcern] = useState(null);
+    const [concernCreator, setConcernCreator] = useState(null);
 
     useEffect(() => {
         async function fetchConcern() {
             const fetchedConcern = await Database.getConcern(String(concernId));
             setConcern(fetchedConcern);
+            setConcernCreator(await fetchedConcern.fetchCreator(userData));
         }
         fetchConcern();
-    }, [concernId]);
+    }, [concernId, userData]);
 
     const handleBackClick = () => {
         navigate('/my-concerns');
@@ -33,12 +35,6 @@ export function ViewConcern() {
         { sender: 'Admin', message: 'We are looking into it. Please hold on.', timestamp: '2024-10-02 11:00 AM' },
     ];
 
-    const user = {
-        id: 1,
-        name: 'John Doe',
-        isAdmin: true, // Change this to false to test as a student
-    };
-
     return (
         <div className="min-h-screen flex flex-col">
             <main className="p-6 gap-4">
@@ -48,7 +44,7 @@ export function ViewConcern() {
                 </div>
 
                 {/* Concern Details Section */}
-                <ConcernDetails concern={concern} user={user} />
+                <ConcernDetails concern={concern} concernCreator={concernCreator} userData={userData} />
 
                 {/* Discussion Thread Section */}
                 <DiscussionThread initialDiscussion={initialDiscussion} />

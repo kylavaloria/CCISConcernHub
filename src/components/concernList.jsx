@@ -4,7 +4,7 @@ import StatusBadge from './statusBadge';
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
-    categories: ["All", "Scholarship", "Enrollment", "Website", "Grades", "Others"],
+    categories: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
     statuses: ["All", "Open", "In Progress", "On Hold", "Closed"],
 };
 
@@ -29,7 +29,7 @@ const DatePicker = ({ value, onChange }) => (
     />
 );
 
-export function ConcernList({ concerns, showStudentName = false }) {
+export function ConcernList({ concerns }) {
     const [filters, setFilters] = useState({
         issueType: "All",
         category: "All",
@@ -61,7 +61,6 @@ export function ConcernList({ concerns, showStudentName = false }) {
             <div className="min-w-full">
                 {/* Header with Filters Beside Each Column */}
                 <div className="text-gray-600 text-sm flex border-b border-gray-300 pb-2 mb-2">
-                    {showStudentName && <div className="py-3 px-4 flex-1 font-bold">Student Name</div>}
                     <div className="py-3 px-4 font-bold" style={{ width: '120px' }}>Concern ID</div>
                     <div className="flex-1 font-bold">
                         <div>Type of Issue</div>
@@ -110,7 +109,6 @@ export function ConcernList({ concerns, showStudentName = false }) {
                     {filteredConcerns.length > 0 ? (
                         filteredConcerns.map(concern => (
                             <div key={concern.id} className="text-gray-700 border border-gray-300 mb-2 flex">
-                                {showStudentName && <div className="py-2 px-4 flex-1">{concern.creatorDisplayName}</div>}
                                 <div className="py-2 px-4" style={{ width: '100px' }}>{concern.id}</div>
                                 <div className="py-2 px-4 flex-1">{concern.issueType}</div>
                                 <div className="py-2 px-4 flex-1">{concern.category}</div>
@@ -125,7 +123,7 @@ export function ConcernList({ concerns, showStudentName = false }) {
                             </div>
                         ))
                     ) : (
-                        <div className="text-center py-4" colSpan={showStudentName ? 8 : 7}>
+                        <div className="text-center py-4">
                             No concerns available.
                         </div>
                     )}
