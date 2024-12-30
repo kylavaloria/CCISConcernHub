@@ -37,9 +37,9 @@ export function SignIn({ clientUser }) {
                 backgroundPosition: 'center',
             }}
         >
-            <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col">
+            <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col pt-16 pb-32">
                 {/* Title Section */}
-                <div className="text-center mt-8">
+                <div className="text-center mt-16 mb-16">
                     <h1 className="text-4xl font-bold text-white mb-2">CCIS Concern Hub</h1>
                     <p className="text-lg text-white">Your platform for raising concerns</p>
                 </div>
