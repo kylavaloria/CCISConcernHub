@@ -6,6 +6,27 @@ import { FaArrowLeft } from 'react-icons/fa';
 import Concern from '../models/concern';
 import Database from '../services/database';
 
+const selectOptions = {
+    issueTypes: ["Concern", "Request", "Complaint"],
+    categories: ["Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
+};
+
+const SelectDropdown = ({ id, name, value, onChange, options, defaultValue }) => (
+    <select
+        id={id}
+        name={name}
+        required
+        className="border border-blue-300 rounded p-2 w-full"
+        value={value}
+        onChange={onChange}
+    >
+        <option value="">Select {defaultValue}</option>
+        {options.map(option => (
+            <option key={option} value={option}>{option}</option>
+        ))}
+    </select>
+);
+
 export function SubmitConcern({ userData }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -60,23 +81,25 @@ export function SubmitConcern({ userData }) {
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="issue-type" className="block mb-1">Type of Issue *</label>
-                            <select id="issue-type" name="issueType" required className="border border-blue-300 rounded p-2 w-full" value={formData.issueType} onChange={handleChange}>
-                                <option value="">Select Type of Issue</option>
-                                <option value="Concern">Concern</option>
-                                <option value="Request">Request</option>
-                                <option value="Complaint">Complaint</option>
-                            </select>
+                            <SelectDropdown
+                                id="issue-type"
+                                name="issueType"
+                                value={formData.issueType}
+                                onChange={e => handleChange(e)}
+                                options={selectOptions.issueTypes}
+                                defaultValue="Type of Issue"
+                            />
                         </div>
                         <div className="form-group">
                             <label htmlFor="category" className="block mb-1">Category *</label>
-                            <select id="category" name="category" required className="border border-blue-300 rounded p-2 w-full" value={formData.category} onChange={handleChange}>
-                                <option value="">Select Category</option>
-                                <option value="Enrollment">Enrollment</option>
-                                <option value="Grades">Grades</option>
-                                <option value="Laboratory">Laboratory</option>
-                                <option value="Schedule">Schedule</option>
-                                <option value="Scholarship">Scholarship</option>
-                            </select>
+                            <SelectDropdown
+                                id="category"
+                                name="category"
+                                value={formData.category}
+                                onChange={e => handleChange(e)}
+                                options={selectOptions.categories}
+                                defaultValue="Category"
+                            />
                         </div>
                         <div className="form-group">
                             <label htmlFor="subject" className="block mb-1">Subject/Title *</label>
