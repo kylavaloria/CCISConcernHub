@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
 import backgroundImage from '../assets/background.jpg';
 import ClientUser from '../auth/clientUser';
+import outlookLogo from '../assets/outlook-logo.png';
 
 async function navigateBasedOnRole(clientUser, navigate) {
     const userData = await clientUser.getUserFromDatabase();
@@ -48,8 +49,17 @@ export function SignIn({ clientUser }) {
                     <div className="bg-white bg-opacity-20 rounded-3xl p-8 w-80 shadow-3xl">
                         <h2 className="text-2xl font-semibold text-white mb-4">Welcome</h2>
                         <p className="text-md text-white mb-6">Please log in or sign in below</p>
-                        <button onClick={signInWithMicrosoft} className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
-                            Login with Google
+                        <button onClick={signInWithMicrosoft} className="w-full flex justify-center items-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+                            <div className="flex items-center">
+                                <div className="w-6 h-6 flex justify-center items-center rounded-full bg-white mr-2">
+                                    <img 
+                                        src={outlookLogo}
+                                        alt="Outlook Logo" 
+                                        className="w-4 h-4"
+                                    />
+                                </div>
+                                <span>Login with PUP Webmail</span>
+                            </div>
                         </button>
                     </div>
                 </div>
