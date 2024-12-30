@@ -35,6 +35,7 @@ export function SignIn({ clientUser }) {
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
             }}
         >
             <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col pt-16 pb-32">

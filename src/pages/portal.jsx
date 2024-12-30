@@ -5,7 +5,7 @@ import backgroundImage from '../assets/background.jpg';
 export function Portal() {
     const navigate = useNavigate();
 
-    // Handlers for button clicks
+    // Handlers for navigation
     const handleStudentClick = () => {
         navigate('/my-concerns');
     };
@@ -21,41 +21,42 @@ export function Portal() {
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
+                backgroundAttachment: 'fixed',
             }}
         >
-            <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col">
+            <div className="backdrop-blur-sm bg-blue-400 bg-opacity-30 flex-grow flex flex-col pt-16 pb-32">
                 {/* Title Section */}
-                <div className="text-center mt-8">
+                <div className="text-center mt-16 mb-16">
                     <h1 className="text-4xl font-bold text-white mb-2">CCIS Concern Hub</h1>
                     <p className="text-lg text-white">Your platform for raising concerns</p>
                 </div>
 
-                {/* Main Content Area */}
+                {/* Portal Content Area */}
                 <div className="flex-grow flex justify-center items-center">
-                    <div className="bg-white bg-opacity-20 rounded-3xl p-8 w-80 shadow-3xl min-w-96">
-                        <p className="text-4xl font-semibold mb-2 text-white">Welcome</p>
-                        <p className="text-lg mb-6 text-white">Choose your destination</p>
-
+                    <div className="bg-white bg-opacity-20 rounded-3xl p-8 w-80 shadow-3xl">
+                        <h2 className="text-2xl font-semibold text-white mb-4">Welcome</h2>
+                        <p className="text-md text-white mb-6">Choose your destination</p>
+                        
                         {/* Buttons for Student and Admin */}
                         <div className="flex flex-col gap-4">
                             <button
-                                className="px-6 py-2 bg-blue-400 text-white font-semibold rounded-lg hover:bg-blue-500 transition duration-300"
+                                className="w-full flex justify-center items-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
                                 onClick={handleStudentClick}
                             >
-                                Student
+                                <span>Student</span>
                             </button>
                             <button
-                                className="px-6 py-2 bg-blue-400 text-white font-semibold rounded-lg hover:bg-blue-500 transition duration-300"
+                                className="w-full flex justify-center items-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
                                 onClick={handleAdminClick}
                             >
-                                Admin
+                                <span>Admin</span>
                             </button>
                         </div>
                     </div>
                 </div>
-
-                <Footer />
             </div>
+
+            <Footer />
         </div>
     );
 }
