@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore";
 import Database from "../services/database";
 
 export default class Concern {
-    constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, id, isResolved, isSpam, issueType, status, subject }) {
+    constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, id, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
         this.attachmentLinks = attachmentLinks;
         this.category = category;
         this.creatorUid = creatorUid;
