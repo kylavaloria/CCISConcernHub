@@ -102,9 +102,9 @@ const DateDropdown = ({ startDate, endDate, onChange, isOpen, toggleDropdown }) 
 
 export function ConcernList({ concerns }) {
     const [filters, setFilters] = useState({
-        issueType: [],
-        category: [],
-        status: [],
+        issueType: ["All", "Concern", "Request", "Complaint"],
+        category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
+        status: ["All", "Open", "In Progress", "On Hold", "Closed"],
         sortBy: "newest",
         startDate: "",
         endDate: "",
@@ -154,61 +154,63 @@ export function ConcernList({ concerns }) {
         <div className="p-4">
             <div className="min-w-full">
                 <div>
+                    {/* Filter Section */}
+                    <div
+                        className="text-gray-600 border-gray-300 grid text-xs"
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: '2.5fr 2.5fr 4fr 3fr 2.5fr 130px',
+                            alignItems: 'left',
+                        }}
+                    >
+                        <div className="py-3 px-4 flex items-left">
+                            <div className="font-bold mr-2 ml-5">Type of Issue</div>
+                            <FilterDropdown
+                                value={filters.issueType}
+                                onChange={e => handleFilterChange('issueType', e.target.value)}
+                                options={filterOptions.issueTypes}
+                                isOpen={openFilterDropdown.issueType}
+                                toggleDropdown={() => toggleFilterDropdown('issueType')}
+                            />
+                        </div>
+                        <div className="py-3 px-4 flex items-left">
+                            <div className="font-bold mr-2">Category</div>
+                            <FilterDropdown
+                                value={filters.category}
+                                onChange={e => handleFilterChange('category', e.target.value)}
+                                options={filterOptions.categories}
+                                isOpen={openFilterDropdown.category}
+                                toggleDropdown={() => toggleFilterDropdown('category')}
+                            />
+                        </div>
+                        <div className="py-3 px-4">
+                            <div className="font-bold">Subject/Title</div>
+                        </div>
+                        <div className="py-3 px-4 flex items-left">
+                            <div className="font-bold mr-2">Status</div>
+                            <FilterDropdown
+                                value={filters.status}
+                                onChange={e => handleFilterChange('status', e.target.value)}
+                                options={filterOptions.statuses}
+                                isOpen={openFilterDropdown.status}
+                                toggleDropdown={() => toggleFilterDropdown('status')}
+                            />
+                        </div>
+                        <div className="py-3 px-4 flex items-left">
+                            <div className="font-bold mr-2">Date Submitted</div>
+                            <DateDropdown
+                                startDate={filters.startDate}
+                                endDate={filters.endDate}
+                                onChange={handleFilterChange}
+                                isOpen={openFilterDropdown.dateSubmitted}
+                                toggleDropdown={() => toggleFilterDropdown('dateSubmitted')}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Concern List */}
                     {filteredConcerns.length > 0 ? (
                         <div>
-                            <div
-                                className="text-gray-600 border-gray-300 grid text-xs"
-                                style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '2.5fr 2.5fr 4fr 3fr 2.5fr 130px',
-                                    alignItems: 'left',
-                                }}
-                            >
-                                <div className="py-3 px-4 flex items-left">
-                                    <div className="font-bold mr-2 ml-5">Type of Issue</div>
-                                    <FilterDropdown
-                                        value={filters.issueType}
-                                        onChange={e => handleFilterChange('issueType', e.target.value)}
-                                        options={filterOptions.issueTypes}
-                                        isOpen={openFilterDropdown.issueType}
-                                        toggleDropdown={() => toggleFilterDropdown('issueType')}
-                                    />
-                                </div>
-                                <div className="py-3 px-4 flex items-left">
-                                    <div className="font-bold mr-2">Category</div>
-                                    <FilterDropdown
-                                        value={filters.category}
-                                        onChange={e => handleFilterChange('category', e.target.value)}
-                                        options={filterOptions.categories}
-                                        isOpen={openFilterDropdown.category}
-                                        toggleDropdown={() => toggleFilterDropdown('category')}
-                                    />
-                                </div>
-                                <div className="py-3 px-4">
-                                    <div className="font-bold">Subject/Title</div>
-                                </div>
-                                <div className="py-3 px-4 flex items-left">
-                                    <div className="font-bold mr-2">Status</div>
-                                    <FilterDropdown
-                                        value={filters.status}
-                                        onChange={e => handleFilterChange('status', e.target.value)}
-                                        options={filterOptions.statuses}
-                                        isOpen={openFilterDropdown.status}
-                                        toggleDropdown={() => toggleFilterDropdown('status')}
-                                    />
-                                </div>
-                                <div className="py-3 px-4 flex items-left">
-                                    <div className="font-bold mr-2">Date Submitted</div>
-                                    <DateDropdown
-                                        startDate={filters.startDate}
-                                        endDate={filters.endDate}
-                                        onChange={handleFilterChange}
-                                        isOpen={openFilterDropdown.dateSubmitted}
-                                        toggleDropdown={() => toggleFilterDropdown('dateSubmitted')}
-                                    />
-                                </div>
-                            </div>
-
                             {filteredConcerns.map(concern => (
                                 <Link
                                     to={`/view-concern/${concern.id}`}
@@ -230,7 +232,7 @@ export function ConcernList({ concerns }) {
                                     <div className="py-2 px-4">
                                         <StatusBadge status={concern.status} />
                                     </div>
-                                    <div className="py-2 px-4">{new Date(concern.dateSubmitted).toLocaleDateString()}</div>
+                                    <div className="py-2 px-4">{concern.dateSubmitted.toLocaleDateString()}</div>
                                     <div className="py-2 px-2 relative">
                                         <span
                                             onClick={(e) => {
