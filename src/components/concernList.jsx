@@ -104,7 +104,7 @@ export function ConcernList({ concerns }) {
     const [filters, setFilters] = useState({
         issueType: ["All", "Concern", "Request", "Complaint"],
         category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
-        status: ["All", "Open", "In Progress", "On Hold", "Closed"],
+        status: ["Open", "In Progress"],
         sortBy: "newest",
         startDate: "",
         endDate: "",
