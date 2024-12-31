@@ -25,6 +25,10 @@ export function ViewConcern({ userData }) {
         navigate('/my-concerns');
     };
 
+    const handleStatusChange = (newStatus) => { // Added function to handle status change
+        setStatus(newStatus);
+    };
+
     if (!concern) {
         return <div>Loading...</div>;
     }
@@ -43,11 +47,18 @@ export function ViewConcern({ userData }) {
                     <h1 className="text-3xl font-bold mb-4 text-blue-400">View Concerns</h1>
                 </div>
 
-                {/* Concern Details Section */}
-                <ConcernDetails concern={concern} concernCreator={concernCreator} userData={userData} />
+                <ConcernDetails
+                    concern={concern}
+                    concernCreator={concernCreator}
+                    userData={userData}
+                    onStatusChange={handleStatusChange} // Pass status change handler
+                />
 
-                {/* Discussion Thread Section */}
-                <DiscussionThread initialDiscussion={initialDiscussion} />
+                <DiscussionThread
+                    initialDiscussion={initialDiscussion}
+                    status={status} // Pass status to DiscussionThread
+                    concernCreatedDate={concern.dateSubmitted}
+                />
             </main>
             <Footer />
         </div>
