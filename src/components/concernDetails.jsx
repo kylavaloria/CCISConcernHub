@@ -2,13 +2,15 @@ import { useState } from 'react';
 import StatusBadge from './statusBadge';
 import { FaPaperclip } from 'react-icons/fa';
 
-const ConcernDetails = ({ concern, concernCreator, userData }) => {
-    // Initialize state with the current concern status
+const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) => { // Added onStatusChange
     const [status, setStatus] = useState(concern.status);
 
-    // Function to handle status change
     const handleStatusChange = (e) => {
-        setStatus(e.target.value);
+        const newStatus = e.target.value;
+        setStatus(newStatus);
+        if (onStatusChange) { // Notify parent component about status change
+            onStatusChange(newStatus); 
+        }
     };
 
     return (
