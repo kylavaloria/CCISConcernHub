@@ -78,17 +78,18 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
             )}
 
                 {discussion.map((msg, index) => (
-                    <div key={index} className={`mb-3 ${msg.sender === 'Admin' ? 'text-right' : 'text-left'}`}>
-                        <div className={`inline-block p-2 rounded-md ${msg.sender === 'Admin' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                            <p><strong>{msg.sender}:</strong> {msg.message}</p>
-                            <p className="text-xs text-gray-500">{msg.timestamp}</p>
+                    <div key={index} className={`mb-3  ${msg.sender === 'Admin' ? 'text-right' : 'text-left'}`}>
+                        <div className={`inline-block pr-3 pl-3 p-2.5 rounded-md text-sm space-y-1 ${msg.sender === 'Admin' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                            <p className ="text-gray-600 text-xs text-left"><strong>{msg.sender}</strong></p>
+                            <p>{msg.message}</p>
+                            <p className="text-xs text-gray-500 text-left">{formatDate(msg.timestamp)}</p>
                         </div>
                     </div>
                 ))}
             </div>
 
             {/* Input for new message */}
-            <div className="flex">
+            <div className="flex text-xs">
                 <input
                     type="text"
                     value={newMessage}
