@@ -16,6 +16,34 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
         }
     };
 
+    const formatDate = (date) => {
+        const d = new Date(date);
+        
+        const options = {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+        };
+        
+        const datePart = d.toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+        });
+    
+        const timePart = d.toLocaleString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+        });
+    
+        return `${datePart} at ${timePart}`;
+    };
+    
+
     return (
         <div className="border p-4 rounded-md shadow mb-6 mx-14">
             <h3 className="text-lg font-semibold mb-4">Discussion Thread</h3>
