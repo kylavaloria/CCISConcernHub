@@ -31,10 +31,15 @@ export default class Database {
         return concerns;
     }
 
-    static async setConcern(concernData) {
+    static getNewConcernId() {
         const concernsCollectionRef = collection(firestore, "concerns");
         const docRef = doc(concernsCollectionRef);
-        const concernId = docRef.id;
+        return docRef.id;
+    }
+
+    static async setConcern(concernData, concernId) {
+        const concernsCollectionRef = collection(firestore, "concerns");
+        const docRef = doc(concernsCollectionRef);
         await setDoc(docRef, { ...concernData, id: concernId });
     }
 }

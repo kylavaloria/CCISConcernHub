@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Concern from '../models/concern';
 import Database from '../services/database';
+import Storage from '../services/storage';
 
 const selectOptions = {
     issueTypes: ["Concern", "Request", "Complaint"],
@@ -37,7 +38,7 @@ export function SubmitConcern({ userData }) {
         category: '',
         subject: '',
         description: '',
-        attachment: null,
+        attachments: [],
     });
 
     const handleBackClick = () => {
@@ -57,21 +58,26 @@ export function SubmitConcern({ userData }) {
 
         setFormData((prevData) => ({
             ...prevData,
-            [name]: files ? files[0] : newValue,
+            [name]: files ? Array.from(files) : newValue,
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const newConcernId = Database.getNewConcernId();
             const newConcern = new Concern({
                 ...formData,
                 dateSubmitted: new Date(),
                 creatorUid: userData.uid,
-                attachmentLinks: [], // Handle file upload
+                attachmentLinks: [],
+                id: newConcernId,
             });
 
-            await Database.setConcern(newConcern);
+            await Database.setConcern(newConcern, newConcernId);
+
+            // Upload attachments to storage
+            await Promise.all(formData.attachments.map(file => Storage.uploadFile(file, `concerns/${newConcern.id}/${file.name}`)));
 
             navigate('/my-concerns');
         } catch (error) {
@@ -124,8 +130,8 @@ export function SubmitConcern({ userData }) {
                         </div>
                         <small>{DESCRIPTION_LIMIT - formData.description.length}/{DESCRIPTION_LIMIT}</small>
                         <div className="form-group">
-                            <label htmlFor="attachment" className="block mb-1">Attachment</label>
-                            <input type="file" id="attachment" name="attachment" className="border border-blue-300 rounded p-2 w-full" onChange={handleChange} />
+                            <label htmlFor="attachments" className="block mb-1">Attachments</label>
+                            <input type="file" id="attachments" name="attachments" className="border border-blue-300 rounded p-2 w-full" onChange={handleChange} multiple />
                         </div>
                         <button type="submit" className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 transition duration-300">Submit</button>
                     </form>
