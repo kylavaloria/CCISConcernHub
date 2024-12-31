@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const DiscussionThread = ({ initialDiscussion }) => {
+const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => {
     const [discussion, setDiscussion] = useState(initialDiscussion);
     const [newMessage, setNewMessage] = useState('');
 
