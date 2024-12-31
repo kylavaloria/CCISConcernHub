@@ -15,30 +15,30 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
 
     return (
         <div className="flex flex-col mx-14 gap-4">
-            <h2 className="text-3xl font-semibold">{concern.subject}</h2>
-            <div className="flex justify-start gap-8">
-                <div className="text-gray-600 flex items-center gap-2">
-                    Concern ID <strong>#{concern.id}</strong>
-                </div>
-                <div className="flex items-center gap-2">
-                    <span className="text-gray-600">Status:</span>
-                    {userData?.isAdmin() ? (
-                        <select
-                            value={status}
-                            onChange={handleStatusChange}
-                            className="border rounded p-1"
-                        >
-                            <option value="open">Open</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="on-hold">On Hold</option>
-                            <option value="closed">Closed</option>
-                        </select>
-                    ) : (
-                        <StatusBadge status={status} />
-                    )}
-                </div>
+        <h2 className="text-3xl font-semibold">{concern.subject}</h2>
+        <div className="flex justify-start gap-8">
+            <div className="text-gray-600 flex items-center gap-2">
+                Concern ID <strong>#{concern.id}</strong>
             </div>
-
+            <div className="flex items-center gap-2">
+                <span className="text-gray-600">Status:</span>
+                {userData?.isAdmin() ? (
+                    <select
+                        value={status}
+                        onChange={handleStatusChange} // Updated to handle status change
+                        className="border rounded p-1"
+                    >
+                        <option value="open">Open</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="on-hold">On Hold</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                ) : (
+                    <StatusBadge status={status} />
+                )}
+            </div>
+        </div>
+        
             {/* Additional Info for Admins */}
             {userData?.isAdmin() && (
                 <div className="text-gray-600 flex justify-start gap-8">
