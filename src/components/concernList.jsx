@@ -215,7 +215,7 @@ export function ConcernList({ concerns }) {
                                 <Link
                                     to={`/view-concern/${concern.id}`}
                                     key={concern.id}
-                                    className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md"
+                                    className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
                                     style={{
                                         display: 'grid',
                                         gridTemplateColumns: '2.5fr 2.5fr 4fr 3fr 2.5fr 130px',
