@@ -5,6 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
 import Database from '../services/database';
+import LoadingSpinner from '../components/loading';
 
 export function ViewConcern({ userData }) {
     const navigate = useNavigate();
@@ -29,10 +30,6 @@ export function ViewConcern({ userData }) {
         setStatus(newStatus);
     };
 
-    if (!concern) {
-        return <div>Loading...</div>;
-    }
-
     // Sample chat messages (replace with actual discussion data)
     const initialDiscussion = [
         { sender: 'Student', message: 'Can someone help with my issue?', timestamp: '2024-10-02 10:15 AM' },
@@ -46,19 +43,22 @@ export function ViewConcern({ userData }) {
                     <FaArrowLeft className="mr-2 text-blue-400" />
                     <h1 className="text-3xl font-bold mb-4 text-blue-400">View Concerns</h1>
                 </div>
+                {
+                    concern === null ? <LoadingSpinner /> : <>
+                        <ConcernDetails
+                            concern={concern}
+                            concernCreator={concernCreator}
+                            userData={userData}
+                            onStatusChange={handleStatusChange} // Pass status change handler
+                        />
 
-                <ConcernDetails
-                    concern={concern}
-                    concernCreator={concernCreator}
-                    userData={userData}
-                    onStatusChange={handleStatusChange} // Pass status change handler
-                />
-
-                <DiscussionThread
-                    initialDiscussion={initialDiscussion}
-                    status={status} // Pass status to DiscussionThread
-                    concernCreatedDate={concern.dateSubmitted}
-                />
+                        <DiscussionThread
+                            initialDiscussion={initialDiscussion}
+                            status={status} // Pass status to DiscussionThread
+                            concernCreatedDate={concern.dateSubmitted}
+                        />
+                    </>
+                }
             </main>
             <Footer />
         </div>
