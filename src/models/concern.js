@@ -28,4 +28,20 @@ export default class Concern {
             return null;
         }
     }
+
+    toJSON() {
+        return {
+            attachmentLinks: this.attachmentLinks,
+            category: this.category,
+            creatorUid: this.creatorUid,
+            dateSubmitted: this.dateSubmitted,
+            description: this.description,
+            id: this.id,
+            isResolved: this.isResolved,
+            isSpam: this.isSpam,
+            issueType: this.issueType,
+            status: this.status,
+            subject: this.subject,
+        };
+    }
 }
