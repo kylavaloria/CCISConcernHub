@@ -16,6 +16,10 @@ export default class Concern {
         this.subject = subject;
     }
 
+    async saveToDatabase() {
+        await Database.setConcern(this);
+    }
+
     async fetchCreator(userData) {
         if (userData?.uid === this.creatorUid) {
             return userData;

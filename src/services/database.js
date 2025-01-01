@@ -10,10 +10,9 @@ export default class Database {
         return docSnap.exists() ? new User(docSnap.data()) : null;
     }
 
-    static async setUserData(uid, userData) {
+    static async setUser(user) {
         const docRef = doc(firestore, "users", uid);
-        await setDoc(docRef, userData.toPlainObject());
-        return new User(userData);
+        await setDoc(docRef, user.toJSON());
     }
 
     static async getConcern(concernId) {
@@ -37,9 +36,9 @@ export default class Database {
         return docRef.id;
     }
 
-    static async setConcern(concernData, concernId) {
+    static async setConcern(concern) {
         const concernsCollectionRef = collection(firestore, "concerns");
         const docRef = doc(concernsCollectionRef);
-        await setDoc(docRef, { ...concernData, id: concernId });
+        await setDoc(docRef, concern.toJSON());
     }
 }

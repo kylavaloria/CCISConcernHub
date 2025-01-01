@@ -1,9 +1,15 @@
+import Database from "../services/database";
+
 export default class User {
     constructor({ uid, displayName, roles, assignedCategories = null }) {
         this.uid = uid;
         this.displayName = displayName;
         this.roles = roles;
         this.assignedCategories = assignedCategories;
+    }
+
+    async saveToDatabase() {
+        await Database.setUser(this);
     }
 
     getAvatarUrl() {
