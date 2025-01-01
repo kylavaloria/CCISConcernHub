@@ -146,17 +146,17 @@ export function SubmitConcern({ userData }) {
     return (
         <div className="min-h-screen flex flex-col">
             {/* Main Content Area */}
-            <div className="flex flex-row flex-grow bg-white bg-opacity-90 gap-32">
+            <div className="flex flex-row flex-grow bg-white bg-opacity-90 gap-32 mb-20">
                 {/* Left Side: Form */}
                 <div className="w-full p-4 max-w-2xl mx-10">
                     <div className="flex items-center mb-4 cursor-pointer" onClick={handleBackClick}>
                         <FaArrowLeft className="mr-2 text-blue-400" />
                         <h2 className="text-2xl font-bold text-blue-400">Submit Concern</h2>
                     </div>
-                    <p className="mb-2">Fill up the necessary details below:</p>
+                    <p className="mb-6">Fill up the necessary details below:</p>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="issue-type" className="block mb-1">Type of Issue *</label>
+                            <label htmlFor="issue-type" className="block mb-1 text-sm text-gray-600">Type of Issue <span className="text-red-600">*</span></label>
                             <SelectDropdown
                                 id="issue-type"
                                 name="issueType"
@@ -167,7 +167,7 @@ export function SubmitConcern({ userData }) {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="category" className="block mb-1">Category *</label>
+                            <label htmlFor="category" className="block mb-1 text-sm text-gray-600">Category <span className="text-red-600">*</span></label>
                             <SelectDropdown
                                 id="category"
                                 name="category"
@@ -178,15 +178,17 @@ export function SubmitConcern({ userData }) {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="subject" className="block mb-1">Subject/Title *</label>
-                            <input type="text" id="subject" name="subject" required className="border border-blue-300 rounded p-2 w-full" value={formData.subject} onChange={handleChange} />
+                            <label htmlFor="subject" className="block mb-1 text-sm text-gray-600">Subject/Title <span className="text-red-600">*</span></label>
+                            <input type="text" id="subject" name="subject" required className="border border-blue-300 rounded p-2 w-full mb-1" value={formData.subject} onChange={handleChange} />
+                            <div className="text-xs text-gray-600">{SUBJECT_LIMIT - formData.subject.length}/{SUBJECT_LIMIT}</div>
                         </div>
-                        <small>{SUBJECT_LIMIT - formData.subject.length}/{SUBJECT_LIMIT}</small>
+                        
                         <div className="form-group">
-                            <label htmlFor="description" className="block mb-1">Description *</label>
+                            <label htmlFor="description" className="block mb-1 text-sm text-gray-600">Description <span className="text-red-600">*</span></label>
                             <textarea id="description" name="description" required className="border border-blue-300 rounded p-2 w-full h-24" value={formData.description} onChange={handleChange} />
+                            <div className="text-xs text-gray-600">{DESCRIPTION_LIMIT - formData.description.length}/{DESCRIPTION_LIMIT}</div>
                         </div>
-                        <small>{DESCRIPTION_LIMIT - formData.description.length}/{DESCRIPTION_LIMIT}</small>
+                        
                         <div className="form-group">
                             <label htmlFor="attachments" className="block mb-1">Attachments</label>
                             <input type="file" id="attachments" name="attachments" className="border border-blue-300 rounded p-2 w-full" onChange={handleChange} multiple />
