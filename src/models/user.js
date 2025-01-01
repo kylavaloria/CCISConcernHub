@@ -18,7 +18,7 @@ export default class User {
         return this.roles.includes('admin');
     }
 
-    toPlainObject() {
+    toJSON() {
         return {
             uid: this.uid,
             displayName: this.displayName,
