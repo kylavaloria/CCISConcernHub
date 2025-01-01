@@ -1,22 +1,23 @@
 import { useEffect, useState } from 'react';
 import Footer from '../components/footer';
 import ConcernList from '../components/concernList';
-import Database from '../services/database';
+import Database, { Pagination } from '../services/database';
 import LoadingSpinner from '../components/loading';
 
 export function MyConcerns({ userData }) {
     const [concerns, setConcerns] = useState(undefined);
+    const pagination = new Pagination();
+
+    async function fetchUserConcerns() {
+        if (userData) {
+            const userConcerns = await Database.getUserConcerns(userData.uid, pagination);
+            setConcerns(userConcerns);
+        }
+    }
 
     useEffect(() => {
-        async function fetchUserConcerns() {
-            if (userData) {
-                const userConcerns = await Database.getUserConcerns(userData.uid);
-                setConcerns(userConcerns);
-            }
-        }
         fetchUserConcerns();
     }, [userData]);
-
 
     return (
         <div className="min-h-screen flex flex-col">

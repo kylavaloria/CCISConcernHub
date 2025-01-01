@@ -147,8 +147,7 @@ export function ConcernList({ concerns }) {
             const isAfterStartDate = filters.startDate ? dateSubmitted >= new Date(filters.startDate) : true;
             const isBeforeEndDate = filters.endDate ? dateSubmitted <= new Date(filters.endDate) : true;
             return isAfterStartDate && isBeforeEndDate;
-        })
-        .sort((a, b) => (filters.sortBy === "newest" ? new Date(b.dateSubmitted) - new Date(a.dateSubmitted) : new Date(a.dateSubmitted) - new Date(b.dateSubmitted)));
+        });
 
     return (
         <div className="p-4">

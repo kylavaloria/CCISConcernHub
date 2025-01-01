@@ -1,4 +1,4 @@
-import { collection, query, where, doc, getDocs, getDoc, setDoc } from "firebase/firestore";
+import { collection, query, where, doc, getDocs, getDoc, setDoc, orderBy, startAfter, limit } from "firebase/firestore";
 import { firestore } from "./firebase";
 import User from "../models/user";
 import Concern from "../models/concern";
@@ -22,12 +22,34 @@ export default class Database {
         return docSnap.exists() ? new Concern(docSnap.data()) : null;
     }
 
-    static async getUserConcerns(uid) {
-        const q = query(collection(firestore, "concerns"), where("creatorUid", "==", uid));
+    static async getUserConcerns(uid, pagination = null) {
+        let q;
+
+        if (pagination) {
+            q = query(
+                collection(firestore, "concerns"),
+                where("creatorUid", "==", uid),
+                orderBy("dateSubmitted", "desc"),
+                startAfter(pagination.lastDoc || new Date()),
+                limit(pagination.size),
+            );
+        } else {
+            q = query(
+                collection(firestore, "concerns"),
+                where("creatorUid", "==", uid),
+                orderBy("dateSubmitted"),
+            );
+        }
+
         const querySnap = await getDocs(q);
         const concerns = querySnap.docs.map(doc => {
             return new Concern(doc.data());
         });
+
+        if (pagination) {
+            pagination.updateFromSnapshot(querySnap);
+        }
+
         return concerns;
     }
 
@@ -41,5 +63,18 @@ export default class Database {
         const concernData = concern.toJSON();
         const docRef = doc(firestore, "concerns", concernData.uid);
         await setDoc(docRef, concernData);
+    }
+}
+
+export class Pagination {
+    constructor(size = 10) {
+        this.size = size;
+        this.lastDoc = null;
+    }
+
+    updateFromSnapshot(querySnapshot) {
+        // Get the last visible document
+        const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+        if (lastVisible !== undefined) this.lastDoc = lastVisible;
     }
 }
