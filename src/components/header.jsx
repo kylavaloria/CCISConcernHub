@@ -1,8 +1,10 @@
 import pupLogo from '../assets/pup-logo.png';
 import ccisLogo from '../assets/ccis-logo.png';
 import ClientUser from '../auth/clientUser';
+import { useNavigate } from "react-router-dom";
 
 export default function Header({ userData, isSolid }) {
+    const navigate = useNavigate();
     const showNavbar = !!userData;
     const textWhite = !isSolid;
 
@@ -44,20 +46,20 @@ export default function Header({ userData, isSolid }) {
                     <nav className="flex mr-8">
                         <div className="flex space-x-14">
                             <a
-                                href="/submit-concern"
+                                onClick={() => navigate("/submit-concern")}
                                 className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
                             >
                                 Submit Concern
                             </a>
                             <a
-                                href="/my-concerns"
+                                onClick={() => navigate("/my-concerns")}
                                 className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
                             >
                                 My Concerns
                             </a>
 
                             { userData.isAdmin() && <a
-                                href="/admin-dashboard"
+                                onClick={() => navigate("/admin-dashboard")}
                                 className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-900`}
                             >
                                 Manage Concerns
