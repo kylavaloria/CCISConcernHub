@@ -28,7 +28,7 @@ export function LoadingButton({
     spinnerStroke = "#686868",
     ...props
 }) {
-    return <button {...props}>{
+    return <button disabled={loadingState} {...props}>{
         !loadingState ? props.children : <>
             <LoadingSpinner stroke={spinnerStroke} className="inline mr-2" />
             {props.children}

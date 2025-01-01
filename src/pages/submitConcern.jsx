@@ -4,6 +4,7 @@ import iconImage from '../assets/whats-next.png';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Concern from '../models/concern';
+import { LoadingButton } from '../components/loading';
 
 const selectOptions = {
     issueTypes: ["Concern", "Request", "Complaint"],
@@ -41,6 +42,7 @@ export function SubmitConcern({ userData }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [submitLoading, setSubmitLoading] = useState(false);
 
     const handleBackClick = () => {
         navigate('/landing-page');
@@ -65,6 +67,7 @@ export function SubmitConcern({ userData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitLoading(true);
 
         try {
             const newConcern = new Concern({
@@ -80,6 +83,8 @@ export function SubmitConcern({ userData }) {
         } catch (error) {
             console.error('Error submitting concern:', error);
         }
+
+        setSubmitLoading(false);
     };
 
     const handleModalClose = () => {
@@ -271,7 +276,14 @@ export function SubmitConcern({ userData }) {
                 {formData.errorMessage}
             </div>
         )}
-                <button type="submit" className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 transition duration-300">Submit</button>
+                <LoadingButton
+                    loadingState={submitLoading}
+                    spinnerStroke="#bfdbfe"
+                    type="submit"
+                    className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 transition duration-300"
+                >
+                    Submit
+                </LoadingButton>
                 </form>
                 </div>
                 {/* Right Side: Icon and Information */}
