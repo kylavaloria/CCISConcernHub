@@ -18,7 +18,7 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
 
     const formatDate = (date) => {
         const d = new Date(date);
-        
+
         const options = {
             month: 'short',
             day: 'numeric',
@@ -27,31 +27,31 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
             minute: 'numeric',
             hour12: true,
         };
-        
+
         const datePart = d.toLocaleString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
         });
-    
+
         const timePart = d.toLocaleString('en-US', {
             hour: 'numeric',
             minute: 'numeric',
             hour12: true,
         });
-    
+
         return `${datePart} at ${timePart}`;
     };
-    
+
 
     return (
         <div className="border p-4 rounded-md  mb-6 mx-14 shadow">
             <h3 className="text-lg font-semibold mt-2 mb-4">Discussion Thread</h3>
-        <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700"></hr>
+        <hr className="h-px bg-gray-200 border-0 dark:bg-gray-700"></hr>
 
 
             <div className="max-h-64 overflow-y-auto mb-4">
-            
+
             {/* Initial Timestamp and Message */}
             <div className="text-center text-xs text-gray-500 mt-4 mb-5">
                 <p>{formatDate(concernCreatedDate)}</p>
