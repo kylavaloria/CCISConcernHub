@@ -2,13 +2,13 @@ import { Timestamp } from "firebase/firestore";
 import Database from "../services/database";
 
 export default class Concern {
-    constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, id, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
+    constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
         this.attachmentLinks = attachmentLinks;
         this.category = category;
         this.creatorUid = creatorUid;
         this.dateSubmitted = dateSubmitted instanceof Timestamp ? dateSubmitted.toDate() : new Date(dateSubmitted);
         this.description = description;
-        this.id = id || Database.generateConcernUid();
+        this.uid = uid || Database.generateConcernUid();
         this.isResolved = isResolved;
         this.isSpam = isSpam;
         this.issueType = issueType;
@@ -40,7 +40,7 @@ export default class Concern {
             creatorUid: this.creatorUid,
             dateSubmitted: this.dateSubmitted,
             description: this.description,
-            id: this.id,
+            uid: this.uid,
             isResolved: this.isResolved,
             isSpam: this.isSpam,
             issueType: this.issueType,

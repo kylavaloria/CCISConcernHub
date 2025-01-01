@@ -9,7 +9,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         const newStatus = e.target.value;
         setStatus(newStatus);
         if (onStatusChange) { // Notify parent component about status change
-            onStatusChange(newStatus); 
+            onStatusChange(newStatus);
         }
     };
 
@@ -18,7 +18,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         <h2 className="text-3xl font-semibold">{concern.subject}</h2>
         <div className="flex justify-start gap-8">
             <div className="text-gray-600 flex items-center gap-2">
-                Concern ID <strong>#{concern.id}</strong>
+                Concern ID <strong>#{concern.uid}</strong>
             </div>
             <div className="flex items-center gap-2">
                 <span className="text-gray-600">Status:</span>
@@ -38,7 +38,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                 )}
             </div>
         </div>
-        
+
             {/* Additional Info for Admins */}
             {userData?.isAdmin() && (
                 <div className="text-gray-600 flex justify-start gap-8">

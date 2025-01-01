@@ -213,8 +213,8 @@ export function ConcernList({ concerns }) {
                         <div>
                             {filteredConcerns.map(concern => (
                                 <Link
-                                    to={`/view-concern/${concern.id}`}
-                                    key={concern.id}
+                                    to={`/view-concern/${concern.uid}`}
+                                    key={concern.uid}
                                     className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
                                     style={{
                                         display: 'grid',
@@ -237,20 +237,20 @@ export function ConcernList({ concerns }) {
                                         <span
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                toggleDropdown(concern.id);
+                                                toggleDropdown(concern.uid);
                                             }}
                                             className="text-blue-500 hover:text-blue-700 cursor-pointer ml-7"
                                         >
                                             View ID
                                         </span>
-                                        {activeDropdownId === concern.id && (
+                                        {activeDropdownId === concern.uid && (
                                             <div className="absolute left-0 top-full mt-1 bg-white border border-gray-300 rounded shadow-md p-2 z-50 w-50 overflow-hidden">
                                                 <div className="flex items-center justify-between">
-                                                    <span className="text-xs text-gray-700 truncate">{concern.id}</span>
+                                                    <span className="text-xs text-gray-700 truncate">{concern.uid}</span>
                                                     <button
                                                         onClick={(e) => {
                                                             e.preventDefault();
-                                                            handleCopyToClipboard(concern.id);
+                                                            handleCopyToClipboard(concern.uid);
                                                         }}
                                                         className="text-blue-500 hover:text-blue-700 ml-2"
                                                     >

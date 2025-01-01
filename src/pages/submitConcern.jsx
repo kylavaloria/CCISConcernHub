@@ -78,7 +78,7 @@ export function SubmitConcern({ userData }) {
             await newConcern.saveToDatabase();
 
             // Upload attachments to storage
-            await Promise.all(formData.attachments.map(file => Storage.uploadFile(file, `concerns/${newConcern.id}/${file.name}`)));
+            await Promise.all(formData.attachments.map(file => Storage.uploadFile(file, `concerns/${newconcern.uid}/${file.name}`)));
 
             navigate('/my-concerns');
         } catch (error) {
