@@ -190,13 +190,96 @@ export function SubmitConcern({ userData }) {
                         </div>
                         
                         <div className="form-group">
-                            <label htmlFor="attachments" className="block mb-1">Attachments</label>
-                            <input type="file" id="attachments" name="attachments" className="border border-blue-300 rounded p-2 w-full" onChange={handleChange} multiple />
+                            <label htmlFor="attachments" className="block mb-1 text-sm text-gray-600">Attachment</label>
+                            <div className="flex items-start gap-4">
+                            <div className="grid content-start"> 
+                            <button
+                                type="button"
+                                className="rounded-lg bg-blue-200 text-xs text-gray-600 flex items-center px-2 py-2 mb-3 mt-3 hover:bg-blue-400 transition"
+                                onClick={() => setIsModalOpen(true)}
+                            >
+                                <div className="mr-2">
+                                    {/*Paper clip icon*/}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="gray"
+                                        className="size-3"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
+                                        />
+                                    </svg>
+                                </div> 
+                                <div>Attach Files</div>
+                            </button>
+                            
                         </div>
-                        <button type="submit" className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 transition duration-300">Submit</button>
-                    </form>
+                        <div className="grid col-span-5 p-5 flex-grow h-full px-0.5 py-1 mb-3 mt-3 ">
+                        <div>
+                            <div
+                                className="grid gap-1"
+                                style={{
+                                    gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+                                }}
+                            >
+                                {formData.attachments.slice(0, 5).map((file, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative border border-gray-300 bg-gray-100 rounded-md flex items-center text-xs pl-1 p-1 hover:bg-gray-200 group"
+                                    >
+                                        <div className="pl-1 text-gray-600">
+                                            {file.name.length > 12 ? `${file.name.substring(0, 12)}...` : file.name}
+                                        </div>
+                                        <div
+                                            className="absolute mr-1 right-0 hidden group-hover:block"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent click event from bubbling
+                                                setFormData((prevData) => {
+                                                    const updatedAttachments = prevData.attachments.filter((_, i) => i !== index);
+                                                    return {
+                                                        ...prevData,
+                                                        attachments: updatedAttachments,
+                                                    };
+                                                });
+                                            }}
+                                        >
+                                            {/* Icon for X button to remove a specific attached file */}
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth={1.5}
+                                                stroke="gray"
+                                                className="size-3 cursor-pointer"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M6 18 18 6M6 6l12 12"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        </div> 
+                    </div>
                 </div>
-
+        {/* Error message */}
+        {formData.errorMessage && (
+            <div className="text-red-500 text-xs mt-1">
+                {formData.errorMessage}
+            </div>
+        )}
+                <button type="submit" className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 transition duration-300">Submit</button>
+                </form>
+                </div>
                 {/* Right Side: Icon and Information */}
                 <div className="hidden md:flex sm:w-1/3 flex-col items-center justify-center max-w-2xl">
                     <img src={iconImage} alt="Icon" className="w-32 h-32 mb-4" />
