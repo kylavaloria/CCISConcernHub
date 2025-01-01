@@ -67,17 +67,15 @@ export function SubmitConcern({ userData }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const newConcernId = Database.getNewConcernId();
             const newConcern = new Concern({
                 ...formData,
                 dateSubmitted: new Date(),
                 creatorUid: userData.uid,
                 attachmentLinks: [],
-                id: newConcernId,
             });
-
-            await Database.setConcern(newConcern, newConcernId);
+            await newConcern.saveToDatabase();
 
             // Upload attachments to storage
             await Promise.all(formData.attachments.map(file => Storage.uploadFile(file, `concerns/${newConcern.id}/${file.name}`)));
@@ -95,7 +93,7 @@ export function SubmitConcern({ userData }) {
     const handleModalAttach = () => {
         setFormData((prevData) => {
             const combinedFiles = [...prevData.attachments, ...uploadedFiles.map(file => file.file)];
-    
+
             // Check if the combined files exceed the limit
             if (combinedFiles.length > 5) {
                 // Display error message and return the previous state without updating
@@ -105,35 +103,35 @@ export function SubmitConcern({ userData }) {
                 }));
                 return prevData; // Don't update if limit exceeded
             }
-    
+
             return {
                 ...prevData,
                 attachments: combinedFiles,
                 errorMessage: "", // Clear any previous error messages
             };
         });
-    
+
         // Clear uploaded files in the modal and close it
         setUploadedFiles([]);
         setIsModalOpen(false);
     };
-    
+
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files || e.dataTransfer.files);
-    
+
         // Check if the number of files exceeds the limit
         if (uploadedFiles.length + files.length > 5) {
             alert("You can only upload a maximum of 5 files.");
             return;
         }
-    
+
         // Map files to an array of file objects
         const updatedFiles = files.map((file) => ({
             file,
             name: file.name,
             size: (file.size / (1024 * 1024)).toFixed(2) + "MB",
         }));
-    
+
         // Update the state by combining previous files with new files, while ensuring no duplicates
         setUploadedFiles(prevFiles => {
             const allFiles = [...prevFiles, ...updatedFiles];
@@ -141,8 +139,8 @@ export function SubmitConcern({ userData }) {
                 .map(name => allFiles.find(f => f.name === name));
             return uniqueFiles;
         });
-    };    
-    
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             {/* Main Content Area */}
@@ -182,17 +180,17 @@ export function SubmitConcern({ userData }) {
                             <input type="text" id="subject" name="subject" required className="border border-blue-300 rounded p-2 w-full mb-1" value={formData.subject} onChange={handleChange} />
                             <div className="text-xs text-gray-600">{SUBJECT_LIMIT - formData.subject.length}/{SUBJECT_LIMIT}</div>
                         </div>
-                        
+
                         <div className="form-group">
                             <label htmlFor="description" className="block mb-1 text-sm text-gray-600">Description <span className="text-red-600">*</span></label>
                             <textarea id="description" name="description" required className="border border-blue-300 rounded p-2 w-full h-24" value={formData.description} onChange={handleChange} />
                             <div className="text-xs text-gray-600">{DESCRIPTION_LIMIT - formData.description.length}/{DESCRIPTION_LIMIT}</div>
                         </div>
-                        
+
                         <div className="form-group">
                             <label htmlFor="attachments" className="block mb-1 text-sm text-gray-600">Attachment</label>
                             <div className="flex items-start gap-4">
-                            <div className="grid content-start"> 
+                            <div className="grid content-start">
                             <button
                                 type="button"
                                 className="rounded-lg bg-blue-200 text-xs text-gray-600 flex items-center px-2 py-2 mb-3 mt-3 hover:bg-blue-400 transition"
@@ -214,10 +212,10 @@ export function SubmitConcern({ userData }) {
                                             d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
                                         />
                                     </svg>
-                                </div> 
+                                </div>
                                 <div>Attach Files</div>
                             </button>
-                            
+
                         </div>
                         <div className="grid col-span-5 p-5 flex-grow h-full px-0.5 py-1 mb-3 mt-3 ">
                         <div>
@@ -268,7 +266,7 @@ export function SubmitConcern({ userData }) {
                                 ))}
                             </div>
                         </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
         {/* Error message */}
@@ -384,7 +382,7 @@ export function SubmitConcern({ userData }) {
                                         <div
                                             className="absolute top-0 right-0 hidden group-hover:block"
                                             onClick={(e) => {
-                                                e.stopPropagation(); removeFile(index); 
+                                                e.stopPropagation(); removeFile(index);
                                             }}
                                         >
                                         </div>

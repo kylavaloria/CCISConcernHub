@@ -31,7 +31,7 @@ export default class Database {
         return concerns;
     }
 
-    static getNewConcernId() {
+    static generateConcernUid() {
         const concernsCollectionRef = collection(firestore, "concerns");
         const docRef = doc(concernsCollectionRef);
         return docRef.id;

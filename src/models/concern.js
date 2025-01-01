@@ -8,7 +8,7 @@ export default class Concern {
         this.creatorUid = creatorUid;
         this.dateSubmitted = dateSubmitted instanceof Timestamp ? dateSubmitted.toDate() : new Date(dateSubmitted);
         this.description = description;
-        this.id = id;
+        this.id = id || Database.generateConcernUid();
         this.isResolved = isResolved;
         this.isSpam = isSpam;
         this.issueType = issueType;
