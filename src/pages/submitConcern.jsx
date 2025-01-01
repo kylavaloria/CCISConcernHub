@@ -41,6 +41,9 @@ export function SubmitConcern({ userData }) {
         attachments: [],
     });
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+
     const handleBackClick = () => {
         navigate('/landing-page');
     };
@@ -85,6 +88,61 @@ export function SubmitConcern({ userData }) {
         }
     };
 
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleModalAttach = () => {
+        setFormData((prevData) => {
+            const combinedFiles = [...prevData.attachments, ...uploadedFiles.map(file => file.file)];
+    
+            // Check if the combined files exceed the limit
+            if (combinedFiles.length > 5) {
+                // Display error message and return the previous state without updating
+                setFormData((currentData) => ({
+                    ...currentData,
+                    errorMessage: "You can only upload a maximum of 5 files."
+                }));
+                return prevData; // Don't update if limit exceeded
+            }
+    
+            return {
+                ...prevData,
+                attachments: combinedFiles,
+                errorMessage: "", // Clear any previous error messages
+            };
+        });
+    
+        // Clear uploaded files in the modal and close it
+        setUploadedFiles([]);
+        setIsModalOpen(false);
+    };
+    
+    const handleFileUpload = (e) => {
+        const files = Array.from(e.target.files || e.dataTransfer.files);
+    
+        // Check if the number of files exceeds the limit
+        if (uploadedFiles.length + files.length > 5) {
+            alert("You can only upload a maximum of 5 files.");
+            return;
+        }
+    
+        // Map files to an array of file objects
+        const updatedFiles = files.map((file) => ({
+            file,
+            name: file.name,
+            size: (file.size / (1024 * 1024)).toFixed(2) + "MB",
+        }));
+    
+        // Update the state by combining previous files with new files, while ensuring no duplicates
+        setUploadedFiles(prevFiles => {
+            const allFiles = [...prevFiles, ...updatedFiles];
+            const uniqueFiles = Array.from(new Set(allFiles.map(f => f.name)))
+                .map(name => allFiles.find(f => f.name === name));
+            return uniqueFiles;
+        });
+    };    
+    
     return (
         <div className="min-h-screen flex flex-col">
             {/* Main Content Area */}
