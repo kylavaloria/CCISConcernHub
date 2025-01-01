@@ -290,6 +290,131 @@ export function SubmitConcern({ userData }) {
                 </div>
             </div>
 
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-96">
+                        <h2 className="text-lg font-semibold mb-4">Attach Files</h2>
+                        <p className="text-sm text-gray-600 mb-4">Upload supporting documents or images</p>
+                        <div>
+                        {/* Drag and Drop Area */}
+                        <div
+                            className="rounded border-dashed border-2 border-gray-300 bg-gray-50 p-4 mb-4 hover:bg-gray-200"
+                            onClick={() => document.getElementById("fileInput").click()}
+                            onDragOver={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.classList.add("bg-gray-200");
+                            }}
+                            onDragEnter={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.classList.add("bg-gray-200");
+                            }}
+                            onDragLeave={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.classList.remove("bg-gray-200");
+                            }}
+                            onDrop={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.currentTarget.classList.remove("bg-gray-200");
+                            handleFileUpload(e);
+                            }}
+                        >
+                            <p className="flex items-center justify-center">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-5 text-gray-500"
+                            >
+                                <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
+                                />
+                            </svg>
+                            </p>
+                            <p className="text-center text-sm text-gray-600 mt-1">
+                            Click to upload or drag and drop
+                            </p>
+                            <p className="text-center text-sm text-gray-400">
+                            JPEG, JPG, PNG, PDF, DOC, DOCX, XLSX, XLS, CSV
+                            </p>
+                            <p className="text-center text-xs text-gray-400 mt-3">
+                            Maximum number of files: 5
+                            </p>
+                            <p className="text-center text-xs text-gray-400">Maximum file size: 25 MB</p>
+                            <input
+                            id="fileInput"
+                            type="file"
+                            className="hidden"
+                            multiple
+                            onChange={handleFileUpload}
+                            />
+                        </div>
+
+                        {/* Uploaded Files */}
+                            <div className="overflow-y-auto max-h-40">  {/* Add max-height and overflow */}
+                            {uploadedFiles.map((file, index) => (
+                                <div key={index} className="border border-gray-300 p-3 rounded-md group relative">
+                                    <div className="flex space-x-2">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="w-6 h-6 text-gray-500"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                            />
+                                        </svg>
+                                        <span>
+                                            <div className="text-gray-500 font-medium text-sm">{file.name}</div>
+                                            <div className="text-xs text-gray-500">{file.size}</div>
+                                        </span>
+                                        <div
+                                            className="absolute top-0 right-0 hidden group-hover:block"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); removeFile(index); 
+                                            }}
+                                        >
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            </div>
+                        </div>
+                        <div className="flex justify-end gap-4 mt-3 text-sm">
+                            <button
+                                type="button"
+                                className="bg-gray-200 text-gray-600 rounded py-2 px-4 hover:bg-gray-300"
+                                onClick={handleModalClose}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className={`bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 ${
+                                    uploadedFiles.length === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                                }`}
+                                onClick={handleModalAttach}
+                                disabled={uploadedFiles.length === 0} // Disable button if no uploaded files
+                            >
+                                Attach Files
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             {/* Footer Component */}
             <Footer />
         </div>
