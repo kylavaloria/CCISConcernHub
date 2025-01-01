@@ -278,9 +278,10 @@ export function SubmitConcern({ userData }) {
         )}
                 <LoadingButton
                     loadingState={submitLoading}
-                    spinnerStroke="#bfdbfe"
+                    spinnerStroke="#ffffff"
                     type="submit"
                     className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-600 transition duration-300"
+                    loadingClassName="bg-gray-500 text-white rounded py-2 px-4"
                 >
                     Submit
                 </LoadingButton>

@@ -26,9 +26,15 @@ export default function LoadingSpinner({
 export function LoadingButton({
     loadingState,
     spinnerStroke = "#686868",
+    className = "",
+    loadingClassName = "",
     ...props
 }) {
-    return <button disabled={loadingState} {...props}>{
+    return <button
+        className={loadingState ? loadingClassName : className}
+        disabled={loadingState}
+        {...props}
+    >{
         !loadingState ? props.children : <>
             <LoadingSpinner stroke={spinnerStroke} className="inline mr-2" />
             {props.children}
