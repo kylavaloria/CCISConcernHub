@@ -33,7 +33,7 @@ export default class ClientUser {
                 roles: ['student'],
                 assignedCategories: null,
             });
-            user = await Database.setUserData(uid, user);
+            await user.saveToDatabase();
         }
 
         return user;

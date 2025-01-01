@@ -4,7 +4,6 @@ import iconImage from '../assets/whats-next.png';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Concern from '../models/concern';
-import Database from '../services/database';
 import Storage from '../services/storage';
 
 const selectOptions = {
