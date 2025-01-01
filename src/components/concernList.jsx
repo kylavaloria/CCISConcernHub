@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import StatusBadge from "./statusBadge";
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
@@ -100,7 +101,7 @@ const DateDropdown = ({ startDate, endDate, onChange, isOpen, toggleDropdown }) 
     </div>
 );
 
-export function ConcernList({ concerns }) {
+export function ConcernList({ concerns, fetchUserConcerns }) {
     const [filters, setFilters] = useState({
         issueType: ["All", "Concern", "Request", "Complaint"],
         category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
@@ -209,7 +210,11 @@ export function ConcernList({ concerns }) {
 
                     {/* Concern List */}
                     {filteredConcerns.length > 0 ? (
-                        <div>
+                        <InfiniteScroll
+                            dataLength={filteredConcerns.length}
+                            next={fetchUserConcerns}
+                            hasMore={true}
+                        >
                             {filteredConcerns.map(concern => (
                                 <Link
                                     to={`/view-concern/${concern.uid}`}
@@ -261,7 +266,7 @@ export function ConcernList({ concerns }) {
                                     </div>
                                 </Link>
                             ))}
-                        </div>
+                        </InfiniteScroll>
                     ) : (
                         <div className="text-center py-4 text-xs">No concerns available.</div>
                     )}
