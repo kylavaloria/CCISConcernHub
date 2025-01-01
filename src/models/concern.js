@@ -1,5 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import Database from "../services/database";
+import Storage from '../services/storage';
 
 export default class Concern {
     constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
@@ -47,5 +48,16 @@ export default class Concern {
             status: this.status,
             subject: this.subject,
         };
+    }
+
+    async uploadAttachments(files) {
+        const promises = [];
+
+        for (const file of files) {
+            const p = Storage.uploadFile(file, `concerns/${this.uid}/${file.name}`);
+            promises.push(p);
+        }
+
+        await Promise.all(promises);
     }
 }

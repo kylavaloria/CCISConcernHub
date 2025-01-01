@@ -4,7 +4,6 @@ import iconImage from '../assets/whats-next.png';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Concern from '../models/concern';
-import Storage from '../services/storage';
 
 const selectOptions = {
     issueTypes: ["Concern", "Request", "Complaint"],
@@ -75,9 +74,7 @@ export function SubmitConcern({ userData }) {
                 attachmentLinks: [],
             });
             await newConcern.saveToDatabase();
-
-            // Upload attachments to storage
-            await Promise.all(formData.attachments.map(file => Storage.uploadFile(file, `concerns/${newconcern.uid}/${file.name}`)));
+            await newConcern.uploadAttachments(formData.attachments);
 
             navigate('/my-concerns');
         } catch (error) {
