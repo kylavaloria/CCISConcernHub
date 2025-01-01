@@ -11,8 +11,9 @@ export default class Database {
     }
 
     static async setUser(user) {
-        const docRef = doc(firestore, "users", uid);
-        await setDoc(docRef, user.toJSON());
+        const userData = user.toJSON();
+        const docRef = doc(firestore, "users", userData.uid);
+        await setDoc(docRef, userData);
     }
 
     static async getConcern(concernId) {
@@ -37,8 +38,8 @@ export default class Database {
     }
 
     static async setConcern(concern) {
-        const concernsCollectionRef = collection(firestore, "concerns");
-        const docRef = doc(concernsCollectionRef);
-        await setDoc(docRef, concern.toJSON());
+        const concernData = concern.toJSON();
+        const docRef = doc(firestore, "concerns", concernData.uid);
+        await setDoc(docRef, concernData);
     }
 }
