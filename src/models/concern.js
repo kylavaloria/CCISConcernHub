@@ -58,6 +58,10 @@ export default class Concern {
             promises.push(p);
         }
 
-        await Promise.all(promises);
+        const dlUrls = await Promise.all(promises);
+
+        for (const dlUrl of dlUrls) {
+            this.attachmentLinks.push(dlUrl);
+        }
     }
 }

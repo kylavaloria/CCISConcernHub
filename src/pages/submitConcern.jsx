@@ -76,8 +76,8 @@ export function SubmitConcern({ userData }) {
                 creatorUid: userData.uid,
                 attachmentLinks: [],
             });
-            await newConcern.saveToDatabase();
             await newConcern.uploadAttachments(formData.attachments);
+            await newConcern.saveToDatabase();
 
             navigate('/my-concerns');
         } catch (error) {
