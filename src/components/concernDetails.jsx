@@ -71,20 +71,20 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
             {/* Attachments */}
             <div className="mb-6">
                 <h3 className="text-gray-600 mb-2">Attachments</h3>
-                {concern.attachmentLinks.length > 0 ? (
+                {concern.attachments.length > 0 ? (
                     <div className="flex gap-4 flex-wrap">
-                        {concern.attachmentLinks.map((attachment, index) => (
+                        {concern.attachments.map((attachment, index) => (
                             <div
                                 key={index}
                                 className="flex items-center gap-2 p-2 border rounded-2xl bg-gray-50 shadow-sm"
                             >
                                 <FaPaperclip className="text-gray-500" />
                                 <a
-                                    href={`/path/to/${attachment}`}
+                                    href={attachment.url}
                                     className="text-gray-500 hover:underline"
                                     download
                                 >
-                                    {attachment}
+                                    {attachment.name}
                                 </a>
                             </div>
                         ))}

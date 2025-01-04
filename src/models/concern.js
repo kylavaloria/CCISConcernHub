@@ -3,8 +3,8 @@ import Database from "../services/database";
 import Storage from '../services/storage';
 
 export default class Concern {
-    constructor({ attachmentLinks, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
-        this.attachmentLinks = attachmentLinks;
+    constructor({ attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
+        this.attachments = attachments;
         this.category = category;
         this.creatorUid = creatorUid;
         this.dateSubmitted = dateSubmitted instanceof Timestamp ? dateSubmitted.toDate() : new Date(dateSubmitted);
@@ -36,7 +36,7 @@ export default class Concern {
 
     toJSON() {
         return {
-            attachmentLinks: this.attachmentLinks,
+            attachments: this.attachments,
             category: this.category,
             creatorUid: this.creatorUid,
             dateSubmitted: this.dateSubmitted,
@@ -50,18 +50,21 @@ export default class Concern {
         };
     }
 
+    async _uploadFile(file) {
+        const dlUrl = await Storage.uploadFile(file, `concerns/${this.uid}/${file.name}`);
+        this.attachments.push({
+            name: file.name,
+            url: dlUrl,
+        });
+    }
+
     async uploadAttachments(files) {
         const promises = [];
 
         for (const file of files) {
-            const p = Storage.uploadFile(file, `concerns/${this.uid}/${file.name}`);
-            promises.push(p);
+            promises.push(this._uploadFile(file));
         }
 
-        const dlUrls = await Promise.all(promises);
-
-        for (const dlUrl of dlUrls) {
-            this.attachmentLinks.push(dlUrl);
-        }
+        await Promise.all(promises);
     }
 }
