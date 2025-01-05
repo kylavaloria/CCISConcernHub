@@ -22,26 +22,13 @@ export default class Database {
         return docSnap.exists() ? new Concern(docSnap.data()) : null;
     }
 
-    static async getUserConcerns(uid, pagination = null) {
-        let q;
-
+    static async _getPaginatedConcerns(constraints, pagination) {
         if (pagination) {
-            q = query(
-                collection(firestore, "concerns"),
-                where("creatorUid", "==", uid),
-                orderBy("dateSubmitted", "desc"),
-                startAfter(pagination.lastDoc || new Date()),
-                limit(pagination.size),
-            );
-        } else {
-            q = query(
-                collection(firestore, "concerns"),
-                where("creatorUid", "==", uid),
-                orderBy("dateSubmitted"),
-            );
+            constraints.push(startAfter(pagination.lastDoc || new Date()));
+            constraints.push(limit(pagination.size));
         }
 
-        const querySnap = await getDocs(q);
+        const querySnap = await getDocs(query(...constraints));
         const concerns = querySnap.docs.map(doc => {
             return new Concern(doc.data());
         });
@@ -51,6 +38,24 @@ export default class Database {
         }
 
         return concerns;
+    }
+
+    static async getCategoryConcerns(categories, pagination = null) {
+        const constraints = [
+            collection(firestore, "concerns"),
+            where("category", "in", categories),
+            orderBy("dateSubmitted", "desc"),
+        ];
+        return await this._getPaginatedConcerns(constraints, pagination);
+    }
+
+    static async getUserConcerns(uid, pagination = null) {
+        const constraints = [
+            collection(firestore, "concerns"),
+            where("creatorUid", "==", uid),
+            orderBy("dateSubmitted", "desc"),
+        ];
+        return await this._getPaginatedConcerns(constraints, pagination);
     }
 
     static generateConcernUid() {
