@@ -7,23 +7,23 @@ import LoadingSpinner from '../components/loading';
 
 export function AdminDashboard({ userData }) {
     const [concerns, setConcerns] = useState(undefined);
-    const pagination = useRef(new Pagination());
+    const pagination = useRef(new Pagination(5));
 
-    const fetchUserConcerns = useCallback(async () => {
+    const fetchCategoryConcerns = useCallback(async () => {
         if (userData) {
-            const userConcerns = await Database.getUserConcerns(userData.uid, pagination.current);
+            const categoryConcerns = await Database.getCategoryConcerns(userData.assignedCategories, pagination.current)
 
             if (concerns === undefined) {
-                setConcerns(userConcerns);
+                setConcerns(categoryConcerns);
             } else {
-                setConcerns((prevConcerns) => [...prevConcerns, ...userConcerns]);
+                setConcerns([...concerns, ...categoryConcerns]);
             }
         }
     }, [userData, concerns]);
 
     useEffect(() => {
-        fetchUserConcerns();
-    }, [fetchUserConcerns]);
+        fetchCategoryConcerns();
+    }, [fetchCategoryConcerns]);
 
     // Dummy metrics data
     const metricsData = {
@@ -43,7 +43,7 @@ export function AdminDashboard({ userData }) {
                 <h2 className="text-xl font-semibold mt-6 text-blue-400">Manage Concerns</h2>
                 {
                     concerns === undefined ? <LoadingSpinner /> :
-                    <ConcernList concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
+                    <ConcernList concerns={concerns} fetchUserConcerns={fetchCategoryConcerns} />
                 }
             </main>
             <Footer />
