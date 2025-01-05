@@ -12,6 +12,7 @@ export function ViewConcern({ userData }) {
     const { concernId } = useParams();
     const [concern, setConcern] = useState(null);
     const [concernCreator, setConcernCreator] = useState(null);
+    const [status, setStatus] = useState('');
 
     useEffect(() => {
         async function fetchConcern() {
@@ -26,7 +27,7 @@ export function ViewConcern({ userData }) {
         navigate('/my-concerns');
     };
 
-    const handleStatusChange = (newStatus) => { // Added function to handle status change
+    const handleStatusChange = (newStatus) => {
         setStatus(newStatus);
     };
 
@@ -49,12 +50,12 @@ export function ViewConcern({ userData }) {
                             concern={concern}
                             concernCreator={concernCreator}
                             userData={userData}
-                            onStatusChange={handleStatusChange} // Pass status change handler
+                            onStatusChange={handleStatusChange}
                         />
 
                         <DiscussionThread
                             initialDiscussion={initialDiscussion}
-                            status={status} // Pass status to DiscussionThread
+                            status={status}
                             concernCreatedDate={concern.dateSubmitted}
                         />
                     </>
