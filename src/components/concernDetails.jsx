@@ -28,10 +28,10 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                         onChange={handleStatusChange} // Updated to handle status change
                         className="border rounded p-1"
                     >
-                        <option value="open">Open</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="on-hold">On Hold</option>
-                        <option value="closed">Closed</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="On Hold">On Hold</option>
+                        <option value="Closed">Closed</option>
                     </select>
                 ) : (
                     <StatusBadge status={status} />
