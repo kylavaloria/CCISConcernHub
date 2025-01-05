@@ -67,4 +67,9 @@ export default class Concern {
 
         await Promise.all(promises);
     }
+
+    updateStatus(newStatus) {
+        this.status = newStatus;
+        this.saveToDatabase();
+    }
 }

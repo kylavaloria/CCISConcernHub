@@ -8,7 +8,8 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
     const handleStatusChange = (e) => {
         const newStatus = e.target.value;
         setStatus(newStatus);
-        if (onStatusChange) { // Notify parent component about status change
+        concern.updateStatus(newStatus);
+        if (onStatusChange) {
             onStatusChange(newStatus);
         }
     };
@@ -83,6 +84,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                                     href={attachment.url}
                                     className="text-gray-500 hover:underline"
                                     download
+                                    target='_blank'
                                 >
                                     {attachment.name}
                                 </a>
