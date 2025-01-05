@@ -3,16 +3,17 @@ import Footer from '../components/footer';
 import ConcernList from '../components/concernList';
 import DashboardStats from '../components/dashboardStats';
 import Database, { Pagination } from '../services/database';
+import LoadingSpinner from '../components/loading';
 
 export function AdminDashboard({ userData }) {
-    const [concerns, setConcerns] = useState([]);
+    const [concerns, setConcerns] = useState(undefined);
     const pagination = useRef(new Pagination());
 
     const fetchUserConcerns = useCallback(async () => {
         if (userData) {
             const userConcerns = await Database.getUserConcerns(userData.uid, pagination.current);
 
-            if (concerns.length === 0) {
+            if (concerns === undefined) {
                 setConcerns(userConcerns);
             } else {
                 setConcerns((prevConcerns) => [...prevConcerns, ...userConcerns]);
@@ -40,7 +41,10 @@ export function AdminDashboard({ userData }) {
                 <h2 className="text-2xl font-semibold mt-2 text-blue-400">Concern Overview</h2>
                 <DashboardStats metrics={metricsData} />
                 <h2 className="text-xl font-semibold mt-6 text-blue-400">Manage Concerns</h2>
-                <ConcernList concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
+                {
+                    concerns === undefined ? <LoadingSpinner /> :
+                    <ConcernList concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
+                }
             </main>
             <Footer />
         </div>
