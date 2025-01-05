@@ -15,7 +15,7 @@ export function MyConcerns({ userData }) {
             if (concerns === undefined) {
                 setConcerns(userConcerns);
             } else {
-                setConcerns((prevConcerns) => [...prevConcerns, ...userConcerns]);
+                setConcerns([...concerns, ...userConcerns]);
             }
         }
     }, [userData, concerns]);
