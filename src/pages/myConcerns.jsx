@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Footer from '../components/footer';
 import ConcernList from '../components/concernList';
 import Database, { Pagination } from '../services/database';
@@ -8,21 +8,21 @@ export function MyConcerns({ userData }) {
     const [concerns, setConcerns] = useState(undefined);
     const pagination = useRef(new Pagination());
 
-    async function fetchUserConcerns() {
+    const fetchUserConcerns = useCallback(async () => {
         if (userData) {
             const userConcerns = await Database.getUserConcerns(userData.uid, pagination.current);
 
             if (concerns === undefined) {
                 setConcerns(userConcerns);
             } else {
-                setConcerns([...concerns, ...userConcerns]);
+                setConcerns((prevConcerns) => [...prevConcerns, ...userConcerns]);
             }
         }
-    }
+    }, [userData, concerns]);
 
     useEffect(() => {
         fetchUserConcerns();
-    }, [userData]);
+    }, [fetchUserConcerns]);
 
     return (
         <div className="min-h-screen flex flex-col">
