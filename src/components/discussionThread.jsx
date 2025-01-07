@@ -19,15 +19,6 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
     const formatDate = (date) => {
         const d = new Date(date);
 
-        const options = {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-        };
-
         const datePart = d.toLocaleString('en-US', {
             month: 'short',
             day: 'numeric',
@@ -59,19 +50,19 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
             </div>
 
             {/* Status-Specific Messages */}
-            {status === 'in-progress' && (
+            {status === 'In Progress' && (
                 <div className="text-center text-xs text-gray-500 mb-5">
                     <p>{formatDate(new Date())}</p>
                     <p>This concern is now marked as In Progress.</p>
                 </div>
             )}
-            {status === 'on-hold' && (
+            {status === 'On Hold' && (
                 <div className="text-center text-xs text-gray-500 mb-5">
                     <p>{formatDate(new Date())}</p>
                     <p>This concern is now marked as On Hold.</p>
                 </div>
             )}
-            {status === 'closed' && (
+            {status === 'Closed' && (
                 <div className="text-center text-xs text-gray-500 mb-5">
                     <p>This concern is now marked as Closed.</p>
                 </div>

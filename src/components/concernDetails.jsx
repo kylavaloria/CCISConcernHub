@@ -26,7 +26,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                 {userData?.isAdmin() ? (
                     <select
                         value={status}
-                        onChange={handleStatusChange} // Updated to handle status change
+                        onChange={handleStatusChange}
                         className="border rounded p-1"
                     >
                         <option value="Open">Open</option>
