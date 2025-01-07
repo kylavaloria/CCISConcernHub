@@ -8,6 +8,9 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
     const handleUnassignAdmin = () => {
         if (concern.hasAdminAssigned(userData)) {
             concern.unassignAdmin(userData);
+            alert('Admin unassigned successfully.');
+        } else {
+            alert('Admin is not assigned to this concern.');
         }
     }
 
