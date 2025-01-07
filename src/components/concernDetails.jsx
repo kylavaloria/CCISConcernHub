@@ -9,6 +9,11 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         const newStatus = e.target.value;
         setStatus(newStatus);
         concern.updateStatus(newStatus);
+
+        if (!concern.hasAdminAssigned(userData)) {
+            concern.assignAdmin(userData);
+        }
+
         if (onStatusChange) {
             onStatusChange(newStatus);
         }

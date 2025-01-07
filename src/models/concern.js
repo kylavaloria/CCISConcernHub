@@ -74,4 +74,16 @@ export default class Concern {
         this.status = newStatus;
         this.saveToDatabase();
     }
+
+    hasAdminAssigned(userData) {
+        return this.assignedAdmins.find(admin => admin.uid === userData.uid);
+    }
+
+    assignAdmin(userData) {
+        this.assignedAdmins.push({
+            uid: userData.uid,
+            name: userData.displayName,
+        });
+        this.saveToDatabase();
+    }
 }
