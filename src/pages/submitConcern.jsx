@@ -392,7 +392,7 @@ export function SubmitConcern({ userData }) {
                                         <div
                                             className="absolute top-0 right-0 hidden group-hover:block"
                                             onClick={(e) => {
-                                                e.stopPropagation(); removeFile(index);
+                                                e.stopPropagation();
                                             }}
                                         >
                                         </div>
