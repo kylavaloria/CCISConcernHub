@@ -241,7 +241,7 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
                                     {userData?.isAdmin() && (
                                         <div className="py-2 px-4">
                                             {concern.assignedAdmins.map(admin => (
-                                                <div key={admin}>{admin}</div>
+                                                <div key={admin.uid}>{admin.name}</div>
                                             ))}
                                         </div>
                                     )}
