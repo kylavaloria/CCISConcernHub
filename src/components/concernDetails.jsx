@@ -5,6 +5,12 @@ import { FaPaperclip } from 'react-icons/fa';
 const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) => { // Added onStatusChange
     const [status, setStatus] = useState(concern.status);
 
+    const handleUnassignAdmin = () => {
+        if (concern.hasAdminAssigned(userData)) {
+            concern.unassignAdmin(userData);
+        }
+    }
+
     const handleStatusChange = (e) => {
         const newStatus = e.target.value;
         setStatus(newStatus);
@@ -21,7 +27,12 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
 
     return (
         <div className="flex flex-col mx-14 gap-4">
-        <h2 className="text-3xl font-semibold">{concern.subject}</h2>
+        <div className="flex justify-between items-center gap-4">
+            <h2 className="text-3xl font-semibold">{concern.subject}</h2>
+            <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" onClick={handleUnassignAdmin}>
+                Unassign Concern
+            </button>
+        </div>
         <div className="flex justify-start gap-8">
             <div className="text-gray-600 flex items-center gap-2">
                 Concern ID <strong>#{concern.uid}</strong>

@@ -86,4 +86,11 @@ export default class Concern {
         });
         this.saveToDatabase();
     }
+
+    unassignAdmin(userData) {
+        this.assignedAdmins = this.assignedAdmins.filter(
+            admin => admin.uid !== userData.uid
+        );
+        this.saveToDatabase();
+    }
 }
