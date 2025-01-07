@@ -75,6 +75,7 @@ export function SubmitConcern({ userData }) {
                 dateSubmitted: new Date(),
                 creatorUid: userData.uid,
                 attachments: [],
+                assignedAdmins: [],
             });
             await newConcern.uploadAttachments(formData.attachments);
             await newConcern.saveToDatabase();

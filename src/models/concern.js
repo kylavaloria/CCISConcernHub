@@ -3,7 +3,8 @@ import Database from "../services/database";
 import Storage from '../services/storage';
 
 export default class Concern {
-    constructor({ attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
+    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
+        this.assignedAdmins = assignedAdmins;
         this.attachments = attachments;
         this.category = category;
         this.creatorUid = creatorUid;
@@ -36,6 +37,7 @@ export default class Concern {
 
     toJSON() {
         return {
+            assignedAdmins: this.assignedAdmins,
             attachments: this.attachments,
             category: this.category,
             creatorUid: this.creatorUid,

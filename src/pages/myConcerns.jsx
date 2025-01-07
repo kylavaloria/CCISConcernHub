@@ -30,7 +30,7 @@ export function MyConcerns({ userData }) {
                 <h2 className="text-3xl font-bold mb-8 text-blue-400">My Concerns</h2>
                 {
                     concerns === undefined ? <LoadingSpinner /> :
-                    <ConcernList concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
+                    <ConcernList userData={userData} concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
                 }
             </div>
             <Footer />

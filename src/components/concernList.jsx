@@ -101,7 +101,7 @@ const DateDropdown = ({ startDate, endDate, onChange, isOpen, toggleDropdown }) 
     </div>
 );
 
-export function ConcernList({ concerns, fetchUserConcerns }) {
+export function ConcernList({ userData, concerns, fetchUserConcerns }) {
     const [filters, setFilters] = useState({
         issueType: ["All", "Concern", "Request", "Complaint"],
         category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
@@ -159,8 +159,8 @@ export function ConcernList({ concerns, fetchUserConcerns }) {
                         className="text-gray-600 border-gray-300 grid text-xs"
                         style={{
                             display: 'grid',
-                            gridTemplateColumns: '2.5fr 2.5fr 4fr 3fr 2.5fr 130px',
-                            alignItems: 'left',
+                            gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
+                            alignItems: 'center',
                         }}
                     >
                         <div className="py-3 px-4 flex items-left">
@@ -186,6 +186,11 @@ export function ConcernList({ concerns, fetchUserConcerns }) {
                         <div className="py-3 px-4">
                             <div className="font-bold">Subject/Title</div>
                         </div>
+                        {userData?.isAdmin() && (
+                            <div className="py-3 px-4 flex items-left">
+                                <div className="font-bold mr-2">Assigned</div>
+                            </div>
+                        )}
                         <div className="py-3 px-4 flex items-left">
                             <div className="font-bold mr-2">Status</div>
                             <FilterDropdown
@@ -222,7 +227,7 @@ export function ConcernList({ concerns, fetchUserConcerns }) {
                                     className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
                                     style={{
                                         display: 'grid',
-                                        gridTemplateColumns: '2.5fr 2.5fr 4fr 3fr 2.5fr 130px',
+                                        gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
                                         alignItems: 'center',
                                     }}
                                 >
@@ -233,6 +238,13 @@ export function ConcernList({ concerns, fetchUserConcerns }) {
                                             ? `${concern.subject.substring(0, 30)}...`
                                             : concern.subject}
                                     </div>
+                                    {userData?.isAdmin() && (
+                                        <div className="py-2 px-4">
+                                            {concern.assignedAdmins.map(admin => (
+                                                <div key={admin}>{admin}</div>
+                                            ))}
+                                        </div>
+                                    )}
                                     <div className="py-2 px-4">
                                         <StatusBadge status={concern.status} />
                                     </div>

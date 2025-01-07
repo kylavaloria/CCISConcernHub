@@ -43,7 +43,7 @@ export function AdminDashboard({ userData }) {
                 <h2 className="text-xl font-semibold mt-6 text-blue-400">Manage Concerns</h2>
                 {
                     concerns === undefined ? <LoadingSpinner /> :
-                    <ConcernList concerns={concerns} fetchUserConcerns={fetchCategoryConcerns} />
+                    <ConcernList userData={userData} concerns={concerns} fetchUserConcerns={fetchCategoryConcerns} />
                 }
             </main>
             <Footer />
