@@ -4,8 +4,8 @@ import { FaPaperclip } from 'react-icons/fa';
 
 const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) => {
     const [status, setStatus] = useState(concern.status);
-    const [isResolved, setIsResolved] = useState(false);
-    const [isSpam, setIsSpam] = useState(false);
+    const [isResolved, setIsResolved] = useState(concern.isResolved);
+    const [isSpam, setIsSpam] = useState(concern.isSpam);
 
     const handleUnassignAdmin = () => {
         if (concern.isAdminAssigned(userData)) {
@@ -21,33 +21,58 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         const newStatus = e.target.value;
         setStatus(newStatus);
         concern.updateStatus(newStatus);
-        if (!concern.isAdminAssigned(userData)) {
-            concern.assignAdmin(userData);
-        }
+
         if (onStatusChange) {
             onStatusChange(newStatus);
         }
-        this.saveToDatabase();
+
+        if (!concern.isAdminAssigned(userData)) {
+            concern.assignAdmin(userData);
+        }
+
+        concern.saveToDatabase();
     };
 
     const handleMarkAsResolved = () => {
+        if (concern.isResolved === true) {
+            alert('Concern is already marked as resolved.');
+            return;
+        }
+
         setIsResolved(true);
-        setIsSpam(false); 
+        setIsSpam(false);
         setStatus('Closed');
+
+        concern.setIsResolved(true);
+        concern.setIsSpam(false);
         concern.updateStatus('Closed');
-        if (!concern.hasAdminAssigned(userData)) {
+
+        if (!concern.isAdminAssigned(userData)) {
             concern.assignAdmin(userData);
         }
+
+        concern.saveToDatabase();
     };
-    
+
     const handleMarkAsSpam = () => {
+        if (concern.isSpam === true) {
+            alert('Concern is already marked as spam.');
+            return;
+        }
+
         setIsResolved(false);
         setIsSpam(true);
-        concern.markAsSpam();
         setStatus('Closed');
-        if (!concern.hasAdminAssigned(userData)) {
+
+        concern.setIsResolved(false);
+        concern.setIsSpam(true);
+        concern.updateStatus('Closed');
+
+        if (!concern.isAdminAssigned(userData)) {
             concern.assignAdmin(userData);
         }
+
+        concern.saveToDatabase();
     };
 
     return (

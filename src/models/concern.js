@@ -72,7 +72,6 @@ export default class Concern {
 
     updateStatus(newStatus) {
         this.status = newStatus;
-        this.saveToDatabase();
     }
 
     isAdminAssigned(userData) {
@@ -90,5 +89,13 @@ export default class Concern {
         this.assignedAdmins = this.assignedAdmins.filter(
             admin => admin.uid !== userData.uid
         );
+    }
+
+    setIsResolved(isResolved) {
+        this.isResolved = isResolved;
+    }
+
+    setIsSpam(isSpam) {
+        this.isSpam = isSpam;
     }
 }
