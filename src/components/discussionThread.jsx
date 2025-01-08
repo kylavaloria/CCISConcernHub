@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => {
+export default function DiscussionThread({ initialDiscussion, status, concernCreatedDate }) {
     const [discussion, setDiscussion] = useState(initialDiscussion);
     const [newMessage, setNewMessage] = useState('');
 
@@ -98,5 +98,3 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
         </div>
     );
 };
-
-export default DiscussionThread;
