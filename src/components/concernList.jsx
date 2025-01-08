@@ -123,10 +123,6 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
         setOpenFilterDropdown(prev => ({ ...prev, [filterName]: false }));
     };
 
-    const toggleDropdown = (id) => {
-        setActiveDropdownId(activeDropdownId === id ? null : id);
-    };
-
     const toggleFilterDropdown = (filterName) => {
         setOpenFilterDropdown(prev => ({
             ...prev,
@@ -253,30 +249,15 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
                                         <span
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                toggleDropdown(concern.uid);
+                                                handleCopyToClipboard(concern.uid);
                                             }}
                                             className="text-blue-500 hover:text-blue-700 cursor-pointer ml-7"
                                         >
-                                            View ID
+                                            Copy ID
                                         </span>
-                                        {activeDropdownId === concern.uid && (
-                                            <div className="absolute left-0 top-full mt-1 bg-white border border-gray-300 rounded shadow-md p-2 z-50 w-50 overflow-hidden">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-xs text-gray-700 truncate">{concern.uid}</span>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            handleCopyToClipboard(concern.uid);
-                                                        }}
-                                                        className="text-blue-500 hover:text-blue-700 ml-2"
-                                                    >
-                                                        Copy
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
                                 </Link>
+
                             ))}
                         </InfiniteScroll>
                     ) : (
