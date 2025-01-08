@@ -63,7 +63,7 @@ export function SubmitConcern({ userData }) {
             ...prevData,
             [name]: files ? Array.from(files) : newValue,
         }));
-    };
+    };    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -142,6 +142,8 @@ export function SubmitConcern({ userData }) {
             return uniqueFiles;
         });
     };
+
+    
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -396,6 +398,30 @@ export function SubmitConcern({ userData }) {
                                             }}
                                         >
                                         </div>
+                                    </div>
+                                     {/* Icon for X button to remove a specific attached file INSIDE THE MODAL*/}
+                                    <div className="absolute top-1 right-1 hidden group-hover:block">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="gray"
+                                            className="size-3 cursor-pointer"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent click event from bubbling
+                                                setUploadedFiles((prevFiles) => {
+                                                    const updatedFiles = prevFiles.filter((_, i) => i !== index); // Remove file by index
+                                                    return updatedFiles;
+                                                });
+                                            }}
+                                        >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                                        d="M6 18 18 6M6 6l12 12"
+                                        />
+                                        </svg>
                                     </div>
                                 </div>
                             ))}
