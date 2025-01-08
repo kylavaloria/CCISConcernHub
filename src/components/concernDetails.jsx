@@ -6,8 +6,9 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
     const [status, setStatus] = useState(concern.status);
 
     const handleUnassignAdmin = () => {
-        if (concern.hasAdminAssigned(userData)) {
+        if (concern.isAdminAssigned(userData)) {
             concern.unassignAdmin(userData);
+            this.saveToDatabase();
             alert('Admin unassigned successfully.');
         } else {
             alert('Admin is not assigned to this concern.');
@@ -18,14 +19,13 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         const newStatus = e.target.value;
         setStatus(newStatus);
         concern.updateStatus(newStatus);
-
-        if (!concern.hasAdminAssigned(userData)) {
+        if (!concern.isAdminAssigned(userData)) {
             concern.assignAdmin(userData);
         }
-
         if (onStatusChange) {
             onStatusChange(newStatus);
         }
+        this.saveToDatabase();
     };
 
     return (

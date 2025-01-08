@@ -75,7 +75,7 @@ export default class Concern {
         this.saveToDatabase();
     }
 
-    hasAdminAssigned(userData) {
+    isAdminAssigned(userData) {
         return this.assignedAdmins.find(admin => admin.uid === userData.uid);
     }
 
@@ -84,13 +84,11 @@ export default class Concern {
             uid: userData.uid,
             name: userData.displayName,
         });
-        this.saveToDatabase();
     }
 
     unassignAdmin(userData) {
         this.assignedAdmins = this.assignedAdmins.filter(
             admin => admin.uid !== userData.uid
         );
-        this.saveToDatabase();
     }
 }
