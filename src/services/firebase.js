@@ -38,4 +38,4 @@ export const firestore = getFirestore(app);
 export const storage = getStorage(app);
 
 // Initialize Firebase Realtime Database
-export const database = getDatabase(app);
+export const rtdatabase = getDatabase(app);
