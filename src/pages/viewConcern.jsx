@@ -6,6 +6,7 @@ import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
 import Database from '../services/database';
 import LoadingSpinner from '../components/loading';
+import RTDatabase from '../services/rtDatabase';
 
 export function ViewConcern({ userData }) {
     const navigate = useNavigate();
