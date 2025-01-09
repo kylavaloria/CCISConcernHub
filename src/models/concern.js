@@ -52,6 +52,7 @@ export default class Concern {
             issueType: this.issueType,
             status: this.status,
             subject: this.subject,
+            hasDiscussion: this.hasDiscussion,
         };
     }
 
