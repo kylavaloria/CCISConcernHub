@@ -1,39 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => {
     const [discussion, setDiscussion] = useState(initialDiscussion);
-    const [newMessage, setNewMessage] = useState('');
+    const [newMessage, setNewMessage] = useState("");
+
+    const textareaRef = useRef(null);
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
             const newMsg = {
-                sender: 'Student',
+                sender: "Student",
                 message: newMessage,
                 timestamp: new Date().toLocaleString(),
             };
             setDiscussion([...discussion, newMsg]);
-            setNewMessage('');
+            setNewMessage("");
+            if (textareaRef.current) {
+                textareaRef.current.style.height = "auto"; // Reset height after sending
+            }
+        }
+    };
+
+    const adjustHeight = () => {
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.style.height = "auto"; // Reset height to recalculate
+            textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on content
         }
     };
 
     const formatDate = (date) => {
         const d = new Date(date);
 
-        const datePart = d.toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
+        const datePart = d.toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
         });
 
-        const timePart = d.toLocaleString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
+        const timePart = d.toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
             hour12: true,
         });
 
         return `${datePart} at ${timePart}`;
     };
-
 
     return (
         <div className="p-4 rounded-md mb-8 mx-14">
@@ -84,20 +96,26 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
             </div>
 
             {/* Input for new message */}
-            <div className="flex text-xs">
-                <input
-                    type="text"
+            <div className="bg-gray-100 ml-3 flex flex-col border border-gray-300 rounded-md mt-8 overflow-hidden">
+                <textarea
+                    ref={textareaRef}
                     value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type your message here..."
-                    className="flex-grow border border-gray-300 rounded-l-md px-4 py-2"
+                    onChange={(e) => {
+                        setNewMessage(e.target.value);
+                        adjustHeight();
+                    }}
+                    placeholder="Send a reply..."
+                    className="bg-gray-100 px-4 py-2 outline-none resize-none min-h-[40px] max-h-32 overflow-y-auto text-sm"
+                    rows={1}
                 />
-                <button
-                    onClick={handleSendMessage}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600"
-                >
-                    Send
-                </button>
+                <div className="flex justify-end">
+                    <button
+                        onClick={handleSendMessage}
+                        className="bg-blue-500 text-white text-sm px-4 py-1 m-2 rounded-xl hover:bg-blue-600"
+                    >
+                        Send
+                    </button>
+                </div>
             </div>
         </div>
     );
