@@ -48,9 +48,8 @@ export function ViewConcern({ userData }) {
                         />
 
                         <DiscussionThread
-                            initialDiscussion={initialDiscussion}
+                            concern={concern}
                             status={status}
-                            concernCreatedDate={concern.dateSubmitted}
                         />
                     </>
                 }

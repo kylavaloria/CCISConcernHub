@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function DiscussionThread({ initialDiscussion, status, concernCreatedDate }) {
-    const [discussion, setDiscussion] = useState(initialDiscussion);
+export default function DiscussionThread({ concern, status }) {
+    const [discussion, setDiscussion] = useState({ messages: [] });
     const [newMessage, setNewMessage] = useState('');
+
+    useEffect(() => {
+        async function fetchDiscussion() {
+            concern.discussion.fetchMessages();
+            const messages = concern.discussion.getMessages();
+            setDiscussion({ messages: messages });
+        }
+        fetchDiscussion();
+    }, [concern]);
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
@@ -45,7 +54,7 @@ export default function DiscussionThread({ initialDiscussion, status, concernCre
 
             {/* Initial Timestamp and Message */}
             <div className="text-center text-xs text-gray-500 mt-4 mb-5">
-                <p>{formatDate(concernCreatedDate)}</p>
+                <p>{formatDate(concern.getDateSubmitted())}</p>
                 <p>30 days of inactivity will automatically close the concern.</p>
             </div>
 
@@ -68,11 +77,11 @@ export default function DiscussionThread({ initialDiscussion, status, concernCre
                 </div>
             )}
 
-                {discussion.map((msg, index) => (
+                {discussion.messages?.map((msg, index) => (
                     <div key={index} className={`mb-3  ${msg.sender === 'Admin' ? 'text-right' : 'text-left'}`}>
                         <div className={`inline-block pr-3 pl-3 p-2.5 rounded-md text-sm space-y-1 ${msg.sender === 'Admin' ? 'bg-blue-100' : 'bg-gray-100'}`}>
                             <p className ="text-gray-600 text-xs text-left"><strong>{msg.sender}</strong></p>
-                            <p>{msg.message}</p>
+                            <p>{msg.text}</p>
                             <p className="text-xs text-gray-500 text-left">{formatDate(msg.timestamp)}</p>
                         </div>
                     </div>

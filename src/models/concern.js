@@ -101,4 +101,8 @@ export default class Concern {
     setIsSpam(isSpam) {
         this.isSpam = isSpam;
     }
+
+    getDateSubmitted() {
+        return this.dateSubmitted;
+    }
 }
