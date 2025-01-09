@@ -6,7 +6,6 @@ import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
 import Database from '../services/database';
 import LoadingSpinner from '../components/loading';
-import RTDatabase from '../services/rtDatabase';
 
 export function ViewConcern({ userData }) {
     const navigate = useNavigate();
@@ -31,12 +30,6 @@ export function ViewConcern({ userData }) {
     const handleStatusChange = (newStatus) => {
         setStatus(newStatus);
     };
-
-    // Sample chat messages (replace with actual discussion data)
-    const initialDiscussion = [
-        { sender: 'Student', message: 'Can someone help with my issue?', timestamp: '2024-10-02 10:15 AM' },
-        { sender: 'Admin', message: 'We are looking into it. Please hold on.', timestamp: '2024-10-02 11:00 AM' },
-    ];
 
     return (
         <div className="min-h-screen flex flex-col">
