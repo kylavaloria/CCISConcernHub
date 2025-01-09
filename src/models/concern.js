@@ -106,4 +106,8 @@ export default class Concern {
     getDateSubmitted() {
         return this.dateSubmitted;
     }
+
+    setHasDiscussion(hasDiscussion) {
+        this.hasDiscussion = hasDiscussion;
+    }
 }

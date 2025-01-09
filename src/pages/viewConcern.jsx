@@ -48,6 +48,7 @@ export function ViewConcern({ userData }) {
                         />
 
                         <DiscussionThread
+                            userData={userData}
                             concern={concern}
                             status={status}
                         />

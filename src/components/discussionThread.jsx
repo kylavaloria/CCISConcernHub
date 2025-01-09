@@ -1,26 +1,37 @@
 import { useEffect, useState } from 'react';
+import Message from '../models/message';
 
-export default function DiscussionThread({ concern, status }) {
+export default function DiscussionThread({ userData, concern, status }) {
     const [discussion, setDiscussion] = useState({ messages: [] });
     const [newMessage, setNewMessage] = useState('');
 
     useEffect(() => {
         async function fetchDiscussion() {
-            concern.discussion.fetchMessages();
+            if (!concern.hasDiscussion) return;
+            await concern.discussion.fetchMessages();
             const messages = concern.discussion.getMessages();
             setDiscussion({ messages: messages });
         }
         fetchDiscussion();
     }, [concern]);
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
+        if (!concern.hasDiscussion) {
+            concern.setHasDiscussion(true);
+            concern.saveToDatabase();
+        }
+
         if (newMessage.trim()) {
-            const newMsg = {
-                sender: 'Student',
-                message: newMessage,
+            const newMsg = new Message({
+                sender: userData.uid,
+                text: newMessage,
                 timestamp: new Date().toLocaleString(),
-            };
-            setDiscussion([...discussion, newMsg]);
+            });
+            setDiscussion({
+                ...discussion,
+                messages: [...discussion.messages, newMsg],
+            });
+            await concern.discussion.sendMessage(newMsg);
             setNewMessage('');
         }
     };
@@ -77,15 +88,15 @@ export default function DiscussionThread({ concern, status }) {
                 </div>
             )}
 
-                {discussion.messages?.map((msg, index) => (
-                    <div key={index} className={`mb-3  ${msg.sender === 'Admin' ? 'text-right' : 'text-left'}`}>
-                        <div className={`inline-block pr-3 pl-3 p-2.5 rounded-md text-sm space-y-1 ${msg.sender === 'Admin' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                            <p className ="text-gray-600 text-xs text-left"><strong>{msg.sender}</strong></p>
-                            <p>{msg.text}</p>
-                            <p className="text-xs text-gray-500 text-left">{formatDate(msg.timestamp)}</p>
-                        </div>
+            {discussion?.messages?.map((msg, index) => (
+                <div key={index} className={`mb-3  ${msg.sender === 'Admin' ? 'text-right' : 'text-left'}`}>
+                    <div className={`inline-block pr-3 pl-3 p-2.5 rounded-md text-sm space-y-1 ${msg.sender === 'Admin' ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                        <p className ="text-gray-600 text-xs text-left"><strong>{msg.sender}</strong></p>
+                        <p>{msg.text}</p>
+                        <p className="text-xs text-gray-500 text-left">{formatDate(msg.timestamp)}</p>
                     </div>
-                ))}
+                </div>
+            ))}
             </div>
 
             {/* Input for new message */}

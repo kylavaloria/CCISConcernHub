@@ -13,4 +13,8 @@ export default class Discussion {
     getMessages() {
         return this.messages;
     }
+
+    async sendMessage(message) {
+        await RTDatabase.sendMessage(this.uid, message);
+    }
 }
