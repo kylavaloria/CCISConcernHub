@@ -22,7 +22,11 @@ export default class RTDatabase {
     static async sendMessage(threadId, message) {
         const messageRef = ref(rtdatabase, `threads/${threadId}/${message.uid}`);
         await set(messageRef, {
-            sender: message.sender,
+            sender: {
+                uid: message.sender.uid,
+                displayName: message.sender.displayName,
+                avatarUrl: message.sender.avatarUrl,
+            },
             text: message.text,
             timestamp: message.timestamp,
         });

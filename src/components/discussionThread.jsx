@@ -24,7 +24,11 @@ export default function DiscussionThread({ userData, concern, status }) {
 
         if (newMessage.trim()) {
             const newMsg = new Message({
-                sender: userData.uid,
+                sender: {
+                    uid: userData.uid,
+                    displayName: userData.displayName,
+                    avatarUrl: userData.getAvatarUrl(),
+                },
                 text: newMessage,
                 timestamp: new Date().toLocaleString(),
             });
@@ -101,7 +105,7 @@ export default function DiscussionThread({ userData, concern, status }) {
                     <div key={index} className="relative">
                         <div className="pr-3 pl-3 text-sm pt-3">
                             <p className="ml-1 text-gray-600 text-xs text-left pb-2">
-                                <strong>{msg.sender}</strong>
+                                <strong>{msg.sender.displayName}</strong>
                             </p>
                             <p className="ml-1 text-sm break-all overflow-hidden pb-3">
                                 {msg.text}
