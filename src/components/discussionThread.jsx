@@ -4,7 +4,6 @@ import Message from '../models/message';
 export default function DiscussionThread({ userData, concern, status }) {
     const [discussion, setDiscussion] = useState({ messages: [] });
     const [newMessage, setNewMessage] = useState("");
-  
     const textareaRef = useRef(null);
 
     useEffect(() => {
@@ -29,17 +28,17 @@ export default function DiscussionThread({ userData, concern, status }) {
                 text: newMessage,
                 timestamp: new Date().toLocaleString(),
             });
-          
+
             setDiscussion({
                 ...discussion,
                 messages: [...discussion.messages, newMsg],
             });
             setNewMessage("");
-          
+
             if (textareaRef.current) {
                 textareaRef.current.style.height = "auto";
             }
-            
+
             await concern.discussion.sendMessage(newMsg);
         }
     };
@@ -110,12 +109,10 @@ export default function DiscussionThread({ userData, concern, status }) {
                             <p className="absolute right-0 top-0 text-xs text-gray-500 text-right mr-4 pt-3">
                                 {formatDate(msg.timestamp)}
                             </p>
-                            <div className="border-t border-gray-300 border-t-[0.5px]"></div>
-
+                            <div className="border-gray-300 border-t-[0.5px]"></div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
             </div>
 
             {/* Input for new message */}
