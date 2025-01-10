@@ -31,12 +31,6 @@ export function ViewConcern({ userData }) {
         setStatus(newStatus);
     };
 
-    // Sample chat messages (replace with actual discussion data)
-    const initialDiscussion = [
-        { sender: 'Student', message: 'Can someone help with my issue?', timestamp: '2024-10-02 10:15 AM' },
-        { sender: 'Admin', message: 'We are looking into it. Please hold on.', timestamp: '2024-10-02 11:00 AM' },
-    ];
-
     return (
         <div className="min-h-screen flex flex-col">
             <main className="p-6 gap-4">
@@ -54,9 +48,9 @@ export function ViewConcern({ userData }) {
                         />
 
                         <DiscussionThread
-                            initialDiscussion={initialDiscussion}
+                            userData={userData}
+                            concern={concern}
                             status={status}
-                            concernCreatedDate={concern.dateSubmitted}
                         />
                     </>
                 }

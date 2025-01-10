@@ -1,31 +1,54 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from 'react';
+import Message from '../models/message';
 
-const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => {
-    const [discussion, setDiscussion] = useState(initialDiscussion);
+export default function DiscussionThread({ userData, concern, status }) {
+    const [discussion, setDiscussion] = useState({ messages: [] });
     const [newMessage, setNewMessage] = useState("");
-
+  
     const textareaRef = useRef(null);
 
-    const handleSendMessage = () => {
+    useEffect(() => {
+        async function fetchDiscussion() {
+            if (!concern.hasDiscussion) return;
+            await concern.discussion.fetchMessages();
+            const messages = concern.discussion.getMessages();
+            setDiscussion({ messages });
+        }
+        fetchDiscussion();
+    }, [concern]);
+
+    const handleSendMessage = async () => {
+        if (!concern.hasDiscussion) {
+            concern.setHasDiscussion(true);
+            concern.saveToDatabase();
+        }
+
         if (newMessage.trim()) {
-            const newMsg = {
-                sender: "Student",
-                message: newMessage,
+            const newMsg = new Message({
+                sender: userData.uid,
+                text: newMessage,
                 timestamp: new Date().toLocaleString(),
-            };
-            setDiscussion([...discussion, newMsg]);
+            });
+          
+            setDiscussion({
+                ...discussion,
+                messages: [...discussion.messages, newMsg],
+            });
             setNewMessage("");
+          
             if (textareaRef.current) {
-                textareaRef.current.style.height = "auto"; // Reset height after sending
+                textareaRef.current.style.height = "auto";
             }
+            
+            await concern.discussion.sendMessage(newMsg);
         }
     };
 
     const adjustHeight = () => {
         const textarea = textareaRef.current;
         if (textarea) {
-            textarea.style.height = "auto"; // Reset height to recalculate
-            textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on content
+            textarea.style.height = "auto";
+            textarea.style.height = `${textarea.scrollHeight}px`;
         }
     };
 
@@ -51,10 +74,9 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
         <div className="p-4 rounded-md mb-8 mx-14">
             <div className="border mb-10 "></div>
             <h3 className="text-xl font-semibold mt-2 mb-10">Discussion Thread</h3>
-
             <div className="max-h-80 overflow-y-auto mb-4">
                 <div className="text-center text-xs text-gray-500 mt-4 mb-5">
-                    <p>{formatDate(concernCreatedDate)}</p>
+                    <p>{formatDate(concern.getDateSubmitted())}</p>
                     <p>30 days of inactivity will automatically close the concern.</p>
                 </div>
 
@@ -76,14 +98,14 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
                     </div>
                 )}
 
-                {discussion.map((msg, index) => (
+                {discussion?.messages?.map((msg, index) => (
                     <div key={index} className="relative">
                         <div className="pr-3 pl-3 text-sm pt-3">
                             <p className="ml-1 text-gray-600 text-xs text-left pb-2">
                                 <strong>{msg.sender}</strong>
                             </p>
                             <p className="ml-1 text-sm break-all overflow-hidden pb-3">
-                                {msg.message}
+                                {msg.text}
                             </p>
                             <p className="absolute right-0 top-0 text-xs text-gray-500 text-right mr-4 pt-3">
                                 {formatDate(msg.timestamp)}
@@ -92,7 +114,8 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
 
                         </div>
                     </div>
-                ))}
+                </div>
+            ))}
             </div>
 
             {/* Input for new message */}
@@ -104,7 +127,7 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
                         setNewMessage(e.target.value);
                         adjustHeight();
                     }}
-                    placeholder="Send a reply..."
+                    placeholder="Type your message here..."
                     className="bg-gray-100 px-4 py-2 outline-none resize-none min-h-[40px] max-h-32 overflow-y-auto text-sm"
                     rows={1}
                 />
@@ -120,5 +143,3 @@ const DiscussionThread = ({ initialDiscussion, status, concernCreatedDate }) => 
         </div>
     );
 };
-
-export default DiscussionThread;

@@ -1,9 +1,10 @@
 import { Timestamp } from "firebase/firestore";
 import Database from "../services/database";
 import Storage from '../services/storage';
+import Discussion from './discussion';
 
 export default class Concern {
-    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject }) {
+    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject, hasDiscussion = false }) {
         this.assignedAdmins = assignedAdmins;
         this.attachments = attachments;
         this.category = category;
@@ -16,6 +17,8 @@ export default class Concern {
         this.issueType = issueType;
         this.status = status;
         this.subject = subject;
+        this.hasDiscussion = hasDiscussion;
+        this.discussion = new Discussion(this.uid);
     }
 
     async saveToDatabase() {
@@ -49,6 +52,7 @@ export default class Concern {
             issueType: this.issueType,
             status: this.status,
             subject: this.subject,
+            hasDiscussion: this.hasDiscussion,
         };
     }
 
@@ -97,5 +101,13 @@ export default class Concern {
 
     setIsSpam(isSpam) {
         this.isSpam = isSpam;
+    }
+
+    getDateSubmitted() {
+        return this.dateSubmitted;
+    }
+
+    setHasDiscussion(hasDiscussion) {
+        this.hasDiscussion = hasDiscussion;
     }
 }

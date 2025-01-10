@@ -10,7 +10,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
     const handleUnassignAdmin = () => {
         if (concern.isAdminAssigned(userData)) {
             concern.unassignAdmin(userData);
-            this.saveToDatabase();
+            concern.saveToDatabase();
             alert('Admin unassigned successfully.');
         } else {
             alert('Admin is not assigned to this concern.');

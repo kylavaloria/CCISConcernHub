@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -20,6 +21,7 @@ import { getStorage } from "firebase/storage";
 const firebaseConfig = {
   apiKey: "AIzaSyBpTmmA5uqI8rWKSxWnIXzDF7W3slzbUGE",
   authDomain: "prototype-project-463c9.firebaseapp.com",
+  databaseURL: "https://prototype-project-463c9-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "prototype-project-463c9",
   storageBucket: "prototype-project-463c9.firebasestorage.app",
   messagingSenderId: "328202250621",
@@ -34,3 +36,6 @@ export const firestore = getFirestore(app);
 
 // Initialize Firebase Storage
 export const storage = getStorage(app);
+
+// Initialize Firebase Realtime Database
+export const rtdatabase = getDatabase(app);
