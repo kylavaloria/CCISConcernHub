@@ -31,7 +31,7 @@ export default function DiscussionThread({ userData, concern, status }) {
                     avatarUrl: userData.getAvatarUrl(),
                 },
                 text: newMessage,
-                timestamp: new Date().toLocaleString(),
+                timestamp: new Date().toISOString(),
             });
 
             setDiscussion({
