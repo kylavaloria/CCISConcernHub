@@ -1,5 +1,5 @@
 import { rtdatabase } from './firebase.js';
-import { ref, get, set } from 'firebase/database';
+import { ref, get, set, push } from 'firebase/database';
 import Message from '../models/message.js';
 
 export default class RTDatabase {
@@ -20,8 +20,9 @@ export default class RTDatabase {
     }
 
     static async sendMessage(threadId, message) {
-        const messageRef = ref(rtdatabase, `threads/${threadId}/${message.uid}`);
-        await set(messageRef, {
+        const threadRef = ref(rtdatabase, 'threads/' + threadId);
+        const newMessageRef = push(threadRef);
+        await set(newMessageRef, {
             sender: {
                 uid: message.sender.uid,
                 displayName: message.sender.displayName,
