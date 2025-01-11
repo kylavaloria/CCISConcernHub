@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import Message from '../models/message';
+import { formatDate } from '../utils';
 
 export default function DiscussionThread({ userData, concern, status }) {
     const [discussion, setDiscussion] = useState({ messages: [] });
@@ -53,24 +54,6 @@ export default function DiscussionThread({ userData, concern, status }) {
             textarea.style.height = "auto";
             textarea.style.height = `${textarea.scrollHeight}px`;
         }
-    };
-
-    const formatDate = (date) => {
-        const d = new Date(date);
-
-        const datePart = d.toLocaleString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        });
-
-        const timePart = d.toLocaleString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-        });
-
-        return `${datePart} at ${timePart}`;
     };
 
     return (
