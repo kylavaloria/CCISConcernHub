@@ -30,6 +30,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
             concern.assignAdmin(userData);
         }
 
+        concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
         concern.saveToDatabase();
     };
 
