@@ -19,6 +19,12 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
 
     const handleStatusChange = (e) => {
         const newStatus = e.target.value;
+
+        if (newStatus === 'Open') {
+            alert('Concern cannot be set to Open once In Progress status.');
+            return;
+        }
+
         setStatus(newStatus);
         concern.updateStatus(newStatus);
 
