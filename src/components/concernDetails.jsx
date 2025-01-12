@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import StatusBadge from './statusBadge';
 import { FaPaperclip } from 'react-icons/fa';
+import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from './toastNotification';
+
 
 const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) => {
     const [status, setStatus] = useState(concern.status);
@@ -11,9 +13,9 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         if (concern.isAdminAssigned(userData)) {
             concern.unassignAdmin(userData);
             concern.saveToDatabase();
-            alert('Admin unassigned successfully.');
+            showSuccessToast('Admin unassigned successfully.');
         } else {
-            alert('Admin is not assigned to this concern.');
+            showErrorToast('Admin is not assigned to this concern.');
         }
     };
 
@@ -32,11 +34,12 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
 
         concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
         concern.saveToDatabase();
+        showInfoToast(`Status updated to ${newStatus}.`);
     };
 
     const handleMarkAsResolved = () => {
         if (concern.isResolved === true) {
-            alert('Concern is already marked as resolved.');
+            showWarningToast('Concern is already marked as resolved.');
             return;
         }
 
@@ -53,11 +56,12 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         }
 
         concern.saveToDatabase();
+        showSuccessToast('Concern marked as resolved.');
     };
 
     const handleMarkAsSpam = () => {
         if (concern.isSpam === true) {
-            alert('Concern is already marked as spam.');
+            showWarningToast('Concern is already marked as spam.');
             return;
         }
 
@@ -74,6 +78,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         }
 
         concern.saveToDatabase();
+        showSuccessToast('Concern marked as spam.');
     };
 
     return (

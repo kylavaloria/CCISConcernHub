@@ -8,6 +8,7 @@ import { AdminDashboard } from "./pages/adminDashboard";
 import { ViewConcern } from './pages/viewConcern';
 import RouteElement from './components/route';
 import ClientUser from './auth/clientUser';
+import { ToastContainer } from 'react-toastify';
 
 export default function App() {
   /** @type {[undefined | null | ClientUser, any]} */
@@ -78,6 +79,7 @@ export default function App() {
 
   return (
     <Router>
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} limit={2}/>
       <Routes>
         {
           Object.entries(routeMap).map(([path, value]) => {
