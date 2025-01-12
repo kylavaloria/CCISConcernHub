@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Footer from '../components/footer';
 import ConcernList from '../components/concernList';
-import DashboardStats from '../components/dashboardStats';
+import WorkspaceStats from '../components/workspaceStats';
 import Database, { Pagination } from '../services/database';
 import LoadingSpinner from '../components/loading';
 
-export function AdminDashboard({ userData }) {
+export function AdminWorkspace({ userData }) {
     const [concerns, setConcerns] = useState(undefined);
     const pagination = useRef(new Pagination(5));
 
@@ -39,7 +39,7 @@ export function AdminDashboard({ userData }) {
         <div>
             <main className="container mx-auto p-4">
                 <h2 className="text-2xl font-semibold mt-2 text-blue-400">Concern Overview</h2>
-                <DashboardStats metrics={metricsData} />
+                <WorkspaceStats metrics={metricsData} />
                 <h2 className="text-xl font-semibold mt-6 text-blue-400">Manage Concerns</h2>
                 {
                     concerns === undefined ? <LoadingSpinner /> :
@@ -51,4 +51,4 @@ export function AdminDashboard({ userData }) {
     );
 }
 
-export default AdminDashboard;
+export default AdminWorkspace;

@@ -10,7 +10,7 @@ async function navigateBasedOnRole(clientUser, navigate) {
     if (userData.isAdmin() && userData.isStudent()) {
         navigate("/portal");
     } else if (userData.isAdmin()) {
-        navigate("/admin-dashboard");
+        navigate("/admin-workspace");
     } else if (userData.isStudent()) {
         navigate("/my-concerns");
     }
@@ -53,9 +53,9 @@ export function SignIn({ clientUser }) {
                         <button onClick={signInWithMicrosoft} className="w-full flex justify-center items-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
                             <div className="flex items-center">
                                 <div className="w-6 h-6 flex justify-center items-center rounded-full bg-white mr-2">
-                                    <img 
+                                    <img
                                         src={outlookLogo}
-                                        alt="Outlook Logo" 
+                                        alt="Outlook Logo"
                                         className="w-4 h-4"
                                     />
                                 </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export function DashboardStats({ metrics }) {
+export function WorkspaceStats({ metrics }) {
     const [dateRange, setDateRange] = useState('current-month');
     const [issueType, setIssueType] = useState('all');
     const [department, setDepartment] = useState('all');
@@ -104,4 +104,4 @@ export function DashboardStats({ metrics }) {
     );
 }
 
-export default DashboardStats;
+export default WorkspaceStats;

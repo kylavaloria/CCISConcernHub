@@ -59,7 +59,7 @@ export default function Header({ userData, isSolid }) {
                             </a>
 
                             { userData.isAdmin() && <a
-                                onClick={() => navigate("/admin-dashboard")}
+                                onClick={() => navigate("/admin-workspace")}
                                 className={`${textWhite ? 'text-white' : 'text-gray-700'} hover:text-gray-500 cursor-pointer`}
                             >
                                 Manage Concerns

@@ -11,7 +11,7 @@ export function Portal() {
     };
 
     const handleAdminClick = () => {
-        navigate('/admin-dashboard');
+        navigate('/admin-workspace');
     };
 
     return (
@@ -36,7 +36,7 @@ export function Portal() {
                     <div className="bg-white bg-opacity-20 rounded-3xl p-8 w-80 shadow-3xl">
                         <h2 className="text-2xl font-semibold text-white mb-4">Welcome</h2>
                         <p className="text-md text-white mb-6">Choose your destination</p>
-                        
+
                         {/* Buttons for Student and Admin */}
                         <div className="flex flex-col gap-4">
                             <button

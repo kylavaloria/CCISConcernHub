@@ -4,7 +4,7 @@ import { SignIn } from './pages/signin';
 import { Portal } from './pages/portal';
 import { SubmitConcern } from './pages/submitConcern';
 import { MyConcerns } from "./pages/myConcerns";
-import { AdminDashboard } from "./pages/adminDashboard";
+import { AdminWorkspace } from "./pages/adminWorkspace";
 import { ViewConcern } from './pages/viewConcern';
 import RouteElement from './components/route';
 import ClientUser from './auth/clientUser';
@@ -59,8 +59,8 @@ export default function App() {
         "isSolid": true,
       }
     },
-    "/admin-dashboard": {
-      "element": <AdminDashboard userData={userData} />,
+    "/admin-workspace": {
+      "element": <AdminWorkspace userData={userData} />,
       "headerProps": {
         "isSolid": true,
       }
