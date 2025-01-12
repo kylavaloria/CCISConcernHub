@@ -105,19 +105,19 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                                 <option value="On Hold">On Hold</option>
                                 <option value="Closed">Closed</option>
                             </select>
-                            {isResolved && (
-                                <div className="text-gray-600 ml-6">
-                                    Flagged as <span className="font-bold ml-1">Resolved</span>
-                                </div>
-                            )}
-                            {isSpam && (
-                                <div className="text-gray-600 ml-6">
-                                    Flagged as <span className="font-bold ml-1">Spam</span>
-                                </div>
-                            )}
                         </div>
                     ) : (
                         <StatusBadge status={status} />
+                    )}
+                    {isResolved && (
+                        <div className="text-gray-600 ml-6">
+                            Flagged as <span className="font-bold ml-1">Resolved</span>
+                        </div>
+                    )}
+                    {isSpam && (
+                        <div className="text-gray-600 ml-6">
+                            Flagged as <span className="font-bold ml-1">Spam</span>
+                        </div>
                     )}
                 </div>
             </div>
