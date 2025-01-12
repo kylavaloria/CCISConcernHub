@@ -178,17 +178,15 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                 )}
             </div>
             <div className="mt-2 mb-10">
-                {userData?.isAdmin() && (
-                    <div className="mb-2">
-                        <div
-                            className="text-blue-500 rounded-md hover:underline underline-offset-1 cursor-pointer"
-                            onClick={handleMarkAsResolved}
-                        >
-                            Mark as Resolved
-                        </div>
+                <div className="mb-2">
+                    <div
+                        className="text-blue-500 rounded-md hover:underline underline-offset-1 cursor-pointer"
+                        onClick={handleMarkAsResolved}
+                    >
+                        Mark as Resolved
                     </div>
-                )}
-                            {userData?.isAdmin() && (
+                </div>
+                {userData?.isAdmin() && (
                     <div className="mb-2">
                         <div
                             className="text-blue-500 rounded-md hover:underline underline-offset-1 cursor-pointer"
