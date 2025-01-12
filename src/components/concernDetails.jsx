@@ -48,7 +48,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         concern.setIsSpam(false);
         concern.updateStatus('Closed');
 
-        if (!concern.isAdminAssigned(userData)) {
+        if (!concern.isAdminAssigned(userData) && userData.isAdmin) {
             concern.assignAdmin(userData);
         }
 
