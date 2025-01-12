@@ -40,13 +40,16 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
             return;
         }
 
-        setIsResolved(true);
-        setIsSpam(false);
-        setStatus('Closed');
+        // Close only if concern creator is the one marking it as resolved
+        if (concernCreator === userData) {
+            setIsResolved(true);
+            setStatus('Closed');
+        } else {
+            alert('Concern is marked as resolved by admin.');
+        }
 
-        concern.setIsResolved(true);
-        concern.setIsSpam(false);
-        concern.updateStatus('Closed');
+        setIsSpam(false);
+        concern.setAsResolved('Closed', concernCreator, userData);
 
         if (!concern.isAdminAssigned(userData) && userData.isAdmin) {
             concern.assignAdmin(userData);

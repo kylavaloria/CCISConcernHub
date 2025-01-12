@@ -4,7 +4,7 @@ import Storage from '../services/storage';
 import Discussion from './discussion';
 
 export default class Concern {
-    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject, hasDiscussion = false }) {
+    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject, hasDiscussion = false, hasBeenResolvedByCreator = false, hasBeenResolvedByAdmin = false }) {
         this.assignedAdmins = assignedAdmins;
         this.attachments = attachments;
         this.category = category;
@@ -19,6 +19,8 @@ export default class Concern {
         this.subject = subject;
         this.hasDiscussion = hasDiscussion;
         this.discussion = new Discussion(this.uid);
+        this.hasBeenResolvedByCreator = hasBeenResolvedByCreator;
+        this.hasBeenResolvedByAdmin = hasBeenResolvedByAdmin;
     }
 
     async saveToDatabase() {
@@ -95,10 +97,6 @@ export default class Concern {
         );
     }
 
-    setIsResolved(isResolved) {
-        this.isResolved = isResolved;
-    }
-
     setIsSpam(isSpam) {
         this.isSpam = isSpam;
     }
@@ -109,5 +107,17 @@ export default class Concern {
 
     setHasDiscussion(hasDiscussion) {
         this.hasDiscussion = hasDiscussion;
+    }
+
+    setAsResolved(status, concernCreator, userData) {
+        if (concernCreator === userData) {
+            this.hasBeenResolvedByCreator = true;
+            this.updateStatus(status);
+            this.isResolved = true;
+        } else {
+            this.hasBeenResolvedByAdmin = true;
+        }
+
+        this.isSpam = false;
     }
 }
