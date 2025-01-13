@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import Concern from '../models/concern';
 import { LoadingButton } from '../components/loading';
+import { showErrorToast } from '../components/toastNotification';
 
 const selectOptions = {
     issueTypes: ["Concern", "Request", "Complaint"],
@@ -123,7 +124,7 @@ export function SubmitConcern({ userData }) {
 
         // Check if the number of files exceeds the limit
         if (uploadedFiles.length + files.length > 5) {
-            alert("You can only upload a maximum of 5 files.");
+            showErrorToast("You can only upload a maximum of 5 files.");
             return;
         }
 
