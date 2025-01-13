@@ -4,7 +4,7 @@ import Storage from '../services/storage';
 import Discussion from './discussion';
 
 export default class Concern {
-    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject, hasDiscussion = false, hasBeenResolvedByCreator = false, hasBeenResolvedByAdmin = false }) {
+    constructor({ assignedAdmins, attachments, category, creatorUid, dateSubmitted, description, uid, isResolved = false, isSpam = false, issueType, status = 'Open', subject, hasDiscussion = false, hasBeenResolvedByCreator = false, hasBeenResolvedByAdmin = false, recentActivityDate }) {
         this.assignedAdmins = assignedAdmins;
         this.attachments = attachments;
         this.category = category;
@@ -21,6 +21,7 @@ export default class Concern {
         this.discussion = new Discussion(this.uid);
         this.hasBeenResolvedByCreator = hasBeenResolvedByCreator;
         this.hasBeenResolvedByAdmin = hasBeenResolvedByAdmin;
+        this.recentActivityDate = recentActivityDate instanceof Timestamp ? recentActivityDate.toDate() : new Date(recentActivityDate);
     }
 
     async saveToDatabase() {
@@ -55,6 +56,8 @@ export default class Concern {
             status: this.status,
             subject: this.subject,
             hasDiscussion: this.hasDiscussion,
+            hasBeenResolvedByCreator: this.hasBeenResolvedByCreator,           hasBeenResolvedByAdmin: this.hasBeenResolvedByAdmin,
+            recentActivityDate: this.recentActivityDate,
         };
     }
 

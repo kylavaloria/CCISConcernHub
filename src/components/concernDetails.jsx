@@ -39,6 +39,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         }
 
         concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
+        concern.setRecentActivityDate(new Date());
         concern.saveToDatabase();
         showInfoToast(`Status updated to ${newStatus}.`);
     };
