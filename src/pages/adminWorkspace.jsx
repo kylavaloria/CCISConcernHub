@@ -11,9 +11,8 @@ export function AdminWorkspace({ userData }) {
 
     const fetchCategoryConcerns = useCallback(async () => {
         if (userData) {
-            const categoryConcerns = await Database.getCategoryConcerns(userData.assignedCategories, pagination.current)
-
-            if (concerns === undefined) {
+            const categoryConcerns = await Database.getCategoryConcerns(userData.assignedCategories, pagination.current);
+            if (!concerns) {
                 setConcerns(categoryConcerns);
             } else {
                 setConcerns([...concerns, ...categoryConcerns]);
@@ -25,26 +24,21 @@ export function AdminWorkspace({ userData }) {
         fetchCategoryConcerns();
     }, [fetchCategoryConcerns]);
 
-    // Dummy metrics data
-    const metricsData = {
-        open: 5,
-        inProgress: 3,
-        onHold: 2,
-        resolved: 10,
-        unresolved: 1,
-        totalConcerns: 21,
-    };
-
     return (
         <div>
             <main className="container mx-auto p-4">
                 <h2 className="text-2xl font-semibold mt-2 text-blue-400">Concern Overview</h2>
-                <WorkspaceStats metrics={metricsData} />
+                <WorkspaceStats concerns={concerns} />
                 <h2 className="text-xl font-semibold mt-6 text-blue-400">Manage Concerns</h2>
-                {
-                    concerns === undefined ? <LoadingSpinner /> :
-                    <ConcernList userData={userData} concerns={concerns} fetchUserConcerns={fetchCategoryConcerns} />
-                }
+                {concerns === undefined ? (
+                    <LoadingSpinner />
+                ) : (
+                    <ConcernList
+                        userData={userData}
+                        concerns={concerns}
+                        fetchUserConcerns={fetchCategoryConcerns}
+                    />
+                )}
             </main>
             <Footer />
         </div>
