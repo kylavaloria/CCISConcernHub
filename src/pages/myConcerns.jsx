@@ -11,7 +11,6 @@ export function MyConcerns({ userData }) {
     const fetchUserConcerns = useCallback(async () => {
         if (userData) {
             const userConcerns = await Database.getUserConcerns(userData.uid, pagination.current);
-            console.log("Fetched user concerns:", userConcerns); // Debugging: Log the fetched user concerns
 
             if (concerns === undefined) {
                 setConcerns(userConcerns);
@@ -31,7 +30,7 @@ export function MyConcerns({ userData }) {
                 <h2 className="text-3xl font-bold mb-8 text-blue-400">My Concerns</h2>
                 {
                     concerns === undefined ? <LoadingSpinner /> :
-                    <ConcernList concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
+                    <ConcernList userData={userData} concerns={concerns} fetchUserConcerns={fetchUserConcerns} />
                 }
             </div>
             <Footer />
@@ -39,7 +38,4 @@ export function MyConcerns({ userData }) {
     );
 }
 
-export default MyConcerns; 
-
-
-//userdata was change to concerns in the dashboardstats component
+export default MyConcerns;
