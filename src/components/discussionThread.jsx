@@ -1,10 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import Message from '../models/message';
+import { formatDate } from '../utils';
 
-export default function DiscussionThread({ userData, concern, status }) {
+export default function DiscussionThread({ userData, concern }) {
     const [discussion, setDiscussion] = useState({ messages: [] });
     const [newMessage, setNewMessage] = useState("");
     const textareaRef = useRef(null);
+
 
     useEffect(() => {
         async function fetchDiscussion() {
@@ -24,9 +26,13 @@ export default function DiscussionThread({ userData, concern, status }) {
 
         if (newMessage.trim()) {
             const newMsg = new Message({
-                sender: userData.uid,
+                sender: {
+                    uid: userData.uid,
+                    displayName: userData.displayName,
+                    avatarUrl: userData.getAvatarUrl(),
+                },
                 text: newMessage,
-                timestamp: new Date().toLocaleString(),
+                timestamp: new Date().toISOString(),
             });
 
             setDiscussion({
@@ -51,24 +57,6 @@ export default function DiscussionThread({ userData, concern, status }) {
         }
     };
 
-    const formatDate = (date) => {
-        const d = new Date(date);
-
-        const datePart = d.toLocaleString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        });
-
-        const timePart = d.toLocaleString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-        });
-
-        return `${datePart} at ${timePart}`;
-    };
-
     return (
         <div className="p-4 rounded-md mb-8 mx-14">
             <div className="border mb-10 "></div>
@@ -79,29 +67,17 @@ export default function DiscussionThread({ userData, concern, status }) {
                     <p>30 days of inactivity will automatically close the concern.</p>
                 </div>
 
-                {status === "In Progress" && (
-                    <div className="text-center text-xs text-gray-500 mb-5">
-                        <p>{formatDate(new Date())}</p>
-                        <p>This concern is now marked as In Progress.</p>
-                    </div>
-                )}
-                {status === "On Hold" && (
-                    <div className="text-center text-xs text-gray-500 mb-5">
-                        <p>{formatDate(new Date())}</p>
-                        <p>This concern is now marked as On Hold.</p>
-                    </div>
-                )}
-                {status === "Closed" && (
-                    <div className="text-center text-xs text-gray-500 mb-5">
-                        <p>This concern is now marked as Closed.</p>
-                    </div>
-                )}
-
                 {discussion?.messages?.map((msg, index) => (
+                msg.sender.uid === "system-message" ? (
+                    <div key={index} className="text-center text-xs text-gray-500 mt-5 mb-5">
+                    <p>{formatDate(new Date())}</p>
+                    <p>{msg.text}</p>
+                    </div>
+                ) : (
                     <div key={index} className="relative">
                         <div className="pr-3 pl-3 text-sm pt-3">
                             <p className="ml-1 text-gray-600 text-xs text-left pb-2">
-                                <strong>{msg.sender}</strong>
+                                <strong>{msg.sender.displayName}</strong>
                             </p>
                             <p className="ml-1 text-sm break-all overflow-hidden pb-3">
                                 {msg.text}
@@ -112,6 +88,7 @@ export default function DiscussionThread({ userData, concern, status }) {
                             <div className="border-gray-300 border-t-[0.5px]"></div>
                         </div>
                     </div>
+                    )
                 ))}
             </div>
 

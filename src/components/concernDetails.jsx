@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import StatusBadge from './statusBadge';
 import { FaPaperclip } from 'react-icons/fa';
+import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from './toastNotification';
+
 
 const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) => {
     const [status, setStatus] = useState(concern.status);
@@ -11,14 +13,20 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         if (concern.isAdminAssigned(userData)) {
             concern.unassignAdmin(userData);
             concern.saveToDatabase();
-            alert('Admin unassigned successfully.');
+            showSuccessToast('Admin unassigned successfully.');
         } else {
-            alert('Admin is not assigned to this concern.');
+            showErrorToast('Admin is not assigned to this concern.');
         }
     };
 
     const handleStatusChange = (e) => {
         const newStatus = e.target.value;
+
+        if (newStatus === 'Open') {
+            alert('Concern cannot be set to Open once In Progress status.');
+            return;
+        }
+
         setStatus(newStatus);
         concern.updateStatus(newStatus);
 
@@ -30,33 +38,40 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
             concern.assignAdmin(userData);
         }
 
+        concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
+        concern.setRecentActivityDate(new Date());
         concern.saveToDatabase();
+        showInfoToast(`Status updated to ${newStatus}.`);
     };
 
     const handleMarkAsResolved = () => {
         if (concern.isResolved === true) {
-            alert('Concern is already marked as resolved.');
+            showWarningToast('Concern is already marked as resolved.');
             return;
         }
 
-        setIsResolved(true);
+        // Close only if concern creator is the one marking it as resolved
+        if (concernCreator === userData) {
+            setIsResolved(true);
+            setStatus('Closed');
+        } else {
+            alert('Concern is marked as resolved by admin.');
+        }
+
         setIsSpam(false);
-        setStatus('Closed');
+        concern.setAsResolved('Closed', concernCreator, userData);
 
-        concern.setIsResolved(true);
-        concern.setIsSpam(false);
-        concern.updateStatus('Closed');
-
-        if (!concern.isAdminAssigned(userData)) {
+        if (!concern.isAdminAssigned(userData) && userData.isAdmin) {
             concern.assignAdmin(userData);
         }
 
         concern.saveToDatabase();
+        showSuccessToast('Concern marked as resolved.');
     };
 
     const handleMarkAsSpam = () => {
         if (concern.isSpam === true) {
-            alert('Concern is already marked as spam.');
+            showWarningToast('Concern is already marked as spam.');
             return;
         }
 
@@ -73,6 +88,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         }
 
         concern.saveToDatabase();
+        showSuccessToast('Concern marked as spam.');
     };
 
     return (
@@ -104,19 +120,19 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                                 <option value="On Hold">On Hold</option>
                                 <option value="Closed">Closed</option>
                             </select>
-                            {isResolved && (
-                                <div className="text-gray-600 ml-6">
-                                    Flagged as <span className="font-bold ml-1">Resolved</span>
-                                </div>
-                            )}
-                            {isSpam && (
-                                <div className="text-gray-600 ml-6">
-                                    Flagged as <span className="font-bold ml-1">Spam</span>
-                                </div>
-                            )}
                         </div>
                     ) : (
                         <StatusBadge status={status} />
+                    )}
+                    {isResolved && (
+                        <div className="text-gray-600 ml-6">
+                            Flagged as <span className="font-bold ml-1">Resolved</span>
+                        </div>
+                    )}
+                    {isSpam && (
+                        <div className="text-gray-600 ml-6">
+                            Flagged as <span className="font-bold ml-1">Spam</span>
+                        </div>
                     )}
                 </div>
             </div>
@@ -177,17 +193,15 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
                 )}
             </div>
             <div className="mt-2 mb-10">
-                {userData?.isAdmin() && (
-                    <div className="mb-2">
-                        <div
-                            className="text-blue-500 rounded-md hover:underline underline-offset-1 cursor-pointer"
-                            onClick={handleMarkAsResolved}
-                        >
-                            Mark as Resolved
-                        </div>
+                <div className="mb-2">
+                    <div
+                        className="text-blue-500 rounded-md hover:underline underline-offset-1 cursor-pointer"
+                        onClick={handleMarkAsResolved}
+                    >
+                        Mark as Resolved
                     </div>
-                )}
-                            {userData?.isAdmin() && (
+                </div>
+                {userData?.isAdmin() && (
                     <div className="mb-2">
                         <div
                             className="text-blue-500 rounded-md hover:underline underline-offset-1 cursor-pointer"

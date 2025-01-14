@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import StatusBadge from "./statusBadge";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { showSuccessToast } from "./toastNotification";
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
@@ -132,7 +133,7 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
 
     const handleCopyToClipboard = (id) => {
         navigator.clipboard.writeText(id);
-        alert("Copied Concern ID to clipboard: " + id);
+        showSuccessToast("Copied Concern ID to clipboard: " + id);
     };
 
     const filteredConcerns = concerns

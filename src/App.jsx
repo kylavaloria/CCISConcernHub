@@ -4,10 +4,11 @@ import { SignIn } from './pages/signin';
 import { Portal } from './pages/portal';
 import { SubmitConcern } from './pages/submitConcern';
 import { MyConcerns } from "./pages/myConcerns";
-import { AdminDashboard } from "./pages/adminDashboard";
+import { AdminWorkspace } from "./pages/adminWorkspace";
 import { ViewConcern } from './pages/viewConcern';
 import RouteElement from './components/route';
 import ClientUser from './auth/clientUser';
+import { ToastContainer } from 'react-toastify';
 
 export default function App() {
   /** @type {[undefined | null | ClientUser, any]} */
@@ -59,8 +60,8 @@ export default function App() {
         "isSolid": true,
       }
     },
-    "/admin-dashboard": {
-      "element": <AdminDashboard userData={userData} />,
+    "/admin-workspace": {
+      "element": <AdminWorkspace userData={userData} />,
       "headerProps": {
         "isSolid": true,
       }
@@ -78,6 +79,7 @@ export default function App() {
 
   return (
     <Router>
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} limit={2}/>
       <Routes>
         {
           Object.entries(routeMap).map(([path, value]) => {

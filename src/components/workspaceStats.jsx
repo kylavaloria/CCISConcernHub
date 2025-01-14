@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback  } from 'react';
 
-export function DashboardStats({ concerns }) {
+export function WorkspaceStats({ concerns }) {
     const [dateRange, setDateRange] = useState('current-month');
     const [issueType, setIssueType] = useState('all');
     const [department, setDepartment] = useState('all');
@@ -16,7 +16,6 @@ export function DashboardStats({ concerns }) {
         totalConcerns: 'bg-gray-600',
     };
 
-    // sa dashboardstats, concerns ang pinasa para makuha yung number ng concerns
     const calculateMetrics = useCallback(() => {
         if (!concerns || concerns.length === 0) {
             return {
@@ -138,4 +137,4 @@ export function DashboardStats({ concerns }) {
     );
 }
 
-export default DashboardStats;
+export default WorkspaceStats;
