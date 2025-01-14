@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Footer from '../components/footer';
 import iconImage from '../assets/whats-next.png';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
+import BackArrow from '../components/backArrow';
 import Concern from '../models/concern';
 import { LoadingButton } from '../components/loading';
 import { showErrorToast } from '../components/toastNotification';
@@ -45,10 +45,6 @@ export function SubmitConcern({ userData }) {
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [submitLoading, setSubmitLoading] = useState(false);
 
-    const handleBackClick = () => {
-        navigate('/landing-page');
-    };
-
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         let newValue = value;
@@ -64,7 +60,7 @@ export function SubmitConcern({ userData }) {
             ...prevData,
             [name]: files ? Array.from(files) : newValue,
         }));
-    };    
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -82,7 +78,7 @@ export function SubmitConcern({ userData }) {
             await newConcern.uploadAttachments(formData.attachments);
             await newConcern.saveToDatabase();
 
-            navigate('/my-concerns');
+            navigate(`/view-concern/${newConcern.uid}`);
         } catch (error) {
             console.error('Error submitting concern:', error);
         }
@@ -145,7 +141,7 @@ export function SubmitConcern({ userData }) {
         });
     };
 
-    
+
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -153,10 +149,7 @@ export function SubmitConcern({ userData }) {
             <div className="flex flex-row flex-grow bg-white bg-opacity-90 gap-32 mb-20">
                 {/* Left Side: Form */}
                 <div className="w-full p-4 max-w-2xl mx-10">
-                    <div className="flex items-center mb-4 cursor-pointer" onClick={handleBackClick}>
-                        <FaArrowLeft className="mr-2 text-blue-400" />
-                        <h2 className="text-2xl font-bold text-blue-400">Submit Concern</h2>
-                    </div>
+                    <BackArrow label='Back'/>
                     <p className="mb-6">Fill up the necessary details below:</p>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="form-group">
