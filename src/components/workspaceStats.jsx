@@ -1,61 +1,32 @@
-import { useState, useEffect, useCallback  } from 'react';
+import { useState, useEffect } from "react";
+import Database from "../services/database";
 
 export function WorkspaceStats({ concernsFilter }) {
-    const [concerns, setConcerns] = useState([]);
+    const [metrics, setMetrics] = useState(null);
     const [dateRange, setDateRange] = useState('current-month');
     const [issueType, setIssueType] = useState('all');
     const [department, setDepartment] = useState('all');
     const [category, setCategory] = useState('all');
 
+    useEffect(() => {
+        async function fetchMetrics() {
+            if (concernsFilter) {
+                setMetrics(await Database.aggregateConcernsByStatus(concernsFilter));
+            }
+        }
+
+        fetchMetrics();
+    }, [concernsFilter]);
+
     // Define status colors
     const statusColors = {
-        open: 'bg-orange-400',
-        inProgress: 'bg-green-400',
-        onHold: 'bg-red-400',
-        resolved: 'bg-blue-400',
-        unresolved: 'bg-gray-300',
-        totalConcerns: 'bg-gray-600',
+        "Open": "bg-orange-400",
+        "In Progress": "bg-green-400",
+        "On Hold": "bg-red-400",
+        "Resolved": "bg-blue-400",
+        "Unresolved": "bg-gray-300",
+        "Total Concerns": "bg-gray-600",
     };
-
-    const calculateMetrics = useCallback(() => {
-        if (!concerns || concerns.length === 0) {
-            return {
-                open: 0,
-                inProgress: 0,
-                onHold: 0,
-                resolved: 0,
-                unresolved: 0,
-                totalConcerns: 0,
-            };
-        }
-
-        let filteredConcerns = concerns;
-
-        // Apply filters
-        if (issueType !== 'all') {
-            filteredConcerns = filteredConcerns.filter(
-                (concern) => concern.issueType?.toLowerCase() === issueType.toLowerCase()
-            );
-        }
-
-        if (category !== 'all') {
-            filteredConcerns = filteredConcerns.filter(
-                (concern) => concern.category?.toLowerCase() === category.toLowerCase()
-            );
-        }
-
-        // Calculate metrics based on status
-        return {
-            open: filteredConcerns.filter((concern) => concern.status?.toLowerCase() === 'open').length,
-            inProgress: filteredConcerns.filter((concern) => concern.status?.toLowerCase() === 'inprogress').length,
-            onHold: filteredConcerns.filter((concern) => concern.status?.toLowerCase() === 'onhold').length,
-            resolved: filteredConcerns.filter((concern) => concern.status?.toLowerCase() === 'resolved').length,
-            unresolved: filteredConcerns.filter((concern) => concern.status?.toLowerCase() === 'unresolved').length,
-            totalConcerns: filteredConcerns.length,
-        };
-    }, [concerns, issueType, category]);
-
-    const metrics = calculateMetrics();
 
     return (
         <div className="rounded-lg p-4 mb-4">
@@ -120,8 +91,9 @@ export function WorkspaceStats({ concernsFilter }) {
 
             {/* Metrics Section */}
             <div className="flex justify-between bg-white p-4 rounded-lg shadow-md">
-                {Object.entries(metrics).map(([status, count], index) => (
-                    <div
+                {Object.keys(statusColors).map((status, index) => {
+                    const count = metrics === null ? "--" : metrics[status];
+                    return <div
                         key={status}
                         className={`flex items-center space-x-2 p-3 ${index !== 0 ? 'border-l-2 border-gray-300' : ''}`}>
                         <span
@@ -129,10 +101,10 @@ export function WorkspaceStats({ concernsFilter }) {
                         ></span>
                         <div>
                             <h3 className="text-sm font-semibold capitalize">{status.replace(/([A-Z])/g, ' $1')}</h3>
-                            <p className="text-xl">{count || 0}</p>
+                            <p className="text-xl">{count}</p>
                         </div>
-                    </div>
-                ))}
+                    </div>;
+                })}
             </div>
         </div>
     );

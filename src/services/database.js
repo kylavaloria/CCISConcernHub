@@ -67,7 +67,7 @@ export default class Database {
             "On Hold": await getCount([where("status", "==", "On Hold")]),
             "Resolved": resolved,
             "Unresolved": total - resolved,
-            "Total": total,
+            "Total Concerns": total,
         };
 
         return result;
