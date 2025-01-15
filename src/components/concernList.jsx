@@ -103,6 +103,7 @@ const DateDropdown = ({ startDate, endDate, onChange, isOpen, toggleDropdown }) 
 );
 
 export function ConcernList({ userData, concerns, fetchUserConcerns }) {
+    const [filteredConcerns, setFilteredConcerns] = useState(concerns);
     const [filters, setFilters] = useState({
         issueType: ["All", "Concern", "Request", "Complaint"],
         category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
@@ -111,7 +112,6 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
         startDate: "",
         endDate: "",
     });
-    const [activeDropdownId, setActiveDropdownId] = useState(null);
     const [openFilterDropdown, setOpenFilterDropdown] = useState({
         issueType: false,
         category: false,
@@ -135,17 +135,6 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
         navigator.clipboard.writeText(id);
         showSuccessToast("Copied Concern ID to clipboard: " + id);
     };
-
-    const filteredConcerns = concerns
-        .filter(concern => (filters.issueType.length === 0 || filters.issueType.includes(concern.issueType)))
-        .filter(concern => (filters.category.length === 0 || filters.category.includes(concern.category)))
-        .filter(concern => (filters.status.length === 0 || filters.status.includes(concern.status)))
-        .filter(concern => {
-            const dateSubmitted = new Date(concern.dateSubmitted);
-            const isAfterStartDate = filters.startDate ? dateSubmitted >= new Date(filters.startDate) : true;
-            const isBeforeEndDate = filters.endDate ? dateSubmitted <= new Date(filters.endDate) : true;
-            return isAfterStartDate && isBeforeEndDate;
-        });
 
     return (
         <div className="p-4">
