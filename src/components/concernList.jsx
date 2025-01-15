@@ -135,14 +135,15 @@ export function ConcernList({ userData, concernsFilter }) {
                 // to make sure that everything on that given day will be fetched
                 setTimeToLastMinute(new Date(filters.endDate))
             );
-            const fetchedConcerns = (await Database.getConcerns(filter, pagination.current))
-                .filter(concern => (filters.issueType.length === 0 || filters.issueType.includes(concern.issueType)))
-                .filter(concern => (filters.category.length === 0 || filters.category.includes(concern.category)))
-                .filter(concern => (filters.status.length === 0 || filters.status.includes(concern.status)));
+            const fetchedConcerns = await Database.getConcerns(filter, pagination.current);
+            const filteredFetchedConcerns = fetchedConcerns
+                .filter(concern => filters.issueType.includes(concern.issueType))
+                .filter(concern => filters.category.includes(concern.category))
+                .filter(concern => filters.status.includes(concern.status));
 
             setFilteredConcerns((filteredConcerns) => {
-                if (filteredConcerns === undefined) return fetchedConcerns;
-                return [...filteredConcerns, ...fetchedConcerns];
+                if (filteredConcerns === undefined) return filteredFetchedConcerns;
+                return [...filteredConcerns, ...filteredFetchedConcerns];
             });
         }
     }, [concernsFilter, filters]);
