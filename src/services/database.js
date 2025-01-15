@@ -74,6 +74,12 @@ export class ConcernsFilter {
         ];
     }
 
+    copy() {
+        const filter = new ConcernsFilter();
+        filter.constraints = [...this.constraints];
+        return filter;
+    }
+
     categoryIn(categories) {
         this.constraints.push(where("category", "in", categories));
         return this;
@@ -81,6 +87,22 @@ export class ConcernsFilter {
 
     creatorIs(userUid) {
         this.constraints.push(where("creatorUid", "==", userUid));
+        return this;
+    }
+
+    issueTypeIn(issueTypes) {
+        this.constraints.push(where("issueType", "in", issueTypes));
+        return this;
+    }
+
+    statusIn(statuses) {
+        this.constraints.push(where("status", "in", statuses));
+        return this;
+    }
+
+    dateSubmittedRange(fromDate, toDate) {
+        this.constraints.push(where("dateSubmitted", ">=", fromDate));
+        this.constraints.push(where("dateSubmitted", "<=", toDate));
         return this;
     }
 }
