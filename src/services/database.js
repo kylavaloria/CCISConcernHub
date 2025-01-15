@@ -46,7 +46,7 @@ export default class Database {
             where("category", "in", categories),
             orderBy("dateSubmitted", "desc"),
         ];
-        return await this._getPaginatedConcerns(constraints, pagination);
+        return await Database._getPaginatedConcerns(constraints, pagination);
     }
 
     static async getUserConcerns(uid, pagination = null) {
@@ -55,7 +55,7 @@ export default class Database {
             where("creatorUid", "==", uid),
             orderBy("dateSubmitted", "desc"),
         ];
-        return await this._getPaginatedConcerns(constraints, pagination);
+        return await Database._getPaginatedConcerns(constraints, pagination);
     }
 
     static generateConcernUid() {

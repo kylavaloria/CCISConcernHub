@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback  } from 'react';
+import { useState, useEffect, useCallback  } from 'react';
 
-export function WorkspaceStats({ concerns }) {
+export function WorkspaceStats({ fetchConcernsMethod }) {
+    const [concerns, setConcerns] = useState([]);
     const [dateRange, setDateRange] = useState('current-month');
     const [issueType, setIssueType] = useState('all');
     const [department, setDepartment] = useState('all');

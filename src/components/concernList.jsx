@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import StatusBadge from "./statusBadge";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Pagination } from "../services/database";
+import LoadingSpinner from "../components/loading";
 import { showSuccessToast } from "./toastNotification";
 
 const filterOptions = {
@@ -102,8 +104,8 @@ const DateDropdown = ({ startDate, endDate, onChange, isOpen, toggleDropdown }) 
     </div>
 );
 
-export function ConcernList({ userData, concerns, fetchUserConcerns }) {
-    const [filteredConcerns, setFilteredConcerns] = useState(concerns);
+export function ConcernList({ userData, fetchConcernsMethod }) {
+    const [filteredConcerns, setFilteredConcerns] = useState(undefined);
     const [filters, setFilters] = useState({
         issueType: ["All", "Concern", "Request", "Complaint"],
         category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
@@ -118,6 +120,23 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
         status: false,
         dateSubmitted: false,
     });
+    const pagination = useRef(new Pagination());
+
+    const fetchConcerns = useCallback(async () => {
+        if (userData) {
+            const fetchedConcerns = await fetchConcernsMethod(userData.uid, pagination.current);
+
+            if (filteredConcerns === undefined) {
+                setFilteredConcerns(fetchedConcerns);
+            } else {
+                setFilteredConcerns([...filteredConcerns, ...fetchedConcerns]);
+            }
+        }
+    }, [fetchConcernsMethod, filteredConcerns, userData]);
+
+    useEffect(() => {
+        fetchConcerns();
+    }, [fetchConcerns]);
 
     const handleFilterChange = (filterName, value) => {
         setFilters(prev => ({ ...prev, [filterName]: value }));
@@ -200,59 +219,67 @@ export function ConcernList({ userData, concerns, fetchUserConcerns }) {
                     </div>
 
                     {/* Concern List */}
-                    {filteredConcerns.length > 0 ? (
-                        <InfiniteScroll
-                            dataLength={filteredConcerns.length}
-                            next={fetchUserConcerns}
-                            hasMore={true}
-                        >
-                            {filteredConcerns.map(concern => (
-                                <Link
-                                    to={`/view-concern/${concern.uid}`}
-                                    key={concern.uid}
-                                    className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
-                                    style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <div className="py-2 px-4 ml-5">{concern.issueType}</div>
-                                    <div className="py-2 px-4">{concern.category}</div>
-                                    <div className="py-2 px-4">
-                                        {concern.subject.length > 30
-                                            ? `${concern.subject.substring(0, 30)}...`
-                                            : concern.subject}
-                                    </div>
-                                    {userData?.isAdmin() && (
-                                        <div className="py-2 px-4">
-                                            {concern.assignedAdmins.map(admin => (
-                                                <div key={admin.uid}>{admin.name}</div>
-                                            ))}
-                                        </div>
-                                    )}
-                                    <div className="py-2 px-4">
-                                        <StatusBadge status={concern.status} />
-                                    </div>
-                                    <div className="py-2 px-4">{concern.dateSubmitted.toLocaleDateString()}</div>
-                                    <div className="py-2 px-2 relative">
-                                        <span
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                handleCopyToClipboard(concern.uid);
-                                            }}
-                                            className="text-blue-500 hover:text-blue-700 cursor-pointer ml-7"
-                                        >
-                                            Copy ID
-                                        </span>
-                                    </div>
-                                </Link>
+                    {
+                        filteredConcerns === undefined ?
 
-                            ))}
-                        </InfiniteScroll>
-                    ) : (
-                        <div className="text-center py-4 text-xs">No concerns available.</div>
-                    )}
+                        <div>
+                            <LoadingSpinner />
+                        </div> :
+
+                        filteredConcerns.length > 0 ? (
+                            <InfiniteScroll
+                                dataLength={filteredConcerns.length}
+                                next={fetchConcerns}
+                                hasMore={true}
+                            >
+                                {filteredConcerns.map(concern => (
+                                    <Link
+                                        to={`/view-concern/${concern.uid}`}
+                                        key={concern.uid}
+                                        className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
+                                        style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <div className="py-2 px-4 ml-5">{concern.issueType}</div>
+                                        <div className="py-2 px-4">{concern.category}</div>
+                                        <div className="py-2 px-4">
+                                            {concern.subject.length > 30
+                                                ? `${concern.subject.substring(0, 30)}...`
+                                                : concern.subject}
+                                        </div>
+                                        {userData?.isAdmin() && (
+                                            <div className="py-2 px-4">
+                                                {concern.assignedAdmins.map(admin => (
+                                                    <div key={admin.uid}>{admin.name}</div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        <div className="py-2 px-4">
+                                            <StatusBadge status={concern.status} />
+                                        </div>
+                                        <div className="py-2 px-4">{concern.dateSubmitted.toLocaleDateString()}</div>
+                                        <div className="py-2 px-2 relative">
+                                            <span
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleCopyToClipboard(concern.uid);
+                                                }}
+                                                className="text-blue-500 hover:text-blue-700 cursor-pointer ml-7"
+                                            >
+                                                Copy ID
+                                            </span>
+                                        </div>
+                                    </Link>
+
+                                ))}
+                            </InfiniteScroll>
+                        ) : (
+                            <div className="text-center py-4 text-xs">No concerns available.</div>
+                        )
+                    }
                 </div>
             </div>
         </div>
