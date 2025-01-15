@@ -122,7 +122,7 @@ export function ConcernList({ userData, concernsFilter }) {
         status: false,
         dateSubmitted: false,
     });
-    const pagination = useRef(new Pagination());
+    const pagination = useRef(new Pagination(5));
 
     const fetchConcerns = useCallback(async () => {
         if (concernsFilter) {
