@@ -1,4 +1,16 @@
-import { collection, query, where, doc, getDocs, getDoc, setDoc, orderBy, startAfter, limit } from "firebase/firestore";
+import {
+    collection,
+    query,
+    getCountFromServer,
+    where,
+    doc,
+    getDocs,
+    getDoc,
+    setDoc,
+    orderBy,
+    startAfter,
+    limit
+} from "firebase/firestore";
 import { firestore } from "./firebase";
 import User from "../models/user";
 import Concern from "../models/concern";
@@ -38,6 +50,27 @@ export default class Database {
         }
 
         return concerns;
+    }
+
+    static async aggregateConcernsByStatus(filter) {
+        async function getCount(constraints) {
+            const consts = [...filter.constraints, ...constraints];
+            const querySnap = await getCountFromServer(query(...consts));
+            return querySnap.data().count;
+        }
+
+        const resolved = await getCount([where("isResolved", "==", true)]);
+        const total = await getCount([]);
+        const result = {
+            "Open": await getCount([where("status", "==", "Open")]),
+            "In Progress": await getCount([where("status", "==", "In Progress")]),
+            "On Hold": await getCount([where("status", "==", "On Hold")]),
+            "Resolved": resolved,
+            "Unresolved": total - resolved,
+            "Total": total,
+        };
+
+        return result;
     }
 
     static generateConcernUid() {
