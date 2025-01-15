@@ -22,13 +22,13 @@ export default class Database {
         return docSnap.exists() ? new Concern(docSnap.data()) : null;
     }
 
-    static async _getPaginatedConcerns(constraints, pagination) {
+    static async getConcerns(filter, pagination = null) {
         if (pagination) {
-            constraints.push(startAfter(pagination.lastDoc || new Date()));
-            constraints.push(limit(pagination.size));
+            filter.constraints.push(startAfter(pagination.lastDoc || new Date()));
+            filter.constraints.push(limit(pagination.size));
         }
 
-        const querySnap = await getDocs(query(...constraints));
+        const querySnap = await getDocs(query(...filter.constraints));
         const concerns = querySnap.docs.map(doc => {
             return new Concern(doc.data());
         });
@@ -38,24 +38,6 @@ export default class Database {
         }
 
         return concerns;
-    }
-
-    static async getCategoryConcerns(categories, pagination = null) {
-        const constraints = [
-            collection(firestore, "concerns"),
-            where("category", "in", categories),
-            orderBy("dateSubmitted", "desc"),
-        ];
-        return await Database._getPaginatedConcerns(constraints, pagination);
-    }
-
-    static async getUserConcerns(uid, pagination = null) {
-        const constraints = [
-            collection(firestore, "concerns"),
-            where("creatorUid", "==", uid),
-            orderBy("dateSubmitted", "desc"),
-        ];
-        return await Database._getPaginatedConcerns(constraints, pagination);
     }
 
     static generateConcernUid() {
@@ -81,5 +63,24 @@ export class Pagination {
         // Get the last visible document
         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
         if (lastVisible !== undefined) this.lastDoc = lastVisible;
+    }
+}
+
+export class ConcernsFilter {
+    constructor() {
+        this.constraints = [
+            collection(firestore, "concerns"),
+            orderBy("dateSubmitted", "desc"),
+        ];
+    }
+
+    categoryIn(categories) {
+        this.constraints.push(where("category", "in", categories));
+        return this;
+    }
+
+    creatorIs(userUid) {
+        this.constraints.push(where("creatorUid", "==", userUid));
+        return this;
     }
 }

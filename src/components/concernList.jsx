@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import StatusBadge from "./statusBadge";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Pagination } from "../services/database";
+import Database, { Pagination } from "../services/database";
 import LoadingSpinner from "../components/loading";
 import { showSuccessToast } from "./toastNotification";
 
@@ -104,7 +104,7 @@ const DateDropdown = ({ startDate, endDate, onChange, isOpen, toggleDropdown }) 
     </div>
 );
 
-export function ConcernList({ userData, fetchConcernsMethod }) {
+export function ConcernList({ userData, concernsFilter }) {
     const [filteredConcerns, setFilteredConcerns] = useState(undefined);
     const [filters, setFilters] = useState({
         issueType: ["All", "Concern", "Request", "Complaint"],
@@ -123,8 +123,8 @@ export function ConcernList({ userData, fetchConcernsMethod }) {
     const pagination = useRef(new Pagination());
 
     const fetchConcerns = useCallback(async () => {
-        if (userData) {
-            const fetchedConcerns = await fetchConcernsMethod(userData.uid, pagination.current);
+        if (concernsFilter) {
+            const fetchedConcerns = await Database.getConcerns(concernsFilter, pagination.current);
 
             if (filteredConcerns === undefined) {
                 setFilteredConcerns(fetchedConcerns);
@@ -132,7 +132,7 @@ export function ConcernList({ userData, fetchConcernsMethod }) {
                 setFilteredConcerns([...filteredConcerns, ...fetchedConcerns]);
             }
         }
-    }, [fetchConcernsMethod, filteredConcerns, userData]);
+    }, [concernsFilter, filteredConcerns]);
 
     useEffect(() => {
         fetchConcerns();
