@@ -244,7 +244,7 @@ export function ConcernList({ userData, concernsFilter }) {
                     {
                         filteredConcerns === undefined ?
 
-                        <div>
+                        <div className="flex justify-center">
                             <LoadingSpinner />
                         </div> :
 
