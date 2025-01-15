@@ -15,3 +15,17 @@ export function formatDate(date) {
 
     return `${datePart} at ${timePart}`;
 }
+
+export function dateDaysAgo(daysAgo) {
+    const date = new Date();
+    date.setDate(date.getDate() - daysAgo);
+    return date;
+}
+
+export function setTimeToLastMinute(date) {
+    date.setHours(23);
+    date.setMinutes(59);
+    date.setSeconds(59);
+    date.setMilliseconds(999);
+    return date;
+}

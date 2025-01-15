@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import StatusBadge from "./statusBadge";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import strftime from "strftime";
 import Database, { Pagination } from "../services/database";
 import LoadingSpinner from "../components/loading";
 import { showSuccessToast } from "./toastNotification";
+import { dateDaysAgo, setTimeToLastMinute } from "../utils";
 
 const filterOptions = {
     issueTypes: ["All", "Concern", "Request", "Complaint"],
@@ -111,8 +113,8 @@ export function ConcernList({ userData, concernsFilter }) {
         category: ["All", "Enrollment", "Grades", "Laboratory", "Schedule", "Scholarship"],
         status: ["Open", "In Progress"],
         sortBy: "newest",
-        startDate: "",
-        endDate: "",
+        startDate: strftime("%Y-%m-%d", dateDaysAgo(7)),
+        endDate: strftime("%Y-%m-%d", new Date()),
     });
     const [openFilterDropdown, setOpenFilterDropdown] = useState({
         issueType: false,
@@ -124,21 +126,33 @@ export function ConcernList({ userData, concernsFilter }) {
 
     const fetchConcerns = useCallback(async () => {
         if (concernsFilter) {
-            const fetchedConcerns = await Database.getConcerns(concernsFilter, pagination.current);
+            const filter = concernsFilter.copy().dateSubmittedRange(
+                // `toDateString` is called to remove the time part of the date
+                new Date(new Date(filters.startDate).toDateString()),
 
-            if (filteredConcerns === undefined) {
-                setFilteredConcerns(fetchedConcerns);
-            } else {
-                setFilteredConcerns([...filteredConcerns, ...fetchedConcerns]);
-            }
+                // Firestore will filter the date with time taking into account
+                // So here, we set the date's time to the last minute of the day
+                // to make sure that everything on that given day will be fetched
+                setTimeToLastMinute(new Date(filters.endDate))
+            );
+            const fetchedConcerns = await Database.getConcerns(filter, pagination.current);
+
+            setFilteredConcerns((filteredConcerns) => {
+                if (filteredConcerns === undefined) return fetchedConcerns;
+                return [...filteredConcerns, ...fetchedConcerns];
+            });
         }
-    }, [concernsFilter, filteredConcerns]);
+    }, [concernsFilter, filters]);
 
     useEffect(() => {
         fetchConcerns();
     }, [fetchConcerns]);
 
     const handleFilterChange = (filterName, value) => {
+        // Filter is changed so we need to reset the pagination and concerns
+        pagination.current.reset();
+        setFilteredConcerns(undefined);
+
         setFilters(prev => ({ ...prev, [filterName]: value }));
         setOpenFilterDropdown(prev => ({ ...prev, [filterName]: false }));
     };

@@ -64,6 +64,10 @@ export class Pagination {
         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
         if (lastVisible !== undefined) this.lastDoc = lastVisible;
     }
+
+    reset() {
+        this.lastDoc = null;
+    }
 }
 
 export class ConcernsFilter {
