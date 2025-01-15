@@ -148,6 +148,14 @@ export function ConcernList({ userData, concernsFilter }) {
                 if (filteredConcerns === undefined) return filteredFetchedConcerns;
                 return [...filteredConcerns, ...filteredFetchedConcerns];
             });
+
+            if (fetchedConcerns.length !== 0) {
+                setHideLoadButton(false);
+
+                if (filteredFetchedConcerns.length === 0) {
+                    return await fetchConcerns();
+                }
+            }
         }
 
         return [fetchedConcerns, filteredFetchedConcerns];
