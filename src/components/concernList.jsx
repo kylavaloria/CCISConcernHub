@@ -135,7 +135,10 @@ export function ConcernList({ userData, concernsFilter }) {
                 // to make sure that everything on that given day will be fetched
                 setTimeToLastMinute(new Date(filters.endDate))
             );
-            const fetchedConcerns = await Database.getConcerns(filter, pagination.current);
+            const fetchedConcerns = (await Database.getConcerns(filter, pagination.current))
+                .filter(concern => (filters.issueType.length === 0 || filters.issueType.includes(concern.issueType)))
+                .filter(concern => (filters.category.length === 0 || filters.category.includes(concern.category)))
+                .filter(concern => (filters.status.length === 0 || filters.status.includes(concern.status)));
 
             setFilteredConcerns((filteredConcerns) => {
                 if (filteredConcerns === undefined) return fetchedConcerns;
@@ -145,7 +148,12 @@ export function ConcernList({ userData, concernsFilter }) {
     }, [concernsFilter, filters]);
 
     useEffect(() => {
-        fetchConcerns();
+        fetchConcerns().then(() => {
+            // Fetch twice because the library we're using (react-infinite-scroll-component)
+            // is kinda broken. Since its an old unmaintained library
+            // Basically, this is a band-aid solution
+            fetchConcerns();
+        });
     }, [fetchConcerns]);
 
     const handleFilterChange = (filterName, value) => {
