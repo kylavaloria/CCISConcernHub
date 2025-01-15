@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import StatusBadge from "./statusBadge";
-import InfiniteScroll from 'react-infinite-scroll-component';
 import strftime from "strftime";
 import Database, { Pagination } from "../services/database";
 import LoadingSpinner from "../components/loading";
@@ -122,9 +121,13 @@ export function ConcernList({ userData, concernsFilter }) {
         status: false,
         dateSubmitted: false,
     });
-    const pagination = useRef(new Pagination(5));
+    const [hideLoadButton, setHideLoadButton] = useState(false);
+    const pagination = useRef(new Pagination(10));
 
     const fetchConcerns = useCallback(async () => {
+        let fetchedConcerns;
+        let filteredFetchedConcerns;
+
         if (concernsFilter) {
             const filter = concernsFilter.copy().dateSubmittedRange(
                 // `toDateString` is called to remove the time part of the date
@@ -135,8 +138,8 @@ export function ConcernList({ userData, concernsFilter }) {
                 // to make sure that everything on that given day will be fetched
                 setTimeToLastMinute(new Date(filters.endDate))
             );
-            const fetchedConcerns = await Database.getConcerns(filter, pagination.current);
-            const filteredFetchedConcerns = fetchedConcerns
+            fetchedConcerns = await Database.getConcerns(filter, pagination.current);
+            filteredFetchedConcerns = fetchedConcerns
                 .filter(concern => filters.issueType.includes(concern.issueType))
                 .filter(concern => filters.category.includes(concern.category))
                 .filter(concern => filters.status.includes(concern.status));
@@ -146,15 +149,20 @@ export function ConcernList({ userData, concernsFilter }) {
                 return [...filteredConcerns, ...filteredFetchedConcerns];
             });
         }
+
+        return [fetchedConcerns, filteredFetchedConcerns];
     }, [concernsFilter, filters]);
 
+    async function loadButton() {
+        const fetchedConcerns = (await fetchConcerns())[0];
+
+        if (fetchedConcerns.length === 0) {
+            setHideLoadButton(true);
+        }
+    }
+
     useEffect(() => {
-        fetchConcerns().then(() => {
-            // Fetch twice because the library we're using (react-infinite-scroll-component)
-            // is kinda broken. Since its an old unmaintained library
-            // Basically, this is a band-aid solution
-            fetchConcerns();
-        });
+        fetchConcerns();
     }, [fetchConcerns]);
 
     const handleFilterChange = (filterName, value) => {
@@ -184,7 +192,7 @@ export function ConcernList({ userData, concernsFilter }) {
                 <div>
                     {/* Filter Section */}
                     <div
-                        className="text-gray-600 border-gray-300 grid text-xs"
+                        className="text-gray-600 border-gray-300 grid text-xs sticky top-0 bg-white z-10"
                         style={{
                             display: 'grid',
                             gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
@@ -249,57 +257,60 @@ export function ConcernList({ userData, concernsFilter }) {
                             <LoadingSpinner />
                         </div> :
 
-                        filteredConcerns.length > 0 ? (
-                            <InfiniteScroll
-                                dataLength={filteredConcerns.length}
-                                next={fetchConcerns}
-                                hasMore={true}
-                            >
-                                {filteredConcerns.map(concern => (
-                                    <Link
-                                        to={`/view-concern/${concern.uid}`}
-                                        key={concern.uid}
-                                        className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
-                                        style={{
-                                            display: 'grid',
-                                            gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <div className="py-2 px-4 ml-5">{concern.issueType}</div>
-                                        <div className="py-2 px-4">{concern.category}</div>
+                        filteredConcerns.length > 0 ? <>
+                            {filteredConcerns.map(concern => (
+                                <Link
+                                    to={`/view-concern/${concern.uid}`}
+                                    key={concern.uid}
+                                    className="text-gray-700 border border-gray-300 mb-2 grid text-sm rounded-md hover:shadow hover:bg-gray-100"
+                                    style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: '2.5fr 2.5fr 4fr 4fr 2.5fr 2.5fr 2fr',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <div className="py-2 px-4 ml-5">{concern.issueType}</div>
+                                    <div className="py-2 px-4">{concern.category}</div>
+                                    <div className="py-2 px-4">
+                                        {concern.subject.length > 30
+                                            ? `${concern.subject.substring(0, 30)}...`
+                                            : concern.subject}
+                                    </div>
+                                    {userData?.isAdmin() && (
                                         <div className="py-2 px-4">
-                                            {concern.subject.length > 30
-                                                ? `${concern.subject.substring(0, 30)}...`
-                                                : concern.subject}
+                                            {concern.assignedAdmins.map(admin => (
+                                                <div key={admin.uid}>{admin.name}</div>
+                                            ))}
                                         </div>
-                                        {userData?.isAdmin() && (
-                                            <div className="py-2 px-4">
-                                                {concern.assignedAdmins.map(admin => (
-                                                    <div key={admin.uid}>{admin.name}</div>
-                                                ))}
-                                            </div>
-                                        )}
-                                        <div className="py-2 px-4">
-                                            <StatusBadge status={concern.status} />
-                                        </div>
-                                        <div className="py-2 px-4">{concern.dateSubmitted.toLocaleDateString()}</div>
-                                        <div className="py-2 px-2 relative">
-                                            <span
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    handleCopyToClipboard(concern.uid);
-                                                }}
-                                                className="text-blue-500 hover:text-blue-700 cursor-pointer ml-7"
-                                            >
-                                                Copy ID
-                                            </span>
-                                        </div>
-                                    </Link>
+                                    )}
+                                    <div className="py-2 px-4">
+                                        <StatusBadge status={concern.status} />
+                                    </div>
+                                    <div className="py-2 px-4">{concern.dateSubmitted.toLocaleDateString()}</div>
+                                    <div className="py-2 px-2 relative">
+                                        <span
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                handleCopyToClipboard(concern.uid);
+                                            }}
+                                            className="text-blue-500 hover:text-blue-700 cursor-pointer ml-7"
+                                        >
+                                            Copy ID
+                                        </span>
+                                    </div>
+                                </Link>
+                            ))}
 
-                                ))}
-                            </InfiniteScroll>
-                        ) : (
+                            {
+                                hideLoadButton ? <></> :
+                                <div className="flex justify-center items-center mt-4">
+                                    <button
+                                        className="border border-gray-300 bg-white text-slate-800 py-2 px-4 text-sm cursor-pointer hover:shadow hover:bg-gray-100"
+                                        onClick={() => loadButton()}
+                                    >Load More</button>
+                                </div>
+                            }
+                        </> : (
                             <div className="text-center py-4 text-xs">No concerns available.</div>
                         )
                     }
