@@ -1,0 +1,193 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "issueType",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "recentActivityDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "recentActivityDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "issueType",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "recentActivityDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "recentActivityDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isResolved",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
