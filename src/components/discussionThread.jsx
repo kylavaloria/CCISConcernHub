@@ -3,17 +3,14 @@ import Message from '../models/message';
 import { formatDate } from '../utils';
 
 export default function DiscussionThread({ userData, concern }) {
-    const [discussion, setDiscussion] = useState({ messages: [] });
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const textareaRef = useRef(null);
-
 
     useEffect(() => {
         async function fetchDiscussion() {
             if (!concern.hasDiscussion) return;
-            await concern.discussion.fetchMessages();
-            const messages = concern.discussion.getMessages();
-            setDiscussion({ messages });
+            setMessages(await concern.discussion.fetchMessages());
         }
         fetchDiscussion();
     }, [concern]);
@@ -35,10 +32,6 @@ export default function DiscussionThread({ userData, concern }) {
                 timestamp: new Date().toISOString(),
             });
 
-            setDiscussion({
-                ...discussion,
-                messages: [...discussion.messages, newMsg],
-            });
             setNewMessage("");
 
             if (textareaRef.current) {
@@ -67,7 +60,7 @@ export default function DiscussionThread({ userData, concern }) {
                     <p>30 days of inactivity will automatically close the concern.</p>
                 </div>
 
-                {discussion?.messages?.map((msg, index) => (
+                {messages.map((msg, index) => (
                 msg.sender.uid === "system-message" ? (
                     <div key={index} className="text-center text-xs text-gray-500 mt-5 mb-5">
                     <p>{formatDate(new Date())}</p>

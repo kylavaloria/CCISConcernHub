@@ -4,15 +4,10 @@ import Message from "./message";
 export default class Discussion {
     constructor(uid) {
         this.uid = uid;
-        this.messages = [];
     }
 
     async fetchMessages() {
-        this.messages = await RTDatabase.getMessages(this.uid);
-    }
-
-    getMessages() {
-        return this.messages;
+        return await RTDatabase.getMessages(this.uid);
     }
 
     async sendMessage(message) {
