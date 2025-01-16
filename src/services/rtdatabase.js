@@ -1,5 +1,5 @@
 import { rtdatabase } from './firebase.js';
-import { ref, get, set, push } from 'firebase/database';
+import { ref, query, get, set, push, onChildAdded, limitToLast, off } from 'firebase/database';
 import Message from '../models/message.js';
 
 export default class RTDatabase {
@@ -30,6 +30,21 @@ export default class RTDatabase {
             },
             text: message.text,
             timestamp: message.timestamp,
+        });
+    }
+
+    static listenForNewMessages(threadId, listener) {
+        const threadRef = query(
+            ref(rtdatabase, 'threads/' + threadId),
+            limitToLast(1),
+        );
+
+        // Avoid duplicate listeners
+        off(threadRef);
+
+        onChildAdded(threadRef, (data) => {
+            const message = new Message({ uid: data.key, ...data.val() });
+            listener(message);
         });
     }
 }
