@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import Message from '../models/message';
 import { formatDate } from '../utils';
 
@@ -6,6 +6,12 @@ export default function DiscussionThread({ userData, concern }) {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const textareaRef = useRef(null);
+
+    const bottomMessageElement = useCallback((element) => {
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    }, []);
 
     useEffect(() => {
         async function fetchDiscussion() {
@@ -66,29 +72,36 @@ export default function DiscussionThread({ userData, concern }) {
                     <p>30 days of inactivity will automatically close the concern.</p>
                 </div>
 
-                {messages.map((msg, index) => (
-                msg.sender.uid === "system-message" ? (
-                    <div key={index} className="text-center text-xs text-gray-500 mt-5 mb-5">
-                    <p>{formatDate(new Date())}</p>
-                    <p>{msg.text}</p>
-                    </div>
-                ) : (
-                    <div key={index} className="relative">
-                        <div className="pr-3 pl-3 text-sm pt-3">
-                            <p className="ml-1 text-gray-600 text-xs text-left pb-2">
-                                <strong>{msg.sender.displayName}</strong>
-                            </p>
-                            <p className="ml-1 text-sm break-all overflow-hidden pb-3">
-                                {msg.text}
-                            </p>
-                            <p className="absolute right-0 top-0 text-xs text-gray-500 text-right mr-4 pt-3">
-                                {formatDate(msg.timestamp)}
-                            </p>
-                            <div className="border-gray-300 border-t-[0.5px]"></div>
-                        </div>
-                    </div>
-                    )
-                ))}
+                {messages.map((msg, index) => {
+                    let elem;
+
+                    if (msg.sender.uid === "system-message") {
+                        elem = <div className="text-center text-xs text-gray-500 mt-5 mb-5">
+                            <p>{formatDate(new Date())}</p>
+                            <p>{msg.text}</p>
+                        </div>;
+                    } else {
+                        elem = <div className="relative">
+                            <div className="pr-3 pl-3 text-sm pt-3">
+                                <p className="ml-1 text-gray-600 text-xs text-left pb-2">
+                                    <strong>{msg.sender.displayName}</strong>
+                                </p>
+                                <p className="ml-1 text-sm break-all overflow-hidden pb-3">
+                                    {msg.text}
+                                </p>
+                                <p className="absolute right-0 top-0 text-xs text-gray-500 text-right mr-4 pt-3">
+                                    {formatDate(msg.timestamp)}
+                                </p>
+                                <div className="border-gray-300 border-t-[0.5px]"></div>
+                            </div>
+                        </div>;
+                    }
+
+                    return <div
+                        key={index}
+                        ref={index === messages.length - 1 ? bottomMessageElement : null}
+                    >{elem}</div>;
+                })}
             </div>
 
             {/* Input for new message */}
