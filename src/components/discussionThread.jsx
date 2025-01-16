@@ -100,6 +100,14 @@ export default function DiscussionThread({ userData, concern }) {
                         setNewMessage(e.target.value);
                         adjustHeight();
                     }}
+                    onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                            if (!event.shiftKey) {
+                                event.preventDefault();
+                                handleSendMessage();
+                            }
+                        }
+                    }}
                     placeholder="Type your message here..."
                     className="bg-gray-100 px-4 py-2 outline-none resize-none min-h-[40px] max-h-32 overflow-y-auto text-sm"
                     rows={1}
