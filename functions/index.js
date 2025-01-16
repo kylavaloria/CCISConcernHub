@@ -1,19 +1,24 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 
-const {onRequest} = require("firebase-functions/v2/https");
-const logger = require("firebase-functions/logger");
+initializeApp();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+exports.closeInactiveConcerns = onSchedule("every 24 hours", async () => {
+    const DEADLINE_DAYS = 30;
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() - DEADLINE_DAYS);
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    const db = await getFirestore();
+    const concernsSnapshot = await db.collection("concerns")
+        .where("recentActivityDate", "<=", deadline)
+        .where("status", "!=", "Closed")
+        .get();
+
+    const batch = db.batch();
+    concernsSnapshot.forEach((doc) => {
+        batch.update(doc.ref, { status: "Closed" });
+    });
+
+    await batch.commit();
+});

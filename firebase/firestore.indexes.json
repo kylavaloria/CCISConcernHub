@@ -165,12 +165,40 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "dateSubmitted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "isResolved",
           "order": "ASCENDING"
         },
         {
           "fieldPath": "dateSubmitted",
           "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "recentActivityDate",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
         }
       ]
     },
