@@ -13,6 +13,12 @@ export default function DiscussionThread({ userData, concern }) {
             setMessages(await concern.discussion.fetchMessages());
         }
         fetchDiscussion();
+
+        concern.discussion.listenForNewMessages((message) => {
+            setMessages((messages) => {
+                return [...messages, message];
+            });
+        });
     }, [concern]);
 
     const handleSendMessage = async () => {

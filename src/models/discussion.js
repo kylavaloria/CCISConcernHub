@@ -27,4 +27,8 @@ export default class Discussion {
 
         await RTDatabase.sendMessage(this.uid, systemMessage);
     }
+
+    listenForNewMessages(listener) {
+        RTDatabase.listenForNewMessages(this.uid, listener);
+    }
 }
