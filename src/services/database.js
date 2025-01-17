@@ -107,7 +107,7 @@ export class ConcernsFilter {
     constructor() {
         this.constraints = [
             collection(firestore, "concerns"),
-            orderBy("dateSubmitted", "desc"),
+            orderBy("recentActivityDate", "desc"),
         ];
     }
 
