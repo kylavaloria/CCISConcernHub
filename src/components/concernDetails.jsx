@@ -51,7 +51,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, status, setStatus, 
         setIsSpam(true);
         setStatus('Closed');
 
-        concern.setIsResolved(false);
+        concern.setAsResolved(false);
         concern.setIsSpam(true);
         concern.updateStatus('Closed');
 
