@@ -24,7 +24,7 @@ export function ViewConcern({ userData }) {
         concern.updateStatus(newStatus);
         _setStatus(newStatus);
 
-        if (!concern.isAdminAssigned(userData)) {
+        if (userData.isAdmin() && !concern.isAdminAssigned(userData)) {
             setIsAssigned(true);
         }
 

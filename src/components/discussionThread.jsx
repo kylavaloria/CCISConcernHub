@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import Message from '../models/message';
 import { formatDate } from '../utils';
 
-export default function DiscussionThread({ userData, concern }) {
+export default function DiscussionThread({ userData, concern, status, setStatus }) {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const textareaRef = useRef(null);
@@ -51,6 +51,10 @@ export default function DiscussionThread({ userData, concern }) {
             }
 
             await concern.discussion.sendMessage(newMsg);
+        }
+
+        if (userData.isAdmin() && status === "Open") {
+            setStatus("In Progress");
         }
     };
 
