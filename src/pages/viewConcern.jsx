@@ -6,26 +6,65 @@ import ConcernDetails from '../components/concernDetails';
 import DiscussionThread from '../components/discussionThread';
 import Database from '../services/database';
 import LoadingSpinner from '../components/loading';
+import { showInfoToast, showSuccessToast, showErrorToast } from '../components/toastNotification';
 
 export function ViewConcern({ userData }) {
     const { concernId } = useParams();
     const [concern, setConcern] = useState(null);
     const [concernCreator, setConcernCreator] = useState(null);
-    const [status, setStatus] = useState('');
+    const [status, _setStatus] = useState("");
+    const [isAssigned, _setIsAssigned] = useState(false);
+
+    function setStatus(newStatus) {
+        if (newStatus === "Open" && status === "In Progress") {
+            alert("Concern cannot be set to Open once In Progress status.");
+            return;
+        }
+
+        concern.updateStatus(newStatus);
+        _setStatus(newStatus);
+
+        if (!concern.isAdminAssigned(userData)) {
+            setIsAssigned(true);
+        }
+
+        concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
+        concern.saveToDatabase();
+        showInfoToast(`Status updated to ${newStatus}.`);
+    }
+
+    function setIsAssigned(isAssigned) {
+        const isAlreadyAssigned = concern.isAdminAssigned(userData);
+
+        if (isAssigned) {
+            concern.assignAdmin(userData);
+        } else {
+            if (!isAlreadyAssigned) {
+                showErrorToast("Admin is not assigned to this concern.");
+                return;
+            }
+
+            concern.unassignAdmin(userData);
+            showSuccessToast("Admin unassigned successfully.");
+        }
+
+        _setIsAssigned(isAssigned);
+        concern.saveToDatabase();
+    }
 
     useEffect(() => {
         async function fetchConcern() {
             const fetchedConcern = await Database.getConcern(String(concernId));
             setConcern(fetchedConcern);
             setConcernCreator(await fetchedConcern.fetchCreator(userData));
-            setStatus(fetchedConcern.status);
+            _setStatus(fetchedConcern.status);
+            _setIsAssigned(fetchedConcern.isAdminAssigned(userData));
         }
-        fetchConcern();
-    }, [concernId, userData]);
 
-    const handleStatusChange = (newStatus) => {
-        setStatus(newStatus);
-    };
+        if (userData) {
+            fetchConcern();
+        }
+    }, [concernId, userData]);
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -39,13 +78,15 @@ export function ViewConcern({ userData }) {
                             userData={userData}
                             status={status}
                             setStatus={setStatus}
-                            onStatusChange={handleStatusChange}
+                            isAssigned={isAssigned}
+                            setIsAssigned={setIsAssigned}
                         />
 
                         <DiscussionThread
                             userData={userData}
                             concern={concern}
                             status={status}
+                            setStatus={setStatus}
                         />
                     </>
                 }

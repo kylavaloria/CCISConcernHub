@@ -1,52 +1,19 @@
 import { useState } from 'react';
 import StatusBadge from './statusBadge';
 import { FaPaperclip } from 'react-icons/fa';
-import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from './toastNotification';
+import { showSuccessToast, showWarningToast } from './toastNotification';
 
-const ConcernDetails = ({ concern, concernCreator, userData, status, setStatus, onStatusChange }) => {
+const ConcernDetails = ({ concern, concernCreator, userData, status, setStatus, isAssigned, setIsAssigned }) => {
     const [isResolved, setIsResolved] = useState(concern.isResolved);
     const [isSpam, setIsSpam] = useState(concern.isSpam);
-    const [isAssigned, setIsAssigned] = useState(concern.isAdminAssigned(userData));
-
-    function assign() {
-        concern.assignAdmin(userData);
-        setIsAssigned(true);
-    }
 
     const handleUnassignAdmin = () => {
-        if (concern.isAdminAssigned(userData)) {
-            concern.unassignAdmin(userData);
-            concern.saveToDatabase();
-
-            setIsAssigned(false);
-            showSuccessToast('Admin unassigned successfully.');
-        } else {
-            showErrorToast('Admin is not assigned to this concern.');
-        }
+        setIsAssigned(false);
     };
 
     const handleStatusChange = (e) => {
         const newStatus = e.target.value;
-
-        if (newStatus === 'Open') {
-            alert('Concern cannot be set to Open once In Progress status.');
-            return;
-        }
-
         setStatus(newStatus);
-        concern.updateStatus(newStatus);
-
-        if (onStatusChange) {
-            onStatusChange(newStatus);
-        }
-
-        if (!concern.isAdminAssigned(userData)) {
-            assign();
-        }
-
-        concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
-        concern.saveToDatabase();
-        showInfoToast(`Status updated to ${newStatus}.`);
     };
 
     const handleMarkAsResolved = () => {
@@ -67,7 +34,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, status, setStatus, 
         concern.setAsResolved('Closed', concernCreator, userData);
 
         if (!concern.isAdminAssigned(userData) && userData.isAdmin) {
-            assign();
+            setIsAssigned(true);
         }
 
         concern.saveToDatabase();
@@ -89,7 +56,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, status, setStatus, 
         concern.updateStatus('Closed');
 
         if (!concern.isAdminAssigned(userData)) {
-            assign();
+            setIsAssigned(true);
         }
 
         concern.saveToDatabase();
