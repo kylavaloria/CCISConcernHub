@@ -17,6 +17,8 @@ export default class RTDatabase {
 
             return messages;
         }
+
+        return [];
     }
 
     static async sendMessage(threadId, message) {
