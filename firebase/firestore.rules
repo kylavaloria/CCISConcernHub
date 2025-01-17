@@ -2,8 +2,41 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function emailIsPUP() {
+      return request.auth.token.email.matches('.*@iskolarngbayan.pup.edu.ph');
+    }
+
+    function isAdmin() {
+      let data = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return "admin" in data.roles;
+    }
+
     match /{document=**} {
-      allow read, write: if request.auth.token.email.matches('.*@iskolarngbayan.pup.edu.ph');
+      allow read, write: if false;
+    }
+
+    match /users/{userId} {
+      function ownUserDoc() {
+        return request.auth.uid == userId;
+      }
+
+      function userDataIsValid() {
+        return (request.resource.data.uid == userId) &&
+          (request.resource.data.roles == ["student"]);
+      }
+
+      allow read: if ownUserDoc() && emailIsPUP();
+      allow create: if ownUserDoc() && emailIsPUP() && userDataIsValid();
+      allow update: if false;
+    }
+
+    match /concerns/{concernId} {
+      function ownsConcern() {
+        return request.auth.uid == resource.data.creatorUid;
+      }
+
+      allow read, update: if ownsConcern() || isAdmin();
+      allow create: if request.auth.uid == request.resource.data.creatorUid;
     }
   }
 }

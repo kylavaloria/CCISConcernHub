@@ -205,6 +205,24 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "recentActivityDate",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "dateSubmitted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "concerns",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "creatorUid",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "status",
           "order": "ASCENDING"
         },
