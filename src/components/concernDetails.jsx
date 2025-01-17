@@ -3,9 +3,7 @@ import StatusBadge from './statusBadge';
 import { FaPaperclip } from 'react-icons/fa';
 import { showSuccessToast, showErrorToast, showInfoToast, showWarningToast } from './toastNotification';
 
-
-const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) => {
-    const [status, setStatus] = useState(concern.status);
+const ConcernDetails = ({ concern, concernCreator, userData, status, setStatus, onStatusChange }) => {
     const [isResolved, setIsResolved] = useState(concern.isResolved);
     const [isSpam, setIsSpam] = useState(concern.isSpam);
     const [isAssigned, setIsAssigned] = useState(concern.isAdminAssigned(userData));

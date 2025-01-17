@@ -18,6 +18,7 @@ export function ViewConcern({ userData }) {
             const fetchedConcern = await Database.getConcern(String(concernId));
             setConcern(fetchedConcern);
             setConcernCreator(await fetchedConcern.fetchCreator(userData));
+            setStatus(fetchedConcern.status);
         }
         fetchConcern();
     }, [concernId, userData]);
@@ -36,6 +37,8 @@ export function ViewConcern({ userData }) {
                             concern={concern}
                             concernCreator={concernCreator}
                             userData={userData}
+                            status={status}
+                            setStatus={setStatus}
                             onStatusChange={handleStatusChange}
                         />
 
