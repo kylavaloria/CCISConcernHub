@@ -5,8 +5,16 @@ rules_version = '2';
 //    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
+    function emailIsPUP() {
+      return request.auth.token.email.matches('.*@iskolarngbayan.pup.edu.ph');
+    }
+
     match /{allPaths=**} {
       allow read, write: if false;
+    }
+
+    match /concerns/{concernId}/{file} {
+      allow read, write: if emailIsPUP();
     }
   }
 }

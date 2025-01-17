@@ -1,6 +1,10 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    "threads": {
+      "$threadId": {
+        ".read": true,
+        ".write": true
+      }
+    }
   }
 }
