@@ -78,7 +78,7 @@ export default function App() {
   routeMap["*"] = routeMap["/signin"]; // Fallback to signin page if the user went to an invalid path
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} limit={2}/>
       <Routes>
         {
