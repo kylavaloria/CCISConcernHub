@@ -8,11 +8,19 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
     const [status, setStatus] = useState(concern.status);
     const [isResolved, setIsResolved] = useState(concern.isResolved);
     const [isSpam, setIsSpam] = useState(concern.isSpam);
+    const [isAssigned, setIsAssigned] = useState(concern.isAdminAssigned(userData));
+
+    function assign() {
+        concern.assignAdmin(userData);
+        setIsAssigned(true);
+    }
 
     const handleUnassignAdmin = () => {
         if (concern.isAdminAssigned(userData)) {
             concern.unassignAdmin(userData);
             concern.saveToDatabase();
+
+            setIsAssigned(false);
             showSuccessToast('Admin unassigned successfully.');
         } else {
             showErrorToast('Admin is not assigned to this concern.');
@@ -35,7 +43,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         }
 
         if (!concern.isAdminAssigned(userData)) {
-            concern.assignAdmin(userData);
+            assign();
         }
 
         concern.discussion.sendSystemMessage(`This concern is now marked as ${newStatus}.`);
@@ -62,7 +70,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         concern.setAsResolved('Closed', concernCreator, userData);
 
         if (!concern.isAdminAssigned(userData) && userData.isAdmin) {
-            concern.assignAdmin(userData);
+            assign();
         }
 
         concern.saveToDatabase();
@@ -84,7 +92,7 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         concern.updateStatus('Closed');
 
         if (!concern.isAdminAssigned(userData)) {
-            concern.assignAdmin(userData);
+            assign();
         }
 
         concern.saveToDatabase();
@@ -95,12 +103,16 @@ const ConcernDetails = ({ concern, concernCreator, userData, onStatusChange }) =
         <div className="flex flex-col mx-14 gap-4">
             <div className="flex justify-between items-center gap-4">
                 <h2 className="text-3xl font-semibold">{concern.subject}</h2>
-                <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                    onClick={handleUnassignAdmin}
-                >
-                    Unassign Concern
-                </button>
+
+                {
+                    !isAssigned ? null :
+                    <button
+                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                        onClick={handleUnassignAdmin}
+                    >
+                        Unassign Concern
+                    </button>
+                }
             </div>
             <div className="flex justify-start gap-8">
                 <div className="text-gray-600 flex items-center gap-2">
